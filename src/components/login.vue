@@ -2,19 +2,16 @@
   <div >
     <nav><a href="/" style="text-decoration: none"><strong>Code</strong>Book</a></nav>
     <div id="first">
-        <h1 class="main ">Sign Up</h1>
+        <h1 class="main ">Log In</h1>
         <form action="" method="POST" class="containers">
-            <input class="input" type="text" placeholder="Name" required  name="name">
             <input class="input" type="text" placeholder="Username" required  name="username">
-            <input class="input" type="email" placeholder="Email ID" required  name="email">
             <input class="input" type="password" placeholder="Password" required name="password">
-            <input class="input" type="password" placeholder="Re-type Password" required name="repassword">
 
-            <input id="submit" type="submit" value="REGISTER">
+            <input id="submit" type="submit" value="LOG IN">
         </form>
         <div class="message">
-            <h4 id="bottom">Already have an account?</h4>
-            <h4 id="bottom"><a href="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</a></h4>
+            <h4 id="bottom">Not registered yet?</h4>
+            <h4 id="bottom"><a href="/register" style="text-decoration: none; color: rgb(113, 212, 212)">Sign up</a></h4>
         </div>
     </div>
 
@@ -140,12 +137,12 @@ input:hover{
     justify-content: center;
 }
 nav a{
+    /* font-family: 'Playfair Display', serif; */
     font-family: 'La Belle Aurore', cursive;
     color: rgb(113, 212, 212);
     font-weight: lighter;
     padding: 1vw;
     font-size: 1.5vw;
 }
-
 </style>
 

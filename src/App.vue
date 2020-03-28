@@ -1,20 +1,21 @@
 <template>
-  <div id="app">
-    <main-page class="landing"></main-page>
+  <div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import frontPage from './components/frontPage.vue'
+// import HelloWorld from './components/HelloWorld';
 
 export default {
   name: 'App',
+
   components: {
-    'main-page': frontPage
-  }
-}
+    // HelloWorld,
+  },
+
+  data: () => ({
+    //
+  }),
+};
 </script>
-
-<style>
-
-</style>
