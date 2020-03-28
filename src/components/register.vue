@@ -3,15 +3,30 @@
     <nav><a href="/" style="text-decoration: none"><strong>Code</strong>Book</a></nav>
     <div id="first">
         <h1 class="main ">Sign Up</h1>
-        <form action="" method="POST" class="containers">
-            <input class="input" type="text" placeholder="Name" required  name="name">
-            <input class="input" type="text" placeholder="Username" required  name="username">
-            <input class="input" type="email" placeholder="Email ID" required  name="email">
-            <input class="input" type="password" placeholder="Password" required name="password">
-            <input class="input" type="password" placeholder="Re-type Password" required name="repassword">
 
-            <input id="submit" type="submit" value="REGISTER">
-        </form>
+            <ApolloMutation 
+                :mutation="require('../graphql/mutations/createUser.graphql')" 
+                :variables="{
+                    name: this.name,
+                    username: this.username,
+                    email: this.email,
+                    password: this.password,
+                    repassword: this.repassword
+                }">
+                <template v-slot="{mutate, error}">
+                    <p v-if="error">{{error}}</p>
+                    <form action='/'  class="containers">
+                        <input class="input" type="text" placeholder="Name" required  name="name" v-model="name">
+                        <input class="input" type="text" placeholder="Username" required  name="username" v-model="username">
+                        <input class="input" type="email" placeholder="Email ID" required  name="email" v-model="email">
+                        <input class="input" type="password" placeholder="Password" required name="password" v-model="password">
+                        <input class="input" type="password" placeholder="Re-type Password" required name="repassword" v-model="repassword">
+                        <button id="submit" v-on:click="mutate()">REGISTER</button>
+                    </form>
+                </template>
+
+            </ApolloMutation>
+            <!-- <input id="submit" type="submit" value="REGISTER"> -->
         <div class="message">
             <h4 id="bottom">Already have an account?</h4>
             <h4 id="bottom"><a href="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</a></h4>
@@ -23,7 +38,15 @@
 
 <script>
 export default {
- 
+    data(){
+        return{
+            name: "",
+            username: "",
+            email: "",
+            password: "",
+            repassword: ""
+        }
+    }
 }
 </script>
 
@@ -110,6 +133,7 @@ textarea{
     color: rgb(243, 244, 245);
     margin-bottom: 4vw;
     background-color: rgb(113, 212, 212);
+    border: none;
 
 }
 .input{

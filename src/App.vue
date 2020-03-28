@@ -1,17 +1,18 @@
 <template>
   <div>
     <router-view></router-view>
+    <!-- <profiles></profiles> -->
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld';
+// import profiles from './components/profiles';
 
 export default {
   name: 'App',
 
   components: {
-    // HelloWorld,
+    // profiles
   },
 
   data: () => ({

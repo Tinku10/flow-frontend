@@ -9,18 +9,48 @@
 
             <input id="submit" type="submit" value="LOG IN">
         </form>
+        <!-- <form action="post" class="containers">
+            <input class="input"
+                placeholder="Username"
+                :error-messages="usernameErrors"
+            >
+                
+            
+            <input class="input"
+                placeholder="Password"
+                :error-messages="passwordErrors"
+            >
+            <input id="submit" type="submit" value="LOG IN">
+            
+        </form> -->
         <div class="message">
             <h4 id="bottom">Not registered yet?</h4>
             <h4 id="bottom"><a href="/register" style="text-decoration: none; color: rgb(113, 212, 212)">Sign up</a></h4>
-        </div>
+        </div> 
     </div>
 
   </div>
 </template>
 
 <script>
+// import {required} from 'vuelidate/lib/validators';
 export default {
- 
+    // validations: {
+    //     Username: {required},
+    //     Password: {required}
+    // }, 
+    // methods: {
+    //     usernameErrors(){
+    //         const errors = [];
+    //         !this.$v.username.required && errors.push('Username is required');
+    //         return this.errors;
+    //     },
+    //     usernamePasswordErrors(){
+    //         const errors = [];
+    //         !this.$v.username.required && errors.push('Username is required');
+    //         return this.errors;
+    //     }
+    // }
 }
 </script>
 

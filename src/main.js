@@ -5,7 +5,9 @@ import { createProvider } from './vue-apollo'
 import frontPage from './components/frontPage';
 import register from './components/register';
 import login from './components/login'
+import Vuelidate from "vuelidate";
 
+Vue.use(Vuelidate);
 Vue.use(VueRouter);
 
 Vue.config.productionTip = false
