@@ -1,6 +1,6 @@
 <template>
   <div >
-    <nav><a href="/" style="text-decoration: none"><strong>Code</strong>Book</a></nav>
+    <nav><router-link to="/" style="text-decoration: none"><strong>Code</strong>Book</router-link></nav>
     <div id="first">
         <h1 class="main ">Sign Up</h1>
 
@@ -12,7 +12,8 @@
                     email: this.email,
                     password: this.password,
                     repassword: this.repassword
-                }">
+                }"
+                @done="onDone">
                 <template v-slot="{mutate, error}">
                     <p v-if="error">{{error}}</p>
                     <form action='/'  class="containers">
@@ -29,7 +30,7 @@
             <!-- <input id="submit" type="submit" value="REGISTER"> -->
         <div class="message">
             <h4 id="bottom">Already have an account?</h4>
-            <h4 id="bottom"><a href="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</a></h4>
+            <h4 id="bottom"><router-link to="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</router-link></h4>
         </div>
     </div>
 
@@ -44,7 +45,13 @@ export default {
             username: "",
             email: "",
             password: "",
-            repassword: ""
+            repassword: "", 
+            user: []
+        }
+    }, 
+    methods: {
+        onDone(val){
+            this.user = val
         }
     }
 }
@@ -132,10 +139,14 @@ textarea{
     outline: none;
     color: rgb(243, 244, 245);
     margin-bottom: 4vw;
+    border-radius: 0.2rem;
     background-color: rgb(113, 212, 212);
     border: none;
 
 }
+/* #submit:hover{
+    font-size: 1.5vw;
+} */
 .input{
     font: "Source Sans Pro", sans-serif;
     font-size: 1vw;

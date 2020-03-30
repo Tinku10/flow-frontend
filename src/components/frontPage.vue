@@ -1,11 +1,11 @@
 <template>
   <div class="hello">
     <nav class="navbar">
-        <span><a href="/login" id="link">Login</a></span>
-        <span><a href="/register" id="link">Register</a></span>
+        <span><router-link to="/login" id="link">Login</router-link></span>
+        <span><router-link to="/register" id="link">Register</router-link></span>
     </nav>
     <div class="center">
-        <a href="/" style="text-decoration: none"><div class="heading"><strong>Code</strong>Book</div></a>
+        <router-link to="/" style="text-decoration: none"><div class="heading"><strong>Code</strong>Book</div></router-link>
         <p class="description">Share your piece of code with the world</p>
     </div>
     

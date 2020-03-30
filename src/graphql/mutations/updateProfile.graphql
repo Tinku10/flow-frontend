@@ -1,0 +1,9 @@
+mutation($description: String, $website: String){
+    updateProfile(
+        description: $description
+        website: $website
+    ){
+        description
+        website
+    }
+}

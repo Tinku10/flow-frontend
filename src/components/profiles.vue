@@ -1,9 +1,12 @@
 <template>
   <div class="hello">
-    <ApolloQuery :query="require('../graphql/queries/users.graphql') " :variables="{id: 1}">
+    <ApolloQuery :query="require('../graphql/queries/users.graphql') " >
         <template v-slot="{result: {loading, data}}">
-          <p v-if="data">{{data.user.username}} {{data.user.name}}</p>
-          <p v-else>Loading..</p>
+          <ul v-for="user in data.users" v-bind:key="user">
+            <p >{{user.username}} {{user.name}} {{user.profile}}</p>
+
+          </ul>
+          <!-- <p v-else>Loading..</p> -->
         </template>
     </ApolloQuery>
     

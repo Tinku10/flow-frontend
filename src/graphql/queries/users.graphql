@@ -1,8 +1,11 @@
-query ($id: ID!){
-    user(id: $id){
+query {
+    users{
         name
         username
         email
+        profile{
+            website
+        }
         
     }
 }
