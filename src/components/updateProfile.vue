@@ -1,6 +1,6 @@
 <template>
   <div >
-    <nav><router-link to="/" style="text-decoration: none"><strong>Code</strong>Book</router-link></nav>
+    <nav v-if="!off"><router-link to="/" style="text-decoration: none"><strong>Code</strong>Book</router-link></nav>
     <div id="first">
         <h1 class="main " v-if="!off">Update your Profile</h1>
         <ApolloMutation 
@@ -11,6 +11,11 @@
             <template v-slot="{mutate, errors}">
                 <div v-if="!off">
                     <form  class="containers" v-on:submit.prevent="mutate(); off=true">
+                        <!-- <div id="imagebox">
+                            <img id="imagebox" :src="getImage">
+                            
+                        </div> -->
+                        <br>
                         <input class="input" type="text" placeholder="Description" required  name="description" v-model="description">
                         <input class="input" type="website" placeholder="Website" required name="website" v-model="website">
 
@@ -42,19 +47,24 @@ export default {
         return{
             description: "",
             website: "",
-            off: false
+            off: false,
+            photo: null
             // api_token: ""
         }
     },
     methods: {
         onDone(){
-            // this.api_token = val.data.login;
-            // alert(val.data.login);
-            // this.$store.state.token = val.data.login;
-            // onLogin(this.$apollo.provider.defaultClient, this.$store.state.token);
+            // console.log(data);
+            // this.username = data.user.username;
             this.$router.push({path: '/home'});
         }
+        
     },
+    computed: {
+        // getImage(){
+        //     return 'https://api.adorable.io/avatars/184/' + 'null' + '@adorable.io.png';
+        // }
+    }
     
 }
 </script>
@@ -180,6 +190,23 @@ nav a{
     font-weight: lighter;
     padding: 1vw;
     font-size: 1.5vw;
+}
+.input.image{
+    width: 5vw;
+    height: 5vw;
+    opacity: 0;
+    cursor: pointer;
+
+}
+#imagebox{
+    /* background: url('https://api.adorable.io/avatars/184/12@adorable.io.png'); */
+    background-size: contain;
+    width: 10vw;
+    height: 10vw;
+    /* border: 1px dashed rgb(221, 218, 218); */
+    outline: none;
+    cursor: pointer;
+    /* filter: blur(100%); */
 }
 </style>
 

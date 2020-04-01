@@ -1,11 +1,10 @@
 query {
-    users{
-        name
-        username
-        email
-        profile{
-            website
-        }
-        
+  users {
+    name
+    username
+    profile {
+      description
+      website
     }
+  }
 }

@@ -3,5 +3,13 @@ query {
     name
     username
     email
+    profile{
+      description
+      website
+    }
+    posts{
+      title
+      post
+    }
   }
 }

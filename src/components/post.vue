@@ -2,33 +2,32 @@
   <div >
     <nav v-if="!off"><router-link to="/" style="text-decoration: none"><strong>Code</strong>Book</router-link></nav>
     <div id="first">
-        <h1 class="main " v-if="!off">Log In</h1>
+        <h1 class="main " v-if="!off">Add a new Post</h1>
         <ApolloMutation 
-        :mutation="require('../graphql/mutations/login.graphql')" 
-        :variables="{email: this.email, password: this.password}"
+        :mutation="require('../graphql/mutations/createPost.graphql')" 
+        :variables="{title: this.title, post: this.post}"
         @done="onDone"
         >
             <template v-slot="{mutate, errors}">
-                <div  v-if="!off">
+                <div v-if="!off">
                     <form  class="containers" v-on:submit.prevent="mutate(); off=true">
-                        <input class="input" type="text" placeholder="Email ID" required  name="email" v-model="email">
-                        <input class="input" type="password" placeholder="Password" required name="password" v-model="password">
+                        <input class="input" type="text" placeholder="Title" required  name="title" v-model="title">
+                        <textarea class="input"  placeholder="Post" required name="post" v-model="post"></textarea>
 
-                        <button id="submit">LOG IN</button>
+                        <button id="submit">POST</button>
                         <div v-if="errors">There was an error</div>
+                        <!-- <div v-else-if="loading">Loading..</div> -->
                     </form>
+
                 </div>
                 <div v-else>
-                    <p>Logging you in..</p>
+                    <p>Posting..</p>
                 </div>
             </template>
         </ApolloMutation>
         <!-- <p>token: {{api_token}}</p> -->
        
-        <div class="message" v-if="!off">
-            <h4 id="bottom">Not registered yet?</h4>
-            <h4 id="bottom"><router-link to="/register" style="text-decoration: none; color: rgb(113, 212, 212)">Sign up</router-link></h4>
-        </div> 
+        
     </div>
 
   </div>
@@ -36,23 +35,25 @@
 
 <script>
 // import {required} from 'vuelidate/lib/validators';
-import {onLogin} from '../vue-apollo';
+// import {onLogin} from '../vue-apollo';
 export default {
     
     data(){
         return{
-            email: "",
-            password: "", 
+            title: "",
+            post: "",
             off: false
             // api_token: ""
         }
     },
     methods: {
-        onDone(val){
+        onDone(){
             // this.api_token = val.data.login;
             // alert(val.data.login);
-            this.$store.state.token = val.data.login;
-            onLogin(this.$apollo.provider.defaultClient, this.$store.state.token);
+            // this.$store.state.token = val.data.login;
+            // onLogin(this.$apollo.provider.defaultClient, this.$store.state.token);
+            // this.$store.state.me.profile.title = this.title;
+            this.$store.state.change += 1;
             this.$router.push({path: '/home'});
         }
     },
@@ -154,11 +155,15 @@ textarea{
     color:rgb(164, 165, 165);
     border: solid 1px rgb(221, 218, 218);
     outline: none;
+    width: 40vw;
 
 }
 input:hover{
     background-color: rgb(245, 243, 243);
     outline: none;
+}
+textarea.input{
+    height: 30vh;
 }
 #bottom{
     font-family: 'Josefin Sans', sans-serif;

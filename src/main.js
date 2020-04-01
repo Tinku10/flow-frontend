@@ -11,6 +11,8 @@ import login from './components/login'
 import home from './components/home'
 import updateProfile from './components/updateProfile'
 import profiles from './components/profiles'
+import post from './components/post'
+import profile from './components/profile'
 
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
@@ -32,7 +34,9 @@ const routes = [
     // }
   },
   { path: '/home/update', component: updateProfile },
-  {path: '/profiles', component: profiles}
+  { path: '/profiles', component: profiles },
+  {path: '/post', component: post},
+  {path: '/profiles/:id', component: profile}
 ];
 
 const router = new VueRouter({

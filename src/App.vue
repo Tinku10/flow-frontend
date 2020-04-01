@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view></router-view>
+    <router-view :key="this.$store.state.change"></router-view>
     <!-- <profiles></profiles> -->
   </div>
 </template>

@@ -2,8 +2,10 @@ mutation($description: String, $website: String){
     updateProfile(
         description: $description
         website: $website
+        # file: $photo
     ){
-        description
-        website
+        user{
+            username
+        }
     }
 }

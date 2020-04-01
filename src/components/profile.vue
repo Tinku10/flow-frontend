@@ -1,75 +1,78 @@
 <template>
   <div >
-    <nav>
+    <nav class="navbar">
         <router-link id="logo" to="/" style="text-decoration: none"><span id=image></span></router-link>
-        <input type="search" name="" id="search">
+
         <div class="right">
             <button id="link" v-on:click="logout">Log out</button>
         </div>
     </nav>
-        <br>
+    <br>
+    <div>
+        <ApolloQuery 
+            :query="require('../graphql/queries/user.graphql')"
+            :variables="{id: $route.params.id}"
+            >
+            <template  v-slot="{result: {loading, error, data}}">
+                <div class ="main-page" v-if="data">
+                    <div class="sidebar">
+                        <div class="user" v-if="data.user">
+                            <div  class="image">
+                                <img id="img" :src="getImage(data)">
 
-    <!-- <div class="dashboard">PROFILE</div> -->
-    <ApolloQuery 
-        :query="require('../graphql/queries/me.graphql')"
-        >
-        <template  v-slot="{result: {loading, error, data}}">
-            <div class ="main-page" >
-                <div class="sidebar">
-                    <div class="user" v-if="data">
-                        <div  class="image">
-                            <img id="img" :src="getImage(data)">
-
-                        </div>
-                        <div class="inf">
-                            <h3 class="name"><b>{{data.me.name}}</b></h3>
-                            <h5 class="username"><b>@</b> {{data.me.username}}</h5>
-                            <div class="extras" v-if="data.me.profile" >
-                                <div v-if="data.me.profile.description != null">
-                                    <p  >{{data.me.profile.description}}</p>
-                                </div>
-                                <div v-if="data.me.profile.website != null">
-                                    <p  >{{data.me.profile.website}}</p>
-                                </div>
                             </div>
-                            <div class="ch-profile">
-                                <button>
-                                    <router-link to="/home/update" style="text-decoration: none; color: white">Update Profile</router-link>
-                                </button>
-                                <br>
-                                <button>
-                                    <router-link to="/post" style="text-decoration: none; color: white">Add a Post</router-link>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="right-bar">
-                    <div>
-                        <div class="main "><b>My Nest</b></div>
-                        <div v-if="data">
-                            <div v-show="data.me.posts">
-                                <ul v-for="post in data.me.posts" :key="post" >
-                                    <div class="post">
-                                        <div class="mention">
-                                            <img id="profile-img" :src="getImage(data)">
-                                            <p>{{data.me.name}}</p>
-                                        </div>
-                                        <p class="post-heading">{{post.title}}</p>
-                                        <p class="post-content">{{post.post}}</p>
+                            <div class="inf">
+                                <h3 class="name"><b>{{data.user.name}}</b></h3>
+                                <h5 class="username"><b>@</b> {{data.user.username}}</h5>
+                                <div class="extras" v-if="data.user.profile" >
+                                    <div v-if="data.user.profile.description != null">
+                                        <p  >{{data.user.profile.description}}</p>
                                     </div>
-                                </ul>
+                                    <div v-if="data.user.profile.website != null">
+                                        <p  >{{data.user.profile.website}}</p>
+                                    </div>
+                                </div>
+                                <div class="ch-profile">
+                                    <button>
+                                        <router-link to="#" style="text-decoration: none; color: white">Follow</router-link>
+                                    </button>
+                                    <br>
+                                    <!-- <button>
+                                        <router-link to="/post" style="text-decoration: none; color: white">Add a Post</router-link>
+                                    </button> -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="right-bar">
+                        <div>
+                            <div class="main "><b>{{data.user.name.split(' ')[0]}}'s Posts</b></div>
+                            <div v-if="data">
+                                <div v-show="data.user.posts">
+                                    <ul v-for="post in data.user.posts" :key="post" >
+                                        <div class="post">
+                                            <div class="mention">
+                                                <img id="profile-img" :src="getImage(data)">
+                                                <p>{{data.user.name}}</p>
+                                            </div>
+                                            <p class="post-heading">{{post.title}}</p>
+                                            <p class="post-content">{{post.post}}</p>
+                                        </div>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
-            <!-- <p v-else-if="error">Error..</p> -->
-        </template>
-    </ApolloQuery>
+                </div>
+                <!-- <p v-else-if="error">Error..</p> -->
+            </template>
+        </ApolloQuery>
+
+    </div>
+    <!-- <div class="dashboard">PROFILE</div> -->
     
   </div>
 </template>
@@ -81,22 +84,23 @@ import {onLogout} from '../vue-apollo';
 export default {
     data(){
         return{
+            id: this.$route.params.username
         }
     },
     computed: {
         token(){
-            return this.$store.state.token;
+            return this.$store.state.token
         }
-        
     },
     methods: {
         
         logout(){
             onLogout(this.$apollo.provider.defaultClient);
             this.$router.push({path: '/'});
+
         },
         getImage(data){
-            return 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
+            return 'https://api.adorable.io/avatars/184/' + data.user.username + '@adorable.io.png';
         }
     }
  
@@ -264,7 +268,6 @@ nav{
     width: 75vw;
     background-color:rgb(247, 242, 242);
     margin-right: -10px;
-    border-top-left-radius: 0.2rem;
     /* height: 100vw; */
     /* border: 1px solid rgb(238, 236, 236); */
 

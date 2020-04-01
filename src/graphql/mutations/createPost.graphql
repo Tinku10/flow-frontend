@@ -1,0 +1,10 @@
+mutation($title: String!, $post: String!) {
+  createPost (
+    title: $title
+    post: $post
+    
+  ){
+      title
+      post
+  }
+}
