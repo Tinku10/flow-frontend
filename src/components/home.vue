@@ -2,12 +2,29 @@
   <div >
     <nav>
         <router-link id="logo" to="/" style="text-decoration: none"><span id=image></span></router-link>
-        <input type="search" name="" id="search" placeholder="Search">
+        <input type="search" name="" class="search" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+        
         <div class="right">
             <button id="link" v-on:click="logout">Log out</button>
         </div>
     </nav>
-        <br>
+    <div class="mention-link"  v-show="searchbox" >
+            <ApolloQuery 
+            :query="require('../graphql/queries/users.graphql') "
+            >
+                <template class="containers" v-slot="{result: {data}}">
+                <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user" >
+                    <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind" style="text-decoration: none">
+                        <img id="profile-img" :src="getProfiles(user.username)">
+                        <p>{{user.name}}</p>
+                    </router-link>
+                </ul>
+                <!-- <p v-else>Loading..</p> -->
+                </template>
+            </ApolloQuery>
+    
+    </div>
+    <br>
 
     <!-- <div class="dashboard">PROFILE</div> -->
     <ApolloQuery 
@@ -81,12 +98,21 @@ import {onLogout} from '../vue-apollo';
 export default {
     data(){
         return{
+            searchbox: false,
+            search: null,
+            users: []
         }
     },
     computed: {
         token(){
             return this.$store.state.token;
+        },
+        searchResult(){
+            return true;
         }
+        // filteredUsers(){
+        //     return 1
+        // }
         
     },
     methods: {
@@ -97,6 +123,23 @@ export default {
         },
         getImage(data){
             return 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
+        },
+        getProfiles(data){
+             return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
+        },
+        filteredUsers(users){
+            if(this.search == ''){
+                this.search = null;
+            }
+            this.users = users;
+            let filtered = [];
+            for(let user of this.users){
+                let name = user.name.toLowerCase();
+                if(name.includes(this.search)){
+                    filtered = filtered.concat(user);
+                }
+            }
+            return filtered;
         }
     }
  
@@ -117,11 +160,11 @@ export default {
 }
 #image{
     background: url('../../public/quote.svg');
-    height: 6vh;
-    width:6vh;
+    height: 6vw;
+    width:6vw;
     background-repeat: no-repeat;
     background-size: contain;
-    padding:15px;
+    padding:1vw;
     background-position: center;
     margin-top: 1vh;
     margin-left: 1.2vh;
@@ -141,7 +184,8 @@ export default {
     background: none;
     padding: 0;
     margin-right: 1vw;
-    margin-top: 0.6vw;
+    margin-top: 0.8vw;
+    margin-bottom: 0.8vw;
     cursor: pointer;
     /* text-align: end; */
     /* float: right; */
@@ -162,6 +206,7 @@ nav{
     margin-left: -10px;
     margin-right: -10px;
     margin-top: -10px;
+    height: 3vw;
     /* position: fixed; */
 
 }
@@ -218,6 +263,7 @@ nav{
     height: 100vh;
     /* background-color: rgb(247, 242, 242); */
     background-color: rgb(255, 255, 255);
+    /* border-right: 1px solid rgb(209, 208, 208); */
 
     /* border-radius: 0.2rem; */
     /* margin-left: 10vw; */
@@ -254,6 +300,7 @@ nav{
     /* position: fixed; */
     width: 25vw;
     margin-right: 1vw;
+    z-index: 1;
 
 }
 /* .main-page{
@@ -261,17 +308,19 @@ nav{
 
 } */
 .right-bar{
-    width: 75vw;
-    background-color:rgb(247, 242, 242);
-    margin-right: -10px;
+    padding: 10px;
+    width: 70vw;
+    /* background-color:rgb(247, 242, 242); */
+    /* margin-right: -10px; */
     border-top-left-radius: 0.2rem;
     /* height: 100vw; */
-    /* border: 1px solid rgb(238, 236, 236); */
-
+    border-left: 1px solid rgb(238, 236, 236);
+    z-index: 1;
 }
 .main-page{
     display: flex;
     flex-direction: row;
+    z-index: 1;
     
 }
 .main{
@@ -281,22 +330,29 @@ nav{
     margin: 0px;
     padding: 1vw;
     text-align: center;
-    align-content: center;
+    /* align-content: center; */
 }
 .post{
     background-color:rgba(255, 255, 255, 0.705);
     /* padding: 1vw; */
-    width: 68vw;
+    width: 65vw;
+    /* align-self: center; */
+    margin-left: none;
+    margin-right: none ; 
     border-radius: 0.2rem;
+    border: 1px solid rgb(240, 237, 237);
+    /* margin-right: none; */
 }
+
 .post-content{
     font-size: 2.5vh;
     font-family: "Source Code Pro", sans-serif;
     color:rgb(128, 126, 126);
     padding: 2vw;
     /* text-align:left; */
-    width: 50vw;
+    width: 40vw;
     margin-left: 8vw;
+    margin-right: 8vw;
     /* margin-right: 1vw; */
 }
 .post-heading{
@@ -346,12 +402,10 @@ nav{
     border-radius: 0.2rem;
     margin-right: 2vh;
 }
-#search{
-    height: 5.2vh;
-    width: 50vh;
-    outline: none;
+.search{
+    height: 5vh;
+    width: 55vh;
     border-radius: 0.2rem;
-    border: none;
     position: center;
     margin-left: 10vh;
     margin-top: 0.5vh;
@@ -359,5 +413,56 @@ nav{
     font-size: 2vh;
     background-color:rgba(255, 255, 255, 0.918);
     padding: 2vh;
+    outline: 0;
+    border: none;
+    /* position: fixed; */
+}
+.search-result{
+    width: 55vh;
+    height: 30vh;
+    border-radius: 0.2rem;
+    /* border: 1px solid #969292; */
+    /* z-index: -10; */
+    margin-left: 20vh;
+    outline: none;
+    position: relative;
+    background-color:rgb(255, 255, 255);
+    box-shadow: 0 0 6px rgb(179, 178, 178);
+}
+.mention-link{
+    font-family: "Source Code Pro", sans-serif;
+    color: gray;
+    display: flex;
+    flex-direction: row;
+    padding: 0.5vh;
+    padding-bottom: 0;
+    border: 1px solid rgb(230, 228, 228);
+    width: 41vh;
+    border-radius: 0.2rem;
+    
+
+}
+.mention-link.ind:hover{
+    background-color:rgb(247, 242, 242);
+    
+
+}
+div.mention-link{
+    width: 55vh;
+    margin-left: 19.8vh;
+    border: none;
+    background-color:rgb(255, 255, 255);
+    box-shadow: 0 0 8px rgb(179, 178, 178);
+    border-radius: 0.2rem;
+    height: 25vh;
+    /* scroll-behavior: auto; */
+    z-index: 10;
+    position: absolute;
+    overflow-y: auto;
+   
+
+}
+.mention-link p{
+    margin-top: 1.5vh;
 }
 </style>

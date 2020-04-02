@@ -1,22 +1,24 @@
 <template>
   <div>
-    <router-view :key="this.$store.state.change"></router-view>
+    <router-view ></router-view>
     <!-- <profiles></profiles> -->
+    <br><br>
+    <!-- <footer-ele></footer-ele> -->
   </div>
 </template>
 
 <script>
-// import profiles from './components/profiles';
+// import footer from '../src/components/footer';
 
 export default {
-  name: 'App',
+  // name: 'App',
 
   components: {
-    // profiles
+    // 'footer-ele': footer
   },
 
-  data: () => ({
-    //
-  }),
+  // data: () => ({
+  //   //
+  // }),
 };
 </script>

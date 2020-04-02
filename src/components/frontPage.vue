@@ -47,16 +47,18 @@ export default {
     margin-right: 1.5vw;
     font-family: 'Josefin Sans', sans-serif;
     font-size: 2.4vh;
+    z-index: 10;
 
 }
 .heading{
     /* font-family: 'Press Start 2P', cursive; */
-    font-family: 'La Belle Aurore', cursive;
+    font-family: 'Inconsolata', monospace;
+    /* font-family: 'La Belle Aurore', cursive; */
     /* font-size: 7vw; */
-    font-size: 18vh;
+    font-size: 15vh;
     align-content: center;
     /* color: rgb(113, 212, 212); */
-    color: rgb(96, 108, 114);
+    color: rgb(76, 77, 78);
     z-index: 10;
     /* font-weight: lighter; */
 }
@@ -83,16 +85,17 @@ export default {
 }
 #image{
     background: url('../../public/quote.svg');
-    height: 150vh;
-    width: 150vh;
+    height: 220vh;
+    width: 220vh;
     background-repeat: no-repeat;
     background-size: contain;
-    filter: blur(15px);
+    /* filter: blur(15px); */
     top: 30%;
     left: 40%;
     z-index: -1;
     transform: translate(-50%, -50%);
     position: fixed;
+    filter: grayscale(60%);
     /* margin-right: 10vh;
     margin-top: -10vh;
     margin-left: -20vh; */

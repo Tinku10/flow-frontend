@@ -1,0 +1,88 @@
+<template>
+  <div id="foot">
+    <p class="icons">
+      <a href="https://github.com/Tinku10" target=_blank style="text-decoration: none; color: inherit;"><div id="logo"></div></a>
+      <a href="https://www.linkedin.com/in/tinkumonikalita/" target=_blank style="text-decoration: none; color: inherit;"><div id="linkedin"></div></a>
+      <a href="https://medium.com/@tinku.kvs" target=_blank style="text-decoration: none; color: inherit;"><div id="medium"></div></a>
+      
+    </p>
+    <div id="copyright">Copyright © 2020</div>
+  </div>
+</template>
+
+<script>
+export default {
+  components: {}
+};
+</script>
+
+<style scoped>
+div {
+  display: block;
+  text-align: center;
+  margin: none;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 5px;
+  font-family: "Fira Sans", sans-serif;
+  font-weight: lighter;
+  font-size: 1.2vw;
+  color: rgba(255, 251, 251, 0.644);
+  background-color: rgb(49, 49, 49);
+}
+#logo{
+  padding: 1px;
+  background: url('../../public/github.svg');
+  height: 20px;
+  width: 20px;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  margin-left: 10px;
+
+}
+
+#medium{
+  padding: 1px;
+  background: url('../../public/medium.svg');
+  height: 20px;
+  width: 20px;
+  background-repeat: no-repeat;
+  margin-left: 10px;
+  margin-right: 10px;
+
+}
+#linkedin{
+  padding: 1px;
+  background: url('../../public/Linkedin.svg');
+  height: 20px;
+  width: 20px;
+  background-repeat: no-repeat;
+  margin-left: 10px;
+  margin-right: 10px;
+  /* filter: grayscale(100%); */
+
+}
+/* #linkedin:hover{
+  filter: grayscale(50%)
+} */
+
+/* #hackerrank:hover{
+  filter: grayscale(50%)
+} */
+#foot{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.icons{
+    display:inline-flex;
+    flex-direction: row;
+    /* justify-content: space-evenly; */
+    /* margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px; */
+
+}
+</style>
