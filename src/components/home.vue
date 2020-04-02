@@ -2,7 +2,7 @@
   <div >
     <nav>
         <router-link id="logo" to="/" style="text-decoration: none"><span id=image></span></router-link>
-        <input type="search" name="" id="search">
+        <input type="search" name="" id="search" placeholder="Search">
         <div class="right">
             <button id="link" v-on:click="logout">Log out</button>
         </div>
@@ -346,5 +346,18 @@ nav{
     border-radius: 0.2rem;
     margin-right: 2vh;
 }
-
+#search{
+    height: 5.2vh;
+    width: 50vh;
+    outline: none;
+    border-radius: 0.2rem;
+    border: none;
+    position: center;
+    margin-left: 10vh;
+    margin-top: 0.5vh;
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 2vh;
+    background-color:rgba(255, 255, 255, 0.918);
+    padding: 2vh;
+}
 </style>
