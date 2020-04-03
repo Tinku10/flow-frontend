@@ -5,7 +5,12 @@
         <span>
             <button  class=" mr-4 ml-4 text-gray-100 float-right outline-none" v-on:click="logout">Log out</button>
         </span>
+        
     </nav>
+    <!-- <div v-show="menuPressed" class="h-12 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
+        <button  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" v-on:click="logout">Log out</button>
+        
+    </div> -->
     <br>
     <div >
         <ApolloQuery 

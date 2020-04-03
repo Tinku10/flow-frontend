@@ -3,11 +3,19 @@
     <nav class="h-30 w-full p-2 bg-gray-800">
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
         <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-2 outline-none border-n " placeholder="Search" @click="searchbox = !searchbox" v-model="search">
-        
-        <span>
-            <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none" v-on:click="logout">Log out</button>
-        </span>
+        <button  v-show="load" class="  mr-4 ml-1 float-right p-1 border-none outline-none" v-on:click="menuPressed = !menuPressed">
+            <img class="rounded h-6 w-6" :src="photo">
+        </button>
+        <button class="h-6 w-6 rounded bg-gray-100 mr-4 ml-1 float-right p-2 mt-1" v-show="!load"></button>
+        <!-- <span>
+            <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none border-none" v-on:click="logout">Log out</button>
+        </span> -->
     </nav>
+    <div v-show="menuPressed" class="h-24 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
+        <button  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" v-on:click="logout">Log out</button>
+        <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
+        </router-link>
+    </div>
     <div class="mention-link w-64 h-56 absolute border-gray-200 shadow-md p-2 ml-24 mt-1"  v-show="searchbox" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
@@ -33,7 +41,7 @@
         <template  v-slot="{result: {loading, error, data}, isLoading}">
             <div class ="main-page flex-row justify-center">
                 <div class="w-1/4 ml-6 mr-6 mt-6">
-                    <div class="p-2" v-if="data">
+                    <div class="p-2" v-if="isData(data)">
                         <div  class=" h-60 w-60 mb-4 ">
                             <img class="rounded" :src="getImage(data)">
                         </div>
@@ -82,6 +90,7 @@
                     </div>
                 </div>
 
+
             </div>
             <!-- <p v-else-if="error">Error..</p> -->
             <div v-if="isLoading" class="main-page flex-row justify-center">
@@ -112,7 +121,9 @@ export default {
             searchbox: false,
             search: null,
             users: [],
-            photo: null
+            photo: null,
+            menuPressed: false,
+            id: null
         }
     },
     computed: {
@@ -153,6 +164,15 @@ export default {
                 }
             }
             return filtered;
+        },
+        isData(data){
+            if(data){
+                this.id = data.me.id;
+                return true
+            }
+            this.load = true;
+            return false
+
         }
     }
  
