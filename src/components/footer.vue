@@ -1,12 +1,12 @@
 <template>
-  <div id="foot">
+  <div id="foot" class="p-5 mt-2 h-32">
     <p class="icons">
       <a href="https://github.com/Tinku10" target=_blank style="text-decoration: none; color: inherit;"><div id="logo"></div></a>
       <a href="https://www.linkedin.com/in/tinkumonikalita/" target=_blank style="text-decoration: none; color: inherit;"><div id="linkedin"></div></a>
       <a href="https://medium.com/@tinku.kvs" target=_blank style="text-decoration: none; color: inherit;"><div id="medium"></div></a>
       
     </p>
-    <div id="copyright">Copyright © 2020</div>
+    <div id="copyright" class="mt-2">Copyright © 2020</div>
   </div>
 </template>
 

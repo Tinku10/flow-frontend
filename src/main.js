@@ -13,7 +13,8 @@ import updateProfile from './components/updateProfile'
 // import profiles from './components/profiles'
 import post from './components/post'
 import profile from './components/profile'
-import './assets/tailwind.css'
+import '@/assets/css/tailwind.css'
+
 
 Vue.use(Vuelidate);
 Vue.use(VueRouter);

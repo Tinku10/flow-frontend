@@ -1,21 +1,21 @@
 <template>
   <div class="hello">
     <nav class="navbar">
-        <div v-if="token">
-            <span><router-link to="/home" id="link" v-if="token">Home</router-link></span>
+        <div v-if="token" class="justify-end p-2">
+            <span><router-link to="/home" id="link" class="mr-2 ml-2" v-if="token">Home</router-link></span>
 
         </div>
-        <div v-else>
-            <span><router-link to="/login" id="link">Login</router-link></span>
-            <span><router-link to="/register" id="link">Register</router-link></span>
+        <div v-else class="justify-end p-2">
+            <span><router-link to="/login" id="link" class="mr-2 ml-2">Login</router-link></span>
+            <span><router-link to="/register" id="link" class="mr-2 ml-2">Register</router-link></span>
 
         </div>
 
     </nav>
     <div class="center">
         <div id="title">
-            <div id=image></div>
-            <router-link to="/" style="text-decoration: none"><div class="heading"><strong>Writ</strong>able</div></router-link>
+            <div id=image class="z-0 h-100 w-100  bg-no-repeat bg-contain" ></div>
+            <router-link to="/" style="text-decoration: none"><div class="heading h-40 z-10 x"><strong>Writ</strong>able</div></router-link>
         </div>
         <!-- <p class="description">Share something beautiful with the world</p> -->
     </div>
@@ -43,8 +43,8 @@ export default {
 #link{
     text-decoration: none;
     color: gray;
-    margin-left: 1.5vw;
-    margin-right: 1.5vw;
+    /* margin-left: 1.5vw;
+    margin-right: 1.5vw; */
     font-family: 'Josefin Sans', sans-serif;
     font-size: 2.4vh;
     z-index: 10;
@@ -85,17 +85,17 @@ export default {
 }
 #image{
     background: url('../../public/quote.svg');
-    height: 220vh;
-    width: 220vh;
-    background-repeat: no-repeat;
+    /* height: 220vh;
+    width: 220vh; */
+    /* background-repeat: no-repeat;
     background-size: contain;
-    /* filter: blur(15px); */
+    filter: blur(15px);
     top: 30%;
     left: 40%;
     z-index: -1;
     transform: translate(-50%, -50%);
     position: fixed;
-    filter: grayscale(60%);
+    filter: grayscale(60%); */
     /* margin-right: 10vh;
     margin-top: -10vh;
     margin-left: -20vh; */
