@@ -1,24 +1,26 @@
 <template>
   <div class="hello">
     <nav class="navbar">
-        <div v-if="token" class="justify-end p-2">
-            <span><router-link to="/home" id="link" class="mr-2 ml-2" v-if="token">Home</router-link></span>
+        <div v-if="token" class="justify-end">
+            <span class="mr-4"><router-link to="/home" id="link" class="mr-2 ml-2" v-if="token">Home</router-link></span>
 
         </div>
-        <div v-else class="justify-end p-2">
-            <span><router-link to="/login" id="link" class="mr-2 ml-2">Login</router-link></span>
-            <span><router-link to="/register" id="link" class="mr-2 ml-2">Register</router-link></span>
+        <div v-else class="justify-end">
+            <span class="mr-4"><router-link to="/login" id="link" class="mr-2 ml-2">Login</router-link></span>
+            <span class="mr-4"><router-link to="/register" id="link" class="mr-2 ml-2">Register</router-link></span>
 
         </div>
 
     </nav>
-    <div class="center">
-        <div id="title">
-            <div id=image class="z-0 h-100 w-100  bg-no-repeat bg-contain" ></div>
-            <router-link to="/" style="text-decoration: none"><div class="heading h-40 z-10 x"><strong>Writ</strong>able</div></router-link>
-        </div>
+    <div>
+        <!-- <div id="title"> -->
+            <!-- <div id=image class="z-0 h-100 w-100  bg-no-repeat bg-contain" ></div> -->
+            <div class="central"></div>
+            <div class="heading">flow</div>
+        <!-- </div> -->
         <!-- <p class="description">Share something beautiful with the world</p> -->
     </div>
+    
     
   </div>
 </template>
@@ -42,49 +44,59 @@ export default {
 }
 #link{
     text-decoration: none;
-    color: gray;
+    color: rgb(133, 130, 130);
     /* margin-left: 1.5vw;
     margin-right: 1.5vw; */
     font-family: 'Josefin Sans', sans-serif;
-    font-size: 2.4vh;
+    font-size: 1rem;
     z-index: 10;
 
 }
 .heading{
+    /* font-family: 'Source Code Pro', sans-serif; */
     /* font-family: 'Press Start 2P', cursive; */
-    font-family: 'Inconsolata', monospace;
+    /* font-family: 'Inconsolata', monospace; */
+    font-family: 'Petit Formal Script', cursive;
     /* font-family: 'La Belle Aurore', cursive; */
     /* font-size: 7vw; */
-    font-size: 15vh;
+    top: 50%;
+    color: gray;
+    /* font-weight: bolder; */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    font-size: 16vh;
     align-content: center;
-    /* color: rgb(113, 212, 212); */
-    color: rgb(76, 77, 78);
-    z-index: 10;
+    /* color: rgba(0, 128, 128, 0.838); */
+    border: 1px solid gray;
+    
+    /* color: rgb(174, 176, 179);
+    z-index: 10; */
     /* font-weight: lighter; */
 }
-.description{
+/* .description{
     font-family: "Source Code Pro", sans-serif ;
-    /* font-family: 'Sofia', cursive; */
-    /* font-family: 'Amatic SC', cursive; */
+    font-family: 'Sofia', cursive;
+    font-family: 'Amatic SC', cursive;
     text-align: center;
     font-style: italic;
     color:rgb(128, 125, 125);
-    /* font-size: 1.7vw; */
+    font-size: 1.7vw;
     font-size: 2.2vh;
     margin-top:0;
     padding: 0;
-}
-.center{
-    display: flex;
+} */
+.central{
+    /* display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     position: fixed;
 }
 #image{
-    background: url('../../public/quote.svg');
+    /* background: url('../../public/quote.svg'); */
     /* height: 220vh;
     width: 220vh; */
     /* background-repeat: no-repeat;
@@ -104,4 +116,16 @@ export default {
     display: flex;
     flex-direction: row;
 } */
+.central{
+    /* background: url('../../public/gareth-david-m0chaAschUw-unsplash.jpg'); */
+    background-size: 100%;
+    /* background-image: url('../../public/gareth-david-m0chaAschUw-unsplash.jpg'); */
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    /* filter: blur(2px); */
+    position: absolute;
+    z-index: -1;
+}
 </style>

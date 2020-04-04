@@ -1,12 +1,20 @@
 <template>
   <div >
-    <nav class="h-30 w-full p-2 bg-gray-800">
+    <nav class="h-30 w-full p-2 navbar-color" >
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
-        <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-2 outline-none border-n " placeholder="Search" @click="searchbox = !searchbox" v-model="search">
-        <button  v-show="load" class="  mr-4 ml-1 float-right p-1 border-none outline-none" v-on:click="menuPressed = !menuPressed">
-            <img class="rounded h-6 w-6" :src="photo">
-        </button>
-        <button class="h-6 w-6 rounded bg-gray-100 mr-4 ml-1 float-right p-2 mt-1" v-show="!load"></button>
+        <!-- <span class="search-img ml-10"></span> -->
+        <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-2 outline-none border-none " placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+        <span class="float-right">
+            <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
+                <template v-slot="{result: {data}, isLoading} ">
+                    <button  v-if="!isLoading" class="  mr-4 ml-1 float-right p-1 border-none outline-none" v-on:click="menuPressed = !menuPressed">
+                        <img class="rounded-sm h-6 w-6" :src="getImage(data.me.username)">
+                    </button>
+                    <button class="h-6 w-6 rounded-sm bg-gray-100 mr-4 ml-1 float-right p-2 mt-1" v-else></button>
+                </template>
+
+            </ApolloQuery>
+        </span>
         <!-- <span>
             <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none border-none" v-on:click="logout">Log out</button>
         </span> -->
@@ -36,14 +44,14 @@
 
     <!-- <div class="dashboard">PROFILE</div> -->
     <ApolloQuery 
-        :query="require('../graphql/queries/me.graphql')"
+        :query="require('../graphql/queries/me2.graphql')"
         >
         <template  v-slot="{result: {loading, error, data}, isLoading}">
             <div class ="main-page flex-row justify-center">
                 <div class="w-1/4 ml-6 mr-6 mt-6">
                     <div class="p-2" v-if="isData(data)">
                         <div  class=" h-60 w-60 mb-4 ">
-                            <img class="rounded" :src="getImage(data)">
+                            <img class="rounded" :src="getImage(data.me.username)">
                         </div>
                         <div class="inf">
                             <h3 class="name mt-2"><b>{{data.me.name}}</b></h3>
@@ -52,17 +60,17 @@
                                 <div class="mt-2" v-if="data.me.profile.description != null">
                                     <p  >{{data.me.profile.description}}</p>
                                 </div>
-                                <div class="mt-2" v-if="data.me.profile.website != null">
-                                    <p  >{{data.me.profile.website}}</p>
+                                <div class="mt-2 text-blue-300" v-if="data.me.profile.website != null">
+                                    <a :href="data.me.profile.website" target="_blank">{{data.me.profile.website}}</a>
                                 </div>
                             </div>
                             <div class="ch-profile">
                                 <button class="w-48 h-10">
-                                    <router-link to="/home/update" style="text-decoration: none; color: white" >Update Profile</router-link>
+                                    <router-link to="/home/update" style="text-decoration: none" >Update Profile</router-link>
                                 </button>
                                 <br>
                                 <button class="w-48 h-10">
-                                    <router-link to="/post" style="text-decoration: none; color: white">Add a Post</router-link>
+                                    <router-link to="/post" style="text-decoration: none">Add a Post</router-link>
                                 </button>
                             </div>
                         </div>
@@ -72,21 +80,24 @@
 
                 <div class="ml-6 mr-6">
                     <div >
-                        <div class="text-center text-gray-600"><b>My Nest</b></div>
+                        <div class="text-center text-gray-600 font-hairline"><b>My Nest</b></div>
                         <div v-if="data" >
-                            <div v-show="data.me.posts">
-                                <ul v-for="post in data.me.posts" :key="post" >
-                                    <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
-                                        <div class="mention">
-                                            <img id="profile-img" :src="getImage(data)">
-                                            <p>{{data.me.name}}</p>
+                            <div v-if="data.me.followings">
+                                <!-- <div v-show="data.me.followings.posts"> -->
+                                    <ul v-for="post in arrange(data.me.followings)" :key="post" >
+                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
+                                            <div class="mention">
+                                                <img id="profile-img" :src="getImage(post.user.username)">
+                                                <p>{{post.user.name}}</p>
+                                            </div>
+                                            <p class="post-heading">{{post.title}}</p>
+                                            <p class="post-content">{{post.post}}</p>
                                         </div>
-                                        <p class="post-heading">{{post.title}}</p>
-                                        <p class="post-content">{{post.post}}</p>
-                                    </div>
-                                </ul>
+                                    </ul>
+                                <!-- </div> -->
                             </div>
                         </div>
+                        
                     </div>
                 </div>
 
@@ -94,8 +105,8 @@
             </div>
             <!-- <p v-else-if="error">Error..</p> -->
             <div v-if="isLoading" class="main-page flex-row justify-center">
-                <div class="w-1/4 h-screen bg-gray-100 mr-10 ml-4 box-content mt-2"></div>
-                <div class="h-screen w-3/5 bg-gray-100 ml-10 mr-4 box-content mt-2" ></div>
+                <div class="w-1/4 h-screen bg-gray-100 mr-10 ml-4 box-content mt-2 rounded-sm"></div>
+                <div class="h-screen w-3/5 bg-gray-100 ml-10 mr-4 box-content mt-2 rounded-sm" ></div>
             </div>
         </template>
     </ApolloQuery>
@@ -121,7 +132,6 @@ export default {
             searchbox: false,
             search: null,
             users: [],
-            photo: null,
             menuPressed: false,
             id: null
         }
@@ -145,8 +155,8 @@ export default {
             this.$router.push({path: '/'});
         },
         getImage(data){
-            this.photo = 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
-            return 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
+            // this.$store.state.photo = 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
+            return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
         },
         getProfiles(data){
              return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
@@ -154,6 +164,8 @@ export default {
         filteredUsers(users){
             if(this.search == ''){
                 this.search = null;
+            }else if(this.search == null){
+                return users;
             }
             this.users = users;
             let filtered = [];
@@ -173,6 +185,17 @@ export default {
             this.load = true;
             return false
 
+        },
+        arrange(postsArr){
+            let arr = [];
+            for(let i = 0; i<postsArr.length; i++){
+                for(let j= 0; j<postsArr[i].posts.length; j++){
+                    arr = arr.concat(postsArr[i].posts[j]);
+                }
+                // arr = [arr.concat(postsArr[i][0])];
+            }
+            arr.sort();
+            return arr;
         }
     }
  
@@ -237,7 +260,7 @@ export default {
     color:rgb(119, 116, 116);
     font-family: "Source Code Pro", sans-serif;
     font-weight: lighter;
-    font-style: italic;
+    /* font-style: italic; */
     column-width: 40%;
 }
 .image{
@@ -265,11 +288,16 @@ export default {
 }
 .ch-profile button{
     font-family: 'Source Code Pro', sans-serif;
-    font-size: 1vw;
-    color: rgb(148, 143, 143);
+    font-size: 0.8rem;
+    color: rgb(255, 255, 255);
     border: none;
     outline: none;
     background-color:rgb(141, 223, 228);
+}
+.ch-profile button:hover {
+    color: rgb(141, 223, 228);
+    border: 1px solid rgb(141, 223, 228);
+    background-color:white;
 }
 .sidebar{
     background-color: rgb(255, 255, 255);
@@ -403,5 +431,16 @@ div.mention-link{
 }
 .mention-link p{
     margin-top: 1.5vh;
+}
+.navbar-color{
+    background-color: rgb(49, 49, 49);
+}
+.search-img{
+    background: url('../../public/search.svg');
+    height: 1rem;
+    width: 1rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+
 }
 </style>

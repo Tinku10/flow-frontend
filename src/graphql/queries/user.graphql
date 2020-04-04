@@ -10,5 +10,11 @@ query($id: ID!){
             title
             post
         }
+        followers{
+            name
+        }
+        followings{
+            name
+        }
     }
 }

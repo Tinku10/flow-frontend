@@ -12,5 +12,8 @@ query {
       title
       post
     }
+    followings{
+      id
+    }
   }
 }

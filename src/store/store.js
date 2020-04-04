@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         token: null,
-        change: 0
+        change: 0,
+        photo: null
     }
     // mutations: {
     //     changeToken(state) {

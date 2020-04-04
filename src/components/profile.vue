@@ -1,6 +1,6 @@
 <template>
   <div >
-    <nav class="h-30 w-full p-3 bg-gray-800">
+    <nav class="h-30 w-full p-3 navbar-color">
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
         <span>
             <button  class=" mr-4 ml-4 text-gray-100 float-right outline-none" v-on:click="logout">Log out</button>
@@ -37,9 +37,31 @@
                                     </div>
                                 </div>
                                 <div class="ch-profile">
-                                    <button class="w-48 h-10">
-                                        <router-link to="#" style="text-decoration: none; color: white">Follow</router-link>
-                                    </button>
+                                    <ApolloQuery :query="require('../graphql/queries/me.graphql')">
+                                        <template v-slot="{result: {data}}">
+                                            <span v-if="checkFollow(data.me.followings, $route.params.id)">
+                                                <ApolloMutation
+                                                :mutation="require('../graphql/mutations/unFollow.graphql')"
+                                                :variables="{id: $route.params.id}"
+                                                @done="onDone">
+                                                    <template v-slot="{mutate}">
+                                                        <button class="w-48 h-10 float-left" v-on:click="mutate()">Unfollow</button>
+                                                    </template>
+                                                </ApolloMutation>
+                                            </span>
+                                            <span v-else>
+                                                <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/follow.graphql')"
+                                                    :variables="{id: $route.params.id}"
+                                                    @done="onDone">
+                                                    <template v-slot="{mutate}">
+                                                        <button class="w-48 h-10 float-left" v-on:click="mutate()">Follow </button>
+                                                    </template>
+                                                </ApolloMutation>
+                                            </span>
+                                        </template>
+                                        
+                                    </ApolloQuery>
                                     <br>
                                     <!-- <button>
                                         <router-link to="/post" style="text-decoration: none; color: white">Add a Post</router-link>
@@ -52,7 +74,7 @@
 
                     <div class="ml-6 mr-6">
                         <div>
-                            <div class="text-center text-gray-600"><b>{{data.user.name.split(' ')[0]}}'s Posts</b></div>
+                            <div class="text-center text-gray-600 font-hairline"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
                             <div v-if="data">
                                 <div v-show="data.user.posts">
                                     <ul v-for="post in data.user.posts" :key="post" >
@@ -66,6 +88,7 @@
                                         </div>
                                     </ul>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -117,6 +140,14 @@ export default {
         },
         getImage(data){
             return 'https://api.adorable.io/avatars/184/' + data.user.username + '@adorable.io.png';
+        },
+        checkFollow(followings, id){
+            for(let follow of followings){
+                if(follow.id == id){
+                    return true;
+                }
+            }
+            return false;
         }
     }
  
@@ -181,7 +212,7 @@ export default {
     color:rgb(119, 116, 116);
     font-family: "Source Code Pro", sans-serif;
     font-weight: lighter;
-    font-style: italic;
+    /* font-style: italic; */
     column-width: 40%;
 }
 .image{
@@ -209,11 +240,16 @@ export default {
 }
 .ch-profile button{
     font-family: 'Source Code Pro', sans-serif;
-    font-size: 1vw;
-    color: rgb(148, 143, 143);
+    font-size: 0.8rem;
+    color: #ffffff;
     border: none;
     outline: none;
     background-color:rgb(141, 223, 228);
+}
+.ch-profile button:hover {
+    color: rgb(141, 223, 228);
+    border: 1px solid rgb(141, 223, 228);
+    background-color:white;
 }
 .sidebar{
     background-color: rgb(255, 255, 255);
@@ -347,5 +383,8 @@ div.mention-link{
 }
 .mention-link p{
     margin-top: 1.5vh;
+}
+.navbar-color{
+    background-color: rgb(49, 49, 49);
 }
 </style>

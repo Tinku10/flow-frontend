@@ -1,0 +1,26 @@
+query {
+  me {
+    id
+    name
+    username
+    email
+    profile{
+      description
+      website
+    }
+    # posts{
+    #   title
+    #   post
+    # }
+    followings{
+      posts{
+        title
+        post
+        user{
+          name
+          username
+        }
+      }
+    }
+  }
+}

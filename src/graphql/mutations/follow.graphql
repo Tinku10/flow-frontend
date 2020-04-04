@@ -1,0 +1,8 @@
+mutation($id: ID!){
+    follow(
+        following_id: $id
+    ){
+        name
+        username
+    }
+}
