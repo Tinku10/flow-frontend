@@ -14,11 +14,16 @@ query {
     # }
     followings{
       posts{
+        id
         title
         post
         user{
           name
           username
+        }
+        likes{
+          liker_id
+          likes
         }
       }
       

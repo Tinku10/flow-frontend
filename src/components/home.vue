@@ -95,6 +95,7 @@
                             <div v-if="data.me.followings">
                                 <!-- <div v-show="data.me.followings.posts"> -->
                                     <ul v-for="post in arrange(data.me.followings)" :key="post" >
+                                      <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
                                         <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
                                             <div class="mention">
                                                 <img id="profile-img" :src="getImage(post.user.username)">
@@ -102,11 +103,40 @@
                                             </div>
                                             <p class="post-heading">{{post.title}}</p>
                                             <p class="post-content">{{post.post}}</p>
+                                            <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
+                                                <template v-slot="{result: {data}}"> -->
                                             <div>
-                                            
-                                                
+                                                <span v-if="seeLike(post.likes, data.me.id)">
+                                                    <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
+                                                    :variables="{post_id: post.id}">
+                                                        <template v-slot="{mutate}">
+                                                          <div class="flex-row">
+                                                            <button v-on:click="mutate()">Like</button>
+                                                            <div>{{post.likes.length}}</div>
+                                                          </div>
+                                                        </template>
+                                                    </ApolloMutation>
+                                                </span>
+                                                <span v-else>
+                                                    <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/removeLike.graphql')"
+                                                    :variables="{post_id: post.id}">
+                                                        <template v-slot="{mutate}">
+                                                          <template class="flex-row float-right mb-2 mt-2">
+                                                            <span class="mr-2">
+                                                              <button v-on:click="mutate()">Remove like</button>
+                                                            </span>
+                                                            <span class="ml-2">{{post.likes.length}}</span>
+                                                          </template>
+
+                                                        </template>
+                                                    </ApolloMutation>
+                                                </span>
 
                                             </div>
+                                                <!-- </template>
+                                            </ApolloQuery> -->
                                         </div>
                                     </ul>
                                 <!-- </div> -->
@@ -215,6 +245,19 @@ export default {
         get(data){
             let arr = data;
             return arr.length;
+        },
+        seeLike(data, id){
+            if(data == []){
+                return true;
+            }else{
+                for(let liker of data){
+                    // console.log(liker);
+                    if(liker.liker_id == id){
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
 }
  
