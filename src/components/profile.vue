@@ -32,9 +32,15 @@
                                     <div class="mt-2" v-if="data.user.profile.description != null">
                                         <p  >{{data.user.profile.description}}</p>
                                     </div>
-                                    <div class="mt-2" v-if="data.user.profile.website != null">
-                                        <p  >{{data.user.profile.website}}</p>
+                                    <div class="mt-2 text-blue-300" v-if="data.user.profile.website != null">
+                                        <a :href="data.user.profile.website" target="_blank">{{data.user.profile.website}}</a>
                                     </div>
+                                </div>
+                                <div v-if="data.user" class=" extras flex-row justify-evenly mt-4 mb-2">
+                                    <span v-if="data.user.followers" class=" mr-2"><b>{{get(data.user.followers)}}</b> Follower</span>
+                                    <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                    <span v-if="data.user.followings" class=" ml-2"><b>{{get(data.user.followings)}}</b> Following</span>
+                                    <span v-else class=" ml-2"><b>0</b> Following</span>
                                 </div>
                                 <div class="ch-profile">
                                     <ApolloQuery :query="require('../graphql/queries/me.graphql')">
@@ -72,7 +78,7 @@
 
                     </div>
 
-                    <div class="ml-6 mr-6">
+                    <div class="ml-6 mr-6 w-2/4">
                         <div>
                             <div class="text-center text-gray-600 font-hairline"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
                             <div v-if="data">
@@ -148,6 +154,10 @@ export default {
                 }
             }
             return false;
+        },
+        get(data){
+            let arr = data;
+            return arr.length;
         }
     }
  
@@ -211,7 +221,7 @@ export default {
     font-size: 1vw;
     color:rgb(119, 116, 116);
     font-family: "Source Code Pro", sans-serif;
-    font-weight: lighter;
+    /* font-weight: lighter; */
     /* font-style: italic; */
     column-width: 40%;
 }

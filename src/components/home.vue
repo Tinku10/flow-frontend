@@ -2,8 +2,8 @@
   <div >
     <nav class="h-30 w-full p-2 navbar-color" >
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
-        <!-- <span class="search-img ml-10"></span> -->
-        <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-2 outline-none border-none " placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+        <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
+        <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-3 outline-none border-none " placeholder="Search" @click="searchbox = !searchbox" v-model="search">
         <span class="float-right">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
@@ -64,6 +64,16 @@
                                     <a :href="data.me.profile.website" target="_blank">{{data.me.profile.website}}</a>
                                 </div>
                             </div>
+                            <!-- <ApolloQuery :query="require('../graphql/queries/count.graphql')">
+                                <template v-slot="{result: {data}}"> -->
+                            <div v-if="data.me" class=" extras flex-row justify-evenly mt-4 mb-2">
+                                <span v-if="data.me.followers" class=" mr-2"><b>{{get(data.me.followers)}}</b> Follower</span>
+                                <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                <span v-if="data.me.followings" class=" ml-2"><b>{{get(data.me.followings)}}</b> Following</span>
+                                <span v-else class=" ml-2"><b>0</b> Following</span>
+                            </div>
+                                <!-- </template>
+                            </ApolloQuery> -->
                             <div class="ch-profile">
                                 <button class="w-48 h-10">
                                     <router-link to="/home/update" style="text-decoration: none" >Update Profile</router-link>
@@ -78,7 +88,7 @@
 
                 </div>
 
-                <div class="ml-6 mr-6">
+                <div class="ml-6 mr-6 w-2/4">
                     <div >
                         <div class="text-center text-gray-600 font-hairline"><b>My Nest</b></div>
                         <div v-if="data" >
@@ -92,6 +102,11 @@
                                             </div>
                                             <p class="post-heading">{{post.title}}</p>
                                             <p class="post-content">{{post.post}}</p>
+                                            <div>
+                                            
+                                                
+
+                                            </div>
                                         </div>
                                     </ul>
                                 <!-- </div> -->
@@ -196,8 +211,12 @@ export default {
             }
             arr.sort();
             return arr;
+        },
+        get(data){
+            let arr = data;
+            return arr.length;
         }
-    }
+}
  
 }
 </script>
@@ -259,7 +278,7 @@ export default {
     font-size: 1vw;
     color:rgb(119, 116, 116);
     font-family: "Source Code Pro", sans-serif;
-    font-weight: lighter;
+    /* font-weight: lighter; */
     /* font-style: italic; */
     column-width: 40%;
 }
@@ -435,12 +454,5 @@ div.mention-link{
 .navbar-color{
     background-color: rgb(49, 49, 49);
 }
-.search-img{
-    background: url('../../public/search.svg');
-    height: 1rem;
-    width: 1rem;
-    background-repeat: no-repeat;
-    background-size: contain;
 
-}
 </style>

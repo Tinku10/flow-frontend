@@ -2,11 +2,11 @@
   <div id="foot" class="p-5 mt-2 h-32">
     <p class="icons">
       <a href="https://github.com/Tinku10" target=_blank style="text-decoration: none; color: inherit;"><div id="logo"></div></a>
-      <a href="https://www.linkedin.com/in/tinkumonikalita/" target=_blank style="text-decoration: none; color: inherit;"><div id="linkedin"></div></a>
-      <a href="https://medium.com/@tinku.kvs" target=_blank style="text-decoration: none; color: inherit;"><div id="medium"></div></a>
+      <span class=" ml-2  flow mr-2 mb-2">flow</span>
+      <!-- <a href="https://www.linkedin.com/in/tinkumonikalita/" target=_blank style="text-decoration: none; color: inherit;"><div id="linkedin"></div></a>
+      <a href="https://medium.com/@tinku.kvs" target=_blank style="text-decoration: none; color: inherit;"><div id="medium"></div></a> -->
       
-    </p>
-    <div id="copyright" class="mt-2">Copyright © 2020</div>
+    <div id="copyright" class="mt-2  align-center">Copyright © 2020 Flow</div>
   </div>
 </template>
 
@@ -32,9 +32,9 @@ div {
 }
 #logo{
   padding: 1px;
-  background: url('../../public/github.svg');
-  height: 20px;
-  width: 20px;
+  background: url('../../public/quote.svg');
+  height: 2.5rem;
+  width: 2.5rem;
   background-repeat: no-repeat;
   margin-right: 10px;
   margin-left: 10px;
@@ -84,5 +84,13 @@ div {
     margin-inline-start: 0px;
     margin-inline-end: 0px; */
 
+}
+.flow{
+  font-size: 1.5rem;
+  font-family: 'Petit Formal Script', cursive;
+}
+#copyright{
+  font-size: 0.8rem;
+  font-family: 'Source Code Pro', sans-serif;
 }
 </style>

@@ -21,6 +21,10 @@ query {
           username
         }
       }
+      
     }
+    followers{
+        id
+      }
   }
 }

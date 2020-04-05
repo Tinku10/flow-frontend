@@ -1,0 +1,5 @@
+mutation($post_id: ID!){
+    removeLike(
+        post_id: $post_id 
+    )
+}
