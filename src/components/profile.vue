@@ -91,6 +91,42 @@
                                             </div>
                                             <p class="post-heading">{{post.title}}</p>
                                             <p class="post-content">{{post.post}}</p>
+                                            <div>
+                                                <ApolloQuery :query="require('../graphql/queries/me.graphql')">
+                                                <template v-slot="{result: {data}}">
+                                                <span v-if="seeLike(post.likes, data.me.id)">
+                                                    <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
+                                                    :variables="{post_id: post.id}">
+                                                        <template v-slot="{mutate}">
+                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
+                                                            <span class="mr-1">
+                                                                <button class="heartl p-1" v-on:click="mutate()"></button>
+                                                            </span>
+                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          </div>
+                                                        </template>
+                                                    </ApolloMutation>
+                                                </span>
+                                                <span v-else>
+                                                    <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/removeLike.graphql')"
+                                                    :variables="{post_id: post.id}">
+                                                        <template v-slot="{mutate}">
+                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
+                                                            <span class="mr-1">
+                                                              <button class="heart p-1" v-on:click="mutate()"></button>
+                                                            </span>
+                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          </div>
+
+                                                        </template>
+                                                    </ApolloMutation>
+                                                </span>
+                                                </template>
+                                                </ApolloQuery>
+                                            </div>
+                                            <br> <br>
                                         </div>
                                     </ul>
                                 </div>
@@ -158,6 +194,19 @@ export default {
         get(data){
             let arr = data;
             return arr.length;
+        },
+        seeLike(data, id){
+            if(data == []){
+                return true;
+            }else{
+                for(let liker of data){
+                    // console.log(liker);
+                    if(liker.liker_id == id){
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
     }
  
@@ -396,5 +445,27 @@ div.mention-link{
 }
 .navbar-color{
     background-color: rgb(49, 49, 49);
+}
+.heart{
+    background-image: url('../../public/heart.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 1.3rem;
+    width: 1.3rem;
+    outline: none;
+}
+.heartl{
+    background-image: url('../../public/heart.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 1.3rem;
+    width: 1.3rem;
+    filter: grayscale(100%);
+    outline: none;
+}
+.likecounter{
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.8rem;
+    color: rgb(184, 181, 181);
 }
 </style>

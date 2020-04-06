@@ -1,20 +1,25 @@
-query($id: ID!){
-    user(id: $id){
-        name
-        username
-        profile{
-            description
-            website
-        }
-        posts{
-            title
-            post
-        }
-        followers{
-            name
-        }
-        followings{
-            name
-        }
+query($id: ID!) {
+  user(id: $id) {
+    name
+    username
+    profile {
+      description
+      website
     }
+    posts {
+        id
+      title
+      post
+      likes {
+        liker_id
+        likes
+      }
+    }
+    followers {
+      name
+    }
+    followings {
+      name
+    }
+  }
 }

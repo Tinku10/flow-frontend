@@ -111,9 +111,11 @@
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
-                                                          <div class="flex-row">
-                                                            <button v-on:click="mutate()">Like</button>
-                                                            <div>{{post.likes.length}}</div>
+                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
+                                                            <span class="mr-1">
+                                                                <button class="heartl p-1" v-on:click="mutate()"></button>
+                                                            </span>
+                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
                                                           </div>
                                                         </template>
                                                     </ApolloMutation>
@@ -123,18 +125,19 @@
                                                     :mutation="require('../graphql/mutations/removeLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
-                                                          <template class="flex-row float-right mb-2 mt-2">
-                                                            <span class="mr-2">
-                                                              <button v-on:click="mutate()">Remove like</button>
+                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
+                                                            <span class="mr-1">
+                                                              <button class="heart p-1" v-on:click="mutate()"></button>
                                                             </span>
-                                                            <span class="ml-2">{{post.likes.length}}</span>
-                                                          </template>
+                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          </div>
 
                                                         </template>
                                                     </ApolloMutation>
                                                 </span>
 
                                             </div>
+                                            <br> <br>
                                                 <!-- </template>
                                             </ApolloQuery> -->
                                         </div>
@@ -496,6 +499,29 @@ div.mention-link{
 }
 .navbar-color{
     background-color: rgb(49, 49, 49);
+}
+
+.heart{
+    background-image: url('../../public/heart.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 1.3rem;
+    width: 1.3rem;
+    outline: none;
+}
+.heartl{
+    background-image: url('../../public/heart.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 1.3rem;
+    width: 1.3rem;
+    filter: grayscale(100%);
+    outline: none;
+}
+.likecounter{
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.8rem;
+    color: rgb(184, 181, 181);
 }
 
 </style>
