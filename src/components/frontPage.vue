@@ -93,7 +93,14 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    height: 100rem;
+    width: 100rem;
     position: fixed;
+    background-image: url('../../public/snowflake-alt (2).svg') ;
+    /* background:linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(29, 28, 29, 0.3)); */
+    background-blend-mode:overlay;
+    background-size:cover;
+    background-repeat: no-repeat;
 }
 #image{
     /* background: url('../../public/quote.svg'); */

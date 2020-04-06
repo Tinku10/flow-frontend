@@ -13,6 +13,7 @@ import updateProfile from './components/updateProfile'
 // import profiles from './components/profiles'
 import post from './components/post'
 import profile from './components/profile'
+
 import '@/assets/css/tailwind.css'
 
 
@@ -33,14 +34,51 @@ const routes = [
   { path: '/', component: frontPage },
   { path: '/login', component: login },
   {
-    path: '/home', component: home
+    path: '/home', component: home,
+    beforeEnter(to, from, next){
+      if (localStorage.getItem("apollo-token")) {
+        next();
+      }
+      else {
+        next({
+          path: '/login'
+        })
+        
+      }
+    }
     // beforeEnter: (to, from, next) => {
     //   if(to == '/login')
     // }
   },
-  { path: '/home/update', component: updateProfile },
+  {
+    path: '/home/update', component: updateProfile,
+    beforeEnter(to, from, next) {
+      if (localStorage.getItem("apollo-token")) {
+        next();
+      }
+      else {
+        next({
+          path: '/login'
+        })
+
+      }
+    }
+  },
   // { path: '/profiles', component: profiles },
-  {path: '/post', component: post},
+  {
+    path: '/post', component: post,
+    beforeEnter(to, from, next) {
+      if (localStorage.getItem("apollo-token")) {
+        next();
+      }
+      else {
+        next({
+          path: '/login'
+        })
+
+      }
+    }
+  },
   {path: '/profiles/:id', component: profile}
 ];
 

@@ -1,12 +1,29 @@
 <template>
   <div >
-    <nav class="h-30 w-full p-3 navbar-color">
+    <nav class="h-30 w-full p-3 navbar-color" >
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
-        <span>
-            <button  class=" mr-4 ml-4 text-gray-100 float-right outline-none" v-on:click="logout">Log out</button>
+        <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
+        <!-- <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-3 outline-none border-none " placeholder="Search" @click="searchbox = !searchbox" v-model="search"> -->
+        <span class="float-right">
+            <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
+                <template v-slot="{result: {data}, isLoading} ">
+                    <div  v-if="!isLoading" class="  mr-4 ml-1 float-right  border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
+                        <img class="rounded-sm h-6 w-6" :src="getMyImage(data.me.username)">
+                    </div>
+                    <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 ml-1 float-right  cursor-pointer" v-else></div>
+                </template>
+
+            </ApolloQuery>
         </span>
-        
+        <!-- <span>
+            <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none border-none" v-on:click="logout">Log out</button>
+        </span> -->
     </nav>
+    <div v-show="menuPressed" class="h-12 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
+        <div  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle cursor-pointer" v-on:click="logout">Log out</div>
+        <!-- <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
+        </router-link> -->
+    </div>
     <!-- <div v-show="menuPressed" class="h-12 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
         <button  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" v-on:click="logout">Log out</button>
         
@@ -99,11 +116,9 @@
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
-                                                            <span class="mr-1">
-                                                                <button class="heartl p-1" v-on:click="mutate()"></button>
-                                                            </span>
-                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
+                                                            <div class="p-2 font-light likecounter">{{post.likes.length}}</div>
                                                           </div>
                                                         </template>
                                                     </ApolloMutation>
@@ -113,11 +128,9 @@
                                                     :mutation="require('../graphql/mutations/removeLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
-                                                            <span class="mr-1">
-                                                              <button class="heart p-1" v-on:click="mutate()"></button>
-                                                            </span>
-                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
+                                                            <div class=" p-2 font-light likecounter ">{{post.likes.length}}</div>
                                                           </div>
 
                                                         </template>
@@ -165,7 +178,9 @@ export default {
     },
     data(){
         return{
-            id: this.$route.params.username
+            // id: this.$route.params.username,
+            menuPressed: false,
+            id: null
         }
     },
     computed: {
@@ -182,6 +197,9 @@ export default {
         },
         getImage(data){
             return 'https://api.adorable.io/avatars/184/' + data.user.username + '@adorable.io.png';
+        },
+        getMyImage(data){
+            return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
         },
         checkFollow(followings, id){
             for(let follow of followings){
@@ -464,7 +482,7 @@ div.mention-link{
     outline: none;
 }
 .likecounter{
-    font-family: 'Source Code Pro', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
     color: rgb(184, 181, 181);
 }

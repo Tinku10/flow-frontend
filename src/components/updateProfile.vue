@@ -1,6 +1,10 @@
 <template>
   <div >
-    <nav v-if="!off"><router-link to="/" style="text-decoration: none"><strong>Code</strong>Book</router-link></nav>
+    <nav v-if="!off" class="h-30 w-full p-2 navbar-color">
+        <router-link  to="/" style="text-decoration: none" >
+            <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
+        </router-link>
+    </nav>
     <div id="first">
         <h1 class="main " v-if="!off">Update your Profile</h1>
         <ApolloMutation 
@@ -17,7 +21,7 @@
                         </div> -->
                         <br>
                         <input class="input" type="text" placeholder="Description" required  name="description" v-model="description">
-                        <input class="input" type="website" placeholder="Website" required name="website" v-model="website">
+                        <input class="input" type="website" placeholder="Website"  name="website" v-model="website">
 
                         <button id="submit">UPDATE</button>
                         <div v-if="errors">There was an error</div>
@@ -72,12 +76,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .main{
-    color: rgb(113, 212, 212);
-    font-size: 1.8vw;
+    color: rgb(141, 223, 228);
+    font-size: 1.5rem;
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: lighter;
     margin: 0px;
-    padding: 3vw;
+    padding: 2.5rem;
     text-align: center;
     align-content: center;
     
@@ -105,7 +109,7 @@ export default {
 
 }
 p{
-    font-size: 2vw;
+    font-size: 1.5rem;
     font-family: "Source Sans Pro", sans-serif;
     color: rgb(173, 170, 170);
     font-weight: lighter;
@@ -113,9 +117,9 @@ p{
     text-align: center;
 }
 input{
-    width: 40vw;
-    height: 0.3vw;
-    padding: 1.5vw;
+    width: 30rem;
+    height: 1rem;
+    padding: 1.2rem;
     border: 1px solid rgb(184, 182, 182);
     border-radius: 0.2rem;
     margin-bottom: 5px;
@@ -125,9 +129,10 @@ input{
 
 }
 
+
 textarea{
-    width: 50vw;
-    height: 4vw;
+    width: 30rem;
+    height: 15rem;
     border: 1px solid rgb(184, 182, 182);
     font: "Source Sans Pro", sans-serif;
     padding: 1.5vw;
@@ -142,24 +147,39 @@ textarea{
 
 }
 #submit{
-    margin-top: 3vw;
-    width: 10vw;
-    height: 4vw;
-    font-size: 1vw;
+    margin-top: 3rem;
+    width: 10rem;
+    height: 3rem;;
+    font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
     outline: none;
     color: rgb(243, 244, 245);
     margin-bottom: 4vw;
     border-radius: 0.2rem;
-    background-color: rgb(113, 212, 212);
+    background-color: rgb(141, 223, 228);
     border: none;
+
+}
+#submit:hover{
+    margin-top: 3rem;
+    width: 10rem;
+    height: 3rem;;
+    font-size: 0.8rem;
+    font-family: 'Josefin Sans', sans-serif;
+    cursor: pointer;
+    outline: none;
+    color: rgb(141, 223, 228);
+    margin-bottom: 4vw;
+    border-radius: 0.2rem;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(141, 223, 228);
 
 }
 .input{
     font: "Source Sans Pro", sans-serif;
-    font-size: 1vw;
-    font-weight: lighter;
+    font-size: 0.8rem;
+    /* font-weight: lighter; */
     color:rgb(164, 165, 165);
     border: solid 1px rgb(221, 218, 218);
     outline: none;
@@ -171,7 +191,7 @@ input:hover{
 }
 #bottom{
     font-family: 'Josefin Sans', sans-serif;
-    font-size: 1.2vw;
+    font-size: 1rem;
     text-align: center;
     text-decoration: none;
     margin-right: 6px;
@@ -191,22 +211,13 @@ nav a{
     padding: 1vw;
     font-size: 1.5vw;
 }
-.input.image{
-    width: 5vw;
-    height: 5vw;
-    opacity: 0;
-    cursor: pointer;
-
-}
-#imagebox{
-    /* background: url('https://api.adorable.io/avatars/184/12@adorable.io.png'); */
+#image{
+    background: url('../../public/quote-gray.svg');
+    background-repeat: no-repeat;
     background-size: contain;
-    width: 10vw;
-    height: 10vw;
-    /* border: 1px dashed rgb(221, 218, 218); */
-    outline: none;
-    cursor: pointer;
-    /* filter: blur(100%); */
+    background-position: center;
+    filter: grayscale(100%)
+
 }
 </style>
 

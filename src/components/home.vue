@@ -7,10 +7,10 @@
         <span class="float-right">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
-                    <button  v-if="!isLoading" class="  mr-4 ml-1 float-right p-1 border-none outline-none" v-on:click="menuPressed = !menuPressed">
+                    <div  v-if="!isLoading" class="  mr-4 ml-1 float-right p-1 border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
                         <img class="rounded-sm h-6 w-6" :src="getImage(data.me.username)">
-                    </button>
-                    <button class="h-6 w-6 rounded-sm bg-gray-100 mr-4 ml-1 float-right p-2 mt-1" v-else></button>
+                    </div>
+                    <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
                 </template>
 
             </ApolloQuery>
@@ -20,7 +20,7 @@
         </span> -->
     </nav>
     <div v-show="menuPressed" class="h-24 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
-        <button  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" v-on:click="logout">Log out</button>
+        <div  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle cursor-pointer" v-on:click="logout">Log out</div>
         <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
         </router-link>
     </div>
@@ -97,10 +97,10 @@
                                     <ul v-for="post in arrange(data.me.followings)" :key="post" >
                                       <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
                                         <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
-                                            <div class="mention">
+                                            <router-link :to="{path: '/profiles/' + String(post.user.id)}" class="mention">
                                                 <img id="profile-img" :src="getImage(post.user.username)">
                                                 <p>{{post.user.name}}</p>
-                                            </div>
+                                            </router-link>
                                             <p class="post-heading">{{post.title}}</p>
                                             <p class="post-content">{{post.post}}</p>
                                             <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
@@ -111,11 +111,9 @@
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
-                                                            <span class="mr-1">
-                                                                <button class="heartl p-1" v-on:click="mutate()"></button>
-                                                            </span>
-                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
+                                                            <div class="p-2 font-light likecounter">{{post.likes.length}}</div>
                                                           </div>
                                                         </template>
                                                     </ApolloMutation>
@@ -125,11 +123,9 @@
                                                     :mutation="require('../graphql/mutations/removeLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 flex-row ml-4">
-                                                            <span class="mr-1">
-                                                              <button class="heart p-1" v-on:click="mutate()"></button>
-                                                            </span>
-                                                            <span class="ml-1 p-2 font-light likecounter mb-1">{{post.likes.length}}</span>
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
+                                                            <div class=" p-2 font-light likecounter ">{{post.likes.length}}</div>
                                                           </div>
 
                                                         </template>
@@ -519,9 +515,13 @@ div.mention-link{
     outline: none;
 }
 .likecounter{
-    font-family: 'Source Code Pro', sans-serif;
+    font-family: 'Montserrat', sans-serif;;
     font-size: 0.8rem;
     color: rgb(184, 181, 181);
+}
+.post-boundary{
+    border: 1px solid rgb(195, 236, 248);
+    border-radius: 0.2rem;
 }
 
 </style>

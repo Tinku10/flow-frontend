@@ -18,6 +18,7 @@ query {
         title
         post
         user{
+          id
           name
           username
         }
