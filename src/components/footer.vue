@@ -21,8 +21,8 @@ div {
   display: block;
   text-align: center;
   margin: none;
-  margin-left: -10px;
-  margin-right: -10px;
+  /* margin-left: -10px;
+  margin-right: -10px; */
   padding: 5px;
   font-family: "Fira Sans", sans-serif;
   font-weight: lighter;

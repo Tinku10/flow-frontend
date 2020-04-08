@@ -76,7 +76,7 @@
                             </ApolloQuery> -->
                             <div class="ch-profile">
                                 <button class="w-48 h-10">
-                                    <router-link to="/home/update" style="text-decoration: none" >Update Profile</router-link>
+                                    <router-link to="/update" style="text-decoration: none" >Update Profile</router-link>
                                 </button>
                                 <br>
                                 <button class="w-48 h-10">
@@ -92,7 +92,7 @@
                     <div >
                         <div class="text-center text-gray-600 font-hairline"><b>My Nest</b></div>
                         <div v-if="data" >
-                            <div v-if="data.me.followings">
+                            <div v-if="data.me.followings" :key="make(data.me.followings)">
                                 <!-- <div v-show="data.me.followings.posts"> -->
                                     <ul v-for="post in arrange(data.me.followings)" :key="post" >
                                       <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
@@ -105,11 +105,12 @@
                                             <p class="post-content">{{post.post}}</p>
                                             <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
                                                 <template v-slot="{result: {data}}"> -->
-                                            <div>
+                                            <div :key="likecount">
                                                 <span v-if="seeLike(post.likes, data.me.id)">
-                                                    <ApolloMutation
+                                                    <ApolloMutation 
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
-                                                    :variables="{post_id: post.id}">
+                                                    :variables="{post_id: post.id}"
+                                                    @done="onDone">
                                                         <template v-slot="{mutate}">
                                                           <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
                                                             <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
@@ -119,9 +120,10 @@
                                                     </ApolloMutation>
                                                 </span>
                                                 <span v-else>
-                                                    <ApolloMutation
-                                                    :mutation="require('../graphql/mutations/removeLike.graphql')"
-                                                    :variables="{post_id: post.id}">
+                                                    <ApolloMutation 
+                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
+                                                    :variables="{post_id: post.id}"
+                                                    @donr="onDone">
                                                         <template v-slot="{mutate}">
                                                           <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
                                                             <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
@@ -131,7 +133,6 @@
                                                         </template>
                                                     </ApolloMutation>
                                                 </span>
-
                                             </div>
                                             <br> <br>
                                                 <!-- </template>
@@ -177,7 +178,8 @@ export default {
             search: null,
             users: [],
             menuPressed: false,
-            id: null
+            id: null,
+            likecount: null
         }
     },
     computed: {
@@ -257,6 +259,9 @@ export default {
                 }
                 return true;
             }
+        },
+        onDone(data){
+            this.likecount = data;
         }
 }
  
@@ -501,16 +506,16 @@ div.mention-link{
     background-image: url('../../public/heart.svg');
     background-repeat: no-repeat;
     background-size: contain;
-    height: 1.3rem;
-    width: 1.3rem;
+    height: 1.2rem;
+    width: 1.2rem;
     outline: none;
 }
 .heartl{
     background-image: url('../../public/heart.svg');
     background-repeat: no-repeat;
     background-size: contain;
-    height: 1.3rem;
-    width: 1.3rem;
+    height: 1.2rem;
+    width: 1.2rem;
     filter: grayscale(100%);
     outline: none;
 }

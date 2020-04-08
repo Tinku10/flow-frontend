@@ -1,7 +1,5 @@
 mutation($post_id: ID!){
     addLike(
         post_id: $post_id 
-    ){
-        title
-    }
+    )
 }

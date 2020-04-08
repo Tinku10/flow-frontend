@@ -51,7 +51,7 @@ const routes = [
     // }
   },
   {
-    path: '/home/update', component: updateProfile,
+    path: '/update', component: updateProfile,
     beforeEnter(to, from, next) {
       if (localStorage.getItem("apollo-token")) {
         next();

@@ -125,7 +125,7 @@
                                                 </span>
                                                 <span v-else>
                                                     <ApolloMutation
-                                                    :mutation="require('../graphql/mutations/removeLike.graphql')"
+                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}">
                                                         <template v-slot="{mutate}">
                                                           <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
