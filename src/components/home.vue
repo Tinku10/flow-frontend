@@ -58,10 +58,12 @@
                             <h5 class="username mt-2 font-bold"><b>@</b> {{data.me.username}}</h5>
                             <div class="extras mt-4 w-48" v-if="data.me.profile" >
                                 <div class="mt-2" v-if="data.me.profile.description != null">
-                                    <p  >{{data.me.profile.description}}</p>
+                                    <p v-if="$store.state.description">{{$store.state.description}}</p>
+                                    <p v-else >{{data.me.profile.description}}</p>
                                 </div>
                                 <div class="mt-2 text-blue-300" v-if="data.me.profile.website != null">
-                                    <a :href="data.me.profile.website" target="_blank">{{data.me.profile.website}}</a>
+                                    <a :href="$store.state.website" target="_blank" v-if="$store.state.website">{{$store.state.website}}</a>
+                                    <a :href="data.me.profile.website" target="_blank" v-else>{{data.me.profile.website}}</a>
                                 </div>
                             </div>
                             <!-- <ApolloQuery :query="require('../graphql/queries/count.graphql')">
@@ -92,11 +94,11 @@
                     <div >
                         <div class="text-center text-gray-600 font-hairline"><b>My Nest</b></div>
                         <div v-if="data" >
-                            <div v-if="data.me.followings" :key="make(data.me.followings)">
+                            <div v-if="data.me.followings" >
                                 <!-- <div v-show="data.me.followings.posts"> -->
-                                    <ul v-for="post in arrange(data.me.followings)" :key="post" >
+                                    <ul v-for="(post,index) in arrange(data.me.followings)" :key="post" >
                                       <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
-                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
+                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4" >
                                             <router-link :to="{path: '/profiles/' + String(post.user.id)}" class="mention">
                                                 <img id="profile-img" :src="getImage(post.user.username)">
                                                 <p>{{post.user.name}}</p>
@@ -105,34 +107,55 @@
                                             <p class="post-content">{{post.post}}</p>
                                             <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
                                                 <template v-slot="{result: {data}}"> -->
-                                            <div :key="likecount">
-                                                <span v-if="seeLike(post.likes, data.me.id)">
+                                            <div>
+                                                <!-- || isLiked(index, data.me.id)" -->
+                                                <span  >
                                                     <ApolloMutation 
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}"
                                                     @done="onDone">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
-                                                            <div class="p-2 font-light likecounter">{{post.likes.length}}</div>
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
+                                                            
+                                                            
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
+
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+
+                                                            <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+
+                                                            
+                                                            
+                                                          </div >
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
+                                                            
+                                                            
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(post.likes.length, index)"></div>
+
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(post.likes.length + 1, index)"></div>
+
+                                                            <div class="p-2 font-light likecounter">{{array[index].like}}</div>
+                                                            
+                                                            
                                                           </div>
                                                         </template>
                                                     </ApolloMutation>
                                                 </span>
-                                                <span v-else>
+                                                <!-- <span v-else>
                                                     <ApolloMutation 
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}"
                                                     @donr="onDone">
                                                         <template v-slot="{mutate}">
                                                           <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
-                                                            <div class=" p-2 font-light likecounter ">{{post.likes.length}}</div>
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate();decreaseLike(index, data.me.id)"></div>
+                                                            <div class="p-2 font-light likecounter" v-if="$store.state.followings">{{$store.state.followings[index].likes.length}}</div>
+                                                            <div class=" p-2 font-light likecounter " v-else>{{post.likes.length}}</div>
                                                           </div>
 
                                                         </template>
                                                     </ApolloMutation>
-                                                </span>
+                                                </span> -->
                                             </div>
                                             <br> <br>
                                                 <!-- </template>
@@ -179,7 +202,11 @@ export default {
             users: [],
             menuPressed: false,
             id: null,
-            likecount: null
+            likecount: null,
+            likeArr: [],
+            pressed: null,
+            color: null,
+            array: null
         }
     },
     computed: {
@@ -237,10 +264,15 @@ export default {
             for(let i = 0; i<postsArr.length; i++){
                 for(let j= 0; j<postsArr[i].posts.length; j++){
                     arr = arr.concat(postsArr[i].posts[j]);
+                    
+                // this.array = this.array.concat({like: ele.likes.length, color: 'red'})
                 }
                 // arr = [arr.concat(postsArr[i][0])];
             }
             arr.sort();
+            
+            this.array = new Array(arr.length).fill({like: null, color: null});
+            // this.$store.commit('setFollowings', arr);
             return arr;
         },
         get(data){
@@ -260,9 +292,54 @@ export default {
                 return true;
             }
         },
+        like(data, index){
+            this.array[index] = {like: data+1, color: 'red'};
+            // return this.array[index].like;
+
+        },
+        dislike(data, index){
+            this.array[index] = {like: data-1, color: 'gray'};
+            // return this.array[index].like;
+
+        },
         onDone(data){
             this.likecount = data;
+        },
+        // increaseLike(index, id){
+        // // increaseLike(index, id){
+        //     this.$store.commit('increaseLikes', {index: index, id: id });
+        // },
+        // decreaseLike(index, id){
+        //     this.$store.commit('decreaseLikes', {index: index, id: id });
+        // },
+        isLiked(index, id){
+            let following = this.$store.getters.getFollowing;
+            // console.log(following[0].likes);
+            if (following[index].likes == []) {
+                return true;
+            } else {
+                for (let liker of following[index].likes) {
+                    // console.log(liker);
+                    if (liker.liker_id == id) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        },
+        turnOn(index, color){
+            this.color = color;
+            this.pressed = index;
         }
+        // make(post){
+        //     // this.likeArr = followings;
+        //     // for(let liker of post){
+        //         // for(let post of liker.posts){
+        //             this.likeArr = this.likeArr.concat(post);
+
+        //         // }
+        //     // }
+        // }
 }
  
 }

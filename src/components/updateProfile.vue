@@ -60,6 +60,8 @@ export default {
         onDone(){
             // console.log(data);
             // this.username = data.user.username;
+            this.$store.commit('setDescription', this.description);
+            this.$store.commit('setWebsite', this.website);
             this.$router.push({path: '/home'});
         }
         
