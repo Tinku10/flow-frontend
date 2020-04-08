@@ -190,7 +190,7 @@ export default {
     background-position: center;
 }
 .last{
-    background-image: url('../../public/florian-klauer-mk7D-4UCfmg-unsplash.jpg');
+    /* background-image: url('../../public/florian-klauer-mk7D-4UCfmg-unsplash.jpg'); */
 }
 .button{
     height: 5rem;
