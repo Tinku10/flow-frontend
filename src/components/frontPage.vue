@@ -1,26 +1,50 @@
 <template>
-    <div>
+    <div class="background overflow-hidden">
 
     <div class="hello relative overflow-hidden">
-        <nav class="navbar">
-            <div v-if="token" class="justify-end">
+        <div class="overlay"></div>
+        <nav class="navbar flex " >
+            <div class="flex-row ">
+                <img class="lens" src="../../public/search.svg" alt="">
+                <input type="text" name="" class=" p-3 outline-none border-none resultbox  rounded-sm" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+            </div>
+
+            <div v-if="token" class="justify-end fixed right-0">
                 <span class="mr-4"><router-link to="/home" id="link" class="mr-2 ml-2" v-if="token">Home</router-link></span>
 
             </div>
-            <div v-else class="justify-end">
+            <div v-else class="justify-end fixed right-0">
                 <span class="mr-4"><router-link to="/login" id="link" class="mr-2 ml-2">Login</router-link></span>
                 <span class="mr-4"><router-link to="/register" id="link" class="mr-2 ml-2">Register</router-link></span>
 
             </div>
 
         </nav>
+        <div class="mention-link  float-left border-gray-200 shadow-md p-2  mt-1 result"  v-show="searchbox" >
+            <ApolloQuery 
+            :query="require('../graphql/queries/users.graphql') "
+            >
+                <template  v-slot="{result: {data}}">
+                <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user"  >
+                    <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
+                        <img id="profile-img" :src="getProfiles(user.username)">
+                        <p>{{user.name}}</p>
+                    </router-link>
+                </ul>
+                <!-- <p v-else>Loading..</p> -->
+                </template>
+            </ApolloQuery>
+
+        </div>
         <div class="relative h-screen w-screen">
             <!-- <div id="title"> -->
                 <!-- <div id=image class="z-0 h-100 w-100  bg-no-repeat bg-contain" ></div> -->
                 <div class="central absolute"></div>
-                <div class="container flex ml-1 mr-1 absolute">
+                <div class="container flex ml-1 mr-1 absolute text-transparent">
                     <div class="f">F</div><div class="l">L</div><div class="o">O</div><div class="w">W</div>
                 </div>
+                
+                
             <!-- </div> -->
             <!-- <p class="description">Share something beautiful with the world</p> -->
         </div>
@@ -42,10 +66,38 @@
 <script>
 // import gql from 'graphql-tag';
 export default {
+    data(){
+        return{
+            searchbox: false,
+            search: null,
+            users: null
+        }
+    },
     computed: {
         token(){
             return localStorage.getItem("apollo-token");
         }
+    },
+    methods: {
+        filteredUsers(users){
+            if(this.search == ''){
+                this.search = null;
+            }else if(this.search == null){
+                return users;
+            }
+            this.users = users;
+            let filtered = [];
+            for(let user of this.users){
+                let name = user.name.toLowerCase();
+                if(name.includes(this.search)){
+                    filtered = filtered.concat(user);
+                }
+            }
+            return filtered;
+        },
+        getProfiles(data){
+             return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
+        },
     }
 }
 </script>
@@ -58,7 +110,7 @@ export default {
 }
 #link{
     text-decoration: none;
-    color: rgb(133, 130, 130);
+    color: rgba(255, 255, 255, 0.712);
     /* margin-left: 1.5vw;
     margin-right: 1.5vw; */
     font-family: 'Josefin Sans', sans-serif;
@@ -88,18 +140,7 @@ export default {
     z-index: 10; */
     /* font-weight: lighter; */
 }
-/* .description{
-    font-family: "Source Code Pro", sans-serif ;
-    font-family: 'Sofia', cursive;
-    font-family: 'Amatic SC', cursive;
-    text-align: center;
-    font-style: italic;
-    color:rgb(128, 125, 125);
-    font-size: 1.7vw;
-    font-size: 2.2vh;
-    margin-top:0;
-    padding: 0;
-} */
+
 .central{
     /* display: flex;
     flex-direction: column;
@@ -119,27 +160,8 @@ export default {
     /* background-size:contain; */
     background-repeat: no-repeat;
 }
-#image{
-    /* background: url('../../public/quote.svg'); */
-    /* height: 220vh;
-    width: 220vh; */
-    /* background-repeat: no-repeat;
-    background-size: contain;
-    filter: blur(15px);
-    top: 30%;
-    left: 40%;
-    z-index: -1;
-    transform: translate(-50%, -50%);
-    position: fixed;
-    filter: grayscale(60%); */
-    /* margin-right: 10vh;
-    margin-top: -10vh;
-    margin-left: -20vh; */
-}
-/* #title{
-    display: flex;
-    flex-direction: row;
-} */
+
+
 .central{
     /* background: url('../../public/gareth-david-m0chaAschUw-unsplash.jpg'); */
     /* background-size: 70%; */
@@ -154,17 +176,20 @@ export default {
 .container{
     justify-content: space-evenly;
     left: 50%;
-    top: 40%;
+    top: 45%;
     transform: translate(-50%, -50%);
     font-family: 'Hind', sans-serif;
     font-size: 6rem;
+    z-index: 100;
+    color: rgba(17, 17, 17, 0.486);
+
 }
-.o, .l{
-    color:rgb(90, 89, 89);
+/* .o, .l{
+    color:rgb(66, 65, 65);
 }
 .f, .w{
-    color: rgb(156, 154, 154);
-}
+    color: rgb(148, 165, 168);
+} */
 .info{
     font-family: 'Hind', sans-serif;
     font-size: 5rem;
@@ -182,30 +207,112 @@ export default {
     font-size: 2rem;
     color: rgb(211, 211, 211);
 }
-.s2{
-    /* background-color: rgb(0, 0, 0); */
-    background-image: url('../../public/gareth-david-m0chaAschUw-unsplash.jpg');
-    /* background-size: 40%; */
-    background-repeat: no-repeat;
-    background-position: center;
+
+.mention-link{
+    font-family: "Source Code Pro", sans-serif;
+    color: gray;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 0;
+    /* border: 1px solid rgb(230, 228, 228); */
+    border-radius: 0.25rem;
+    width: 32.5vw;
+    
+
 }
-.last{
-    /* background-image: url('../../public/florian-klauer-mk7D-4UCfmg-unsplash.jpg'); */
+.mention-link.ind:hover{
+    background-color:rgb(247, 242, 242);
+    
+
 }
-.button{
-    height: 5rem;
-    width: 20rem;
-    padding: 1.2rem;
-    background: rgb(103, 222, 243);
-    color: white;
-    outline: none;
+div.mention-link{
+    border: none;
+    background-color:rgb(255, 255, 255);
     border-radius: 0.2rem;
-    text-align: center;
-    font-size: 1.5rem;
+    z-index: 10;
+    /* overflow-y:scroll; */
+   
+
 }
-.button:hover{
-    background: rgb(255, 255, 255);
-    color: rgb(103, 222, 243);
-    border: 1px solid rgb(103, 222, 243);
+.mention-link p{
+    margin-top: 1.5vh;
+}
+#profile-img{
+    height: 6vh;
+    width: 6vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0.2rem;
+    margin-right: 2vh;
+}
+/* .search{
+    height: 5rem;
+    width: 30rem;
+    border-radius: 0.2rem;
+    position: center;
+    margin-left: 10vh;
+    margin-top: 0.5vh;
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 2vh;
+    background-color:rgba(255, 255, 255, 0.918);
+    padding: 2vh;
+    outline: 0;
+    border: 1px solid gray;
+}
+.search-result{
+    width: 55vh;
+    height: 30vh;
+    border-radius: 0.2rem;
+    margin-left: 20vh;
+    outline: none;
+    position: relative;
+    background-color:rgb(255, 255, 255);
+    box-shadow: 0 0 6px rgb(179, 178, 178);
+    
+} */
+.result{
+    top: 25%;
+    left: 50.2%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 35vw;
+    height: 14rem;
+    overflow: hidden;
+}
+.resultbox{
+    /* top: 5%; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    margin-left: 31vw;
+    justify-content: center;
+    /* position: fixed; */
+    border: 1px solid rgb(190, 190, 190);
+    width: 35vw;
+    height: 2.5vw;
+    background: rgb(240, 239, 239);
+    padding-left: 3vw;
+}
+.lens{
+    height: 1vw;
+    width: 1vw;
+    margin-left: 32vw;
+    z-index: 10;
+    position: fixed;
+    margin-top: 0.7vw;
+}
+.background{
+    background-image: url('../../public/luca-bravo-alS7ewQ41M8-unsplash.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-origin: center;
+    background-blend-mode: overlay;
+    /* position: relative; */
+}
+.overlay{
+    background: black;
+    /* position: absolute; */
+    height: 100%;
+    width: 100%;
+    filter: opacity(60%);
 }
 </style>

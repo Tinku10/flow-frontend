@@ -25,19 +25,19 @@
         </router-link>
     </div>
     <div class="mention-link w-64 h-56 absolute border-gray-200 shadow-md p-2 ml-24 mt-1"  v-show="searchbox" >
-            <ApolloQuery 
-            :query="require('../graphql/queries/users.graphql') "
-            >
-                <template  v-slot="{result: {data}}">
-                <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user"  >
-                    <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
-                        <img id="profile-img" :src="getProfiles(user.username)">
-                        <p>{{user.name}}</p>
-                    </router-link>
-                </ul>
-                <!-- <p v-else>Loading..</p> -->
-                </template>
-            </ApolloQuery>
+        <ApolloQuery 
+        :query="require('../graphql/queries/users.graphql') "
+        >
+            <template  v-slot="{result: {data}}">
+            <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user"  >
+                <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
+                    <img id="profile-img" :src="getProfiles(user.username)">
+                    <p>{{user.name}}</p>
+                </router-link>
+            </ul>
+            <!-- <p v-else>Loading..</p> -->
+            </template>
+        </ApolloQuery>
     
     </div>
     <br>
@@ -104,7 +104,7 @@
                                                 <p>{{post.user.name}}</p>
                                             </router-link>
                                             <p class="post-heading">{{post.title}}</p>
-                                            <p class="post-content">{{post.post}}</p>
+                                            <p class="post-content flex-row justify-center">{{post.post}}</p>
                                             <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
                                                 <template v-slot="{result: {data}}"> -->
                                             <div>
@@ -489,8 +489,9 @@ export default {
     color:rgb(128, 126, 126);
     padding: 2vw;
     width: 40vw;
-    margin-left: 8vw;
+    margin-left: 5.5vw;
     margin-right: 8vw;
+    /* text-align: center; */
 }
 .post-heading{
     font-size: 3vh;

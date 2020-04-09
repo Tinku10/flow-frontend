@@ -1,10 +1,10 @@
 <template>
-  <div >
+  <div>
     <nav class="h-30 w-full p-3 navbar-color" >
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
         <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
         <!-- <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-3 outline-none border-none " placeholder="Search" @click="searchbox = !searchbox" v-model="search"> -->
-        <span class="float-right">
+        <span class="float-right" v-if="isAuth()">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
                     <div  v-if="!isLoading" class="  mr-4 ml-1 float-right  border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
@@ -68,29 +68,35 @@
                                 <div class="ch-profile">
                                     <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                         <template v-slot="{result: {data}}">
-                                            <span v-if="followers == null">
-                                                <ApolloMutation
-                                                :mutation="require('../graphql/mutations/follow.graphql')"
-                                                :variables="{id: $route.params.id}"
-                                                >
-                                                    <template v-slot="{mutate}">
-                                                        <!-- truke -->
-                                                        <button class="w-48 h-10 float-left" v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
-                                                        <button class="w-48 h-10 float-left" v-on:click="mutate();follow(number)" v-else>Follow </button>
-                                                    </template>
-                                                </ApolloMutation>
+                                            <span v-if="isAuth()">
+                                                <span v-if="followers == null">
+                                                    <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/follow.graphql')"
+                                                    :variables="{id: $route.params.id}"
+                                                    >
+                                                        <template v-slot="{mutate}">
+                                                            <!-- truke -->
+                                                            <button class="w-48 h-10 float-left" v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
+                                                            <button class="w-48 h-10 float-left" v-on:click="mutate();follow(number)" v-else>Follow </button>
+                                                        </template>
+                                                    </ApolloMutation>
+                                                </span>
+                                                <span v-else>
+                                                    <ApolloMutation
+                                                    :mutation="require('../graphql/mutations/follow.graphql')"
+                                                    :variables="{id: $route.params.id}"
+                                                    >
+                                                        <template v-slot="{mutate}">
+                                                            <button class="w-48 h-10 float-left" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
+                                                            <button class="w-48 h-10 float-left" v-on:click="mutate(); follow(number)" v-else>Follow </button>
+                                                        
+                                                        </template>
+                                                    </ApolloMutation>
+                                                </span>
+
                                             </span>
                                             <span v-else>
-                                                <ApolloMutation
-                                                :mutation="require('../graphql/mutations/follow.graphql')"
-                                                :variables="{id: $route.params.id}"
-                                                >
-                                                    <template v-slot="{mutate}">
-                                                        <button class="w-48 h-10 float-left" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
-                                                        <button class="w-48 h-10 float-left" v-on:click="mutate(); follow(number)" v-else>Follow </button>
-                                                    
-                                                    </template>
-                                                </ApolloMutation>
+                                                <button class="w-48 h-10 float-left" v-on:click="banner=true;feature='follow a person'">Follow </button>
                                             </span>
                                         </template>
                                         
@@ -126,28 +132,39 @@
                                                     :variables="{post_id: post.id}"
                                                     @done="onDone">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
-                                                            
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
+                                                            <span v-if="isAuth()">
+                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
+                                                                
+                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
 
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
 
-                                                            <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
 
-                                                            
-                                                            
-                                                          </div >
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
-                                                            
-                                                            
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
+                                                                
+                                                                
+                                                            </div >
+                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
+                                                                
+                                                                
+                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
 
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
+                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
 
-                                                            <div class="p-2 font-light likecounter">{{array[index].like}}</div>
-                                                            
-                                                            
-                                                          </div>
+                                                                <div class="p-2 font-light likecounter">{{array[index].like}}</div>
+                                                                
+                                                                
+                                                            </div>
+                                                            </span>
+                                                            <span v-else>
+                                                                <!-- <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div> -->
+                                                                <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" >
+
+                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer"  v-on:click="banner=true; feature='like a post'"></div>
+
+                                                                <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                </div>
+                                                            </span>
                                                         </template>
                                                     </ApolloMutation>
                                                 </template>
@@ -172,6 +189,17 @@
         </ApolloQuery>
 
     </div>
+    <transition name="fade">
+        <div v-show="auth==false&& banner ==true" class="auth p-2 w-1/3 flex-col shadow-xl rounded">
+            <p class="p-4 ml-2 mr-2 text-center">You need to be logged in to {{feature}}.</p>
+            <div class="flex justify-center mt-4 mb-4">
+                <button class="mr-4 ml-4 h-8 w-20"><router-link to="/login"  class="mr-2 ml-2">Login</router-link></button>
+                <button class="mr-4 ml-4 h-8 w-20" @click="banner=false">Explore</button>
+
+            </div>
+        </div>
+
+    </transition>
     <!-- <div class="dashboard">PROFILE</div> -->
     <br><br>
     <footer>
@@ -198,7 +226,10 @@ export default {
             followers: null,
             number: null,
             likes: null,
-            array: null
+            array: null,
+            auth: false,
+            banner: false,
+            feature: ''
         }
     },
     computed: {
@@ -228,6 +259,10 @@ export default {
             return false;
         },
         get(data){
+            if(localStorage.getItem("apollo-token")){
+                this.auth= true;
+            }
+            this.auth= false;
             // this.number = data.length
             // this.followers = {follower: data.length, button: null};
             let arr = data;
@@ -279,7 +314,14 @@ export default {
             this.likes[index] = data-1;
             // return this.array[index].like;
 
+        },
+        isAuth(){
+            if(localStorage.getItem("apollo-token")){
+                return true;
+            }
+            return false;
         }
+        
     }
  
 }
@@ -426,7 +468,7 @@ export default {
     color:rgb(128, 126, 126);
     padding: 2vw;
     width: 40vw;
-    margin-left: 8vw;
+    margin-left: 5.5vw;
     margin-right: 8vw;
 }
 .post-heading{
@@ -539,5 +581,41 @@ div.mention-link{
     font-family: 'Montserrat', sans-serif;
     font-size: 0.8rem;
     color: rgb(184, 181, 181);
+}
+.auth{
+    /* height: 5rem;
+    width: 10rem; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,  -50%);
+    position: fixed;
+    background-color: white;
+    font-family: 'Quicksand', sans-serif;
+    color: rgb(100, 100, 100);
+    font-size: 1.2rem;
+    font-weight: lighter;
+    /* border: 1px solid  rgb(161, 163, 163); */
+    border-radius: 0.2rem;
+}
+.auth button{
+    background: rgb(141, 223, 228);
+    border-radius: 0.2rem;
+    font-size: 0.8rem;
+    color: white;
+    font-weight: lighter;
+    outline: rgb(141, 223, 228);
+
+}
+.auth button:hover{
+    background: rgb(255, 255, 255);
+    color: rgb(141, 223, 228);
+    border: 1px solid rgb(141, 223, 228);
+
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
