@@ -54,31 +54,41 @@
                                     </div>
                                 </div>
                                 <div v-if="data.user" class=" extras flex-row justify-evenly mt-4 mb-2">
-                                    <span v-if="data.user.followers" class=" mr-2"><b>{{get(data.user.followers)}}</b> Follower</span>
-                                    <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                    <span v-if="followers == null">
+                                        <span v-if="data.user.followers" class=" mr-2"><b>{{getf(data.user.followers)}}</b> Follower</span>
+                                        <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                    </span>
+                                    <span v-else>
+                                        <span v-if="followers.follower" class=" mr-2"><b>{{followers.follower}}</b> Follower</span>
+                                        <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                    </span>
                                     <span v-if="data.user.followings" class=" ml-2"><b>{{get(data.user.followings)}}</b> Following</span>
                                     <span v-else class=" ml-2"><b>0</b> Following</span>
                                 </div>
                                 <div class="ch-profile">
                                     <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                         <template v-slot="{result: {data}}">
-                                            <span v-if="checkFollow(data.me.followings, $route.params.id)">
+                                            <span v-if="followers == null">
                                                 <ApolloMutation
-                                                :mutation="require('../graphql/mutations/unFollow.graphql')"
+                                                :mutation="require('../graphql/mutations/follow.graphql')"
                                                 :variables="{id: $route.params.id}"
-                                                @done="onDone">
+                                                >
                                                     <template v-slot="{mutate}">
-                                                        <button class="w-48 h-10 float-left" v-on:click="mutate()">Unfollow</button>
+                                                        <!-- truke -->
+                                                        <button class="w-48 h-10 float-left" v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
+                                                        <button class="w-48 h-10 float-left" v-on:click="mutate();follow(number)" v-else>Follow </button>
                                                     </template>
                                                 </ApolloMutation>
                                             </span>
                                             <span v-else>
                                                 <ApolloMutation
-                                                    :mutation="require('../graphql/mutations/follow.graphql')"
-                                                    :variables="{id: $route.params.id}"
-                                                    @done="onDone">
+                                                :mutation="require('../graphql/mutations/follow.graphql')"
+                                                :variables="{id: $route.params.id}"
+                                                >
                                                     <template v-slot="{mutate}">
-                                                        <button class="w-48 h-10 float-left" v-on:click="mutate()">Follow </button>
+                                                        <button class="w-48 h-10 float-left" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
+                                                        <button class="w-48 h-10 float-left" v-on:click="mutate(); follow(number)" v-else>Follow </button>
+                                                    
                                                     </template>
                                                 </ApolloMutation>
                                             </span>
@@ -180,7 +190,9 @@ export default {
         return{
             // id: this.$route.params.username,
             menuPressed: false,
-            id: null
+            id: null,
+            followers: null,
+            number: null
         }
     },
     computed: {
@@ -210,6 +222,14 @@ export default {
             return false;
         },
         get(data){
+            // this.number = data.length
+            // this.followers = {follower: data.length, button: null};
+            let arr = data;
+            return arr.length;
+        },
+        getf(data){
+            this.number = data.length
+            // this.followers = {follower: data.length, button: null};
             let arr = data;
             return arr.length;
         },
@@ -225,6 +245,14 @@ export default {
                 }
                 return true;
             }
+        },
+        follow(data){
+            this.followers = {follower: data+1, button: 'uf'};
+            this.number = data+1;
+        },
+        unfollow(data){
+            this.followers = {follower: data-1, button: 'f'}
+            this.number = data-1;
         }
     }
  

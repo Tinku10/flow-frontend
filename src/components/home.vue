@@ -130,9 +130,9 @@
                                                           <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
                                                             
                                                             
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(post.likes.length, index)"></div>
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
 
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(post.likes.length + 1, index)"></div>
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
 
                                                             <div class="p-2 font-light likecounter">{{array[index].like}}</div>
                                                             
@@ -206,7 +206,8 @@ export default {
             likeArr: [],
             pressed: null,
             color: null,
-            array: null
+            array: null,
+            likes: null 
         }
     },
     computed: {
@@ -270,7 +271,7 @@ export default {
                 // arr = [arr.concat(postsArr[i][0])];
             }
             arr.sort();
-            
+            this.likes = new Array(arr.length).fill(null);
             this.array = new Array(arr.length).fill({like: null, color: null});
             // this.$store.commit('setFollowings', arr);
             return arr;
@@ -294,11 +295,13 @@ export default {
         },
         like(data, index){
             this.array[index] = {like: data+1, color: 'red'};
+            this.likes[index] = data+1;
             // return this.array[index].like;
 
         },
         dislike(data, index){
             this.array[index] = {like: data-1, color: 'gray'};
+            this.likes[index] = data-1;
             // return this.array[index].like;
 
         },
