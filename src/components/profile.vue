@@ -109,8 +109,8 @@
                         <div>
                             <div class="text-center text-gray-600 font-hairline"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
                             <div v-if="data">
-                                <div v-show="data.user.posts">
-                                    <ul v-for="post in data.user.posts" :key="post" >
+                                <div v-show="arrange(data.user.posts)"> 
+                                    <ul v-for="(post,index) in data.user.posts" :key="post" >
                                         <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
                                             <div class="mention">
                                                 <img id="profile-img" :src="getImage(data)">
@@ -121,31 +121,35 @@
                                             <div>
                                                 <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                                 <template v-slot="{result: {data}}">
-                                                <span v-if="seeLike(post.likes, data.me.id)">
-                                                    <ApolloMutation
+                                                <ApolloMutation 
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
-                                                    :variables="{post_id: post.id}">
+                                                    :variables="{post_id: post.id}"
+                                                    @done="onDone">
                                                         <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
-                                                            <div class="p-2 font-light likecounter">{{post.likes.length}}</div>
-                                                          </div>
-                                                        </template>
-                                                    </ApolloMutation>
-                                                </span>
-                                                <span v-else>
-                                                    <ApolloMutation
-                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
-                                                    :variables="{post_id: post.id}">
-                                                        <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate()"></div>
-                                                            <div class=" p-2 font-light likecounter ">{{post.likes.length}}</div>
-                                                          </div>
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
+                                                            
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
 
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+
+                                                            <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+
+                                                            
+                                                            
+                                                          </div >
+                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
+                                                            
+                                                            
+                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
+
+                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
+
+                                                            <div class="p-2 font-light likecounter">{{array[index].like}}</div>
+                                                            
+                                                            
+                                                          </div>
                                                         </template>
                                                     </ApolloMutation>
-                                                </span>
                                                 </template>
                                                 </ApolloQuery>
                                             </div>
@@ -192,7 +196,9 @@ export default {
             menuPressed: false,
             id: null,
             followers: null,
-            number: null
+            number: null,
+            likes: null,
+            array: null
         }
     },
     computed: {
@@ -253,6 +259,26 @@ export default {
         unfollow(data){
             this.followers = {follower: data-1, button: 'f'}
             this.number = data-1;
+        },
+        arrange(data){
+            if(data){
+                this.likes = new Array(data.length).fill(null);
+                this.array = new Array(data.length).fill({like: null, color: null});
+                return true;
+            }
+            return false;
+        },
+        like(data, index){
+            this.array[index] = {like: data+1, color: 'red'};
+            this.likes[index] = data+1;
+            // return this.array[index].like;
+
+        },
+        dislike(data, index){
+            this.array[index] = {like: data-1, color: 'gray'};
+            this.likes[index] = data-1;
+            // return this.array[index].like;
+
         }
     }
  
