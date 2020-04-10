@@ -22,6 +22,12 @@ export const store = new Vuex.Store({
         },
         getFollowing(state) {
             return state.followings;
+        },
+        getDescription(state){
+            return state.description;
+        },
+        getWebsite(state) {
+            return state.website;
         }
        
     },

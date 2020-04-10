@@ -25,12 +25,14 @@
             :query="require('../graphql/queries/users.graphql') "
             >
                 <template  v-slot="{result: {data}}">
-                <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user"  >
-                    <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
-                        <img id="profile-img" :src="getProfiles(user.username)">
-                        <p>{{user.name}}</p>
-                    </router-link>
-                </ul>
+                <span v-if="data">
+                    <ul v-for="user in filteredUsers(data.users)"  :key="user.id"  >
+                        <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
+                            <img id="profile-img" :src="getProfiles(user.username)">
+                            <p>{{user.name}}</p>
+                        </router-link>
+                    </ul>
+                </span>
                 <!-- <p v-else>Loading..</p> -->
                 </template>
             </ApolloQuery>
@@ -110,7 +112,7 @@ export default {
 }
 #link{
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.712);
+    color: rgba(110, 107, 107, 0.712);
     /* margin-left: 1.5vw;
     margin-right: 1.5vw; */
     font-family: 'Josefin Sans', sans-serif;
@@ -180,8 +182,8 @@ export default {
     transform: translate(-50%, -50%);
     font-family: 'Hind', sans-serif;
     font-size: 6rem;
-    z-index: 100;
-    color: rgba(17, 17, 17, 0.486);
+    /* z-index: 100; */
+    color: rgb(100, 100, 100);
 
 }
 /* .o, .l{
@@ -297,15 +299,16 @@ div.mention-link{
     width: 1vw;
     margin-left: 32vw;
     z-index: 10;
-    position: fixed;
+    position: absolute;
     margin-top: 0.7vw;
 }
 .background{
-    background-image: url('../../public/luca-bravo-alS7ewQ41M8-unsplash.jpg');
+    /* background-image: url('../../public/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     background-origin: center;
     background-blend-mode: overlay;
+    /* filter: opacity(40%); */
     /* position: relative; */
 }
 .overlay{
@@ -313,6 +316,6 @@ div.mention-link{
     /* position: absolute; */
     height: 100%;
     width: 100%;
-    filter: opacity(60%);
+    /* filter: opacity(60%); */
 }
 </style>

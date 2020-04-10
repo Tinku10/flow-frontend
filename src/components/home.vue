@@ -29,12 +29,14 @@
         :query="require('../graphql/queries/users.graphql') "
         >
             <template  v-slot="{result: {data}}">
-            <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user"  >
-                <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
-                    <img id="profile-img" :src="getProfiles(user.username)">
-                    <p>{{user.name}}</p>
-                </router-link>
-            </ul>
+                <span v-if="data">
+                    <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user.id"  >
+                        <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
+                            <img id="profile-img" :src="getProfiles(user.username)">
+                            <p>{{user.name}}</p>
+                        </router-link>
+                    </ul>
+                </span>
             <!-- <p v-else>Loading..</p> -->
             </template>
         </ApolloQuery>
@@ -58,11 +60,11 @@
                             <h5 class="username mt-2 font-bold"><b>@</b> {{data.me.username}}</h5>
                             <div class="extras mt-4 w-48" v-if="data.me.profile" >
                                 <div class="mt-2" v-if="data.me.profile.description != null">
-                                    <p v-if="$store.state.description">{{$store.state.description}}</p>
+                                    <p v-if="$store.getters.getDescription">{{$store.getters.getDescription}}</p>
                                     <p v-else >{{data.me.profile.description}}</p>
                                 </div>
                                 <div class="mt-2 text-blue-300" v-if="data.me.profile.website != null">
-                                    <a :href="$store.state.website" target="_blank" v-if="$store.state.website">{{$store.state.website}}</a>
+                                    <a :href="$store.getters.getWebsite" target="_blank" v-if="$store.getters.getWebsite">{{$store.getters.getWebsite}}</a>
                                     <a :href="data.me.profile.website" target="_blank" v-else>{{data.me.profile.website}}</a>
                                 </div>
                             </div>
@@ -96,7 +98,7 @@
                         <div v-if="data" >
                             <div v-if="data.me.followings" >
                                 <!-- <div v-show="data.me.followings.posts"> -->
-                                    <ul v-for="(post,index) in arrange(data.me.followings)" :key="post" >
+                                    <ul v-for="(post,index) in arrange(data.me.followings)" :key="post.id" >
                                       <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
                                         <div class="bg-gray-100 p-2 rounded mb-4 mt-4" >
                                             <router-link :to="{path: '/profiles/' + String(post.user.id)}" class="mention">

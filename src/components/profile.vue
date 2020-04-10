@@ -7,8 +7,11 @@
         <span class="float-right" v-if="isAuth()">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
-                    <div  v-if="!isLoading" class="  mr-4 ml-1 float-right  border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
+                    <div  v-if="!isLoading && data" class="  mr-4 ml-1 float-right  border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
+                        <span v-if="data.me">
                         <img class="rounded-sm h-6 w-6" :src="getMyImage(data.me.username)">
+
+                        </span>
                     </div>
                     <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 ml-1 float-right  cursor-pointer" v-else></div>
                 </template>
@@ -68,16 +71,19 @@
                                 <div class="ch-profile">
                                     <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                         <template v-slot="{result: {data}}">
-                                            <span v-if="isAuth()">
-                                                <span v-if="followers == null">
+                                            <span v-if="isAuth() && data">
+                                                <span v-if="followers == null ">
                                                     <ApolloMutation
                                                     :mutation="require('../graphql/mutations/follow.graphql')"
                                                     :variables="{id: $route.params.id}"
                                                     >
                                                         <template v-slot="{mutate}">
                                                             <!-- truke -->
+                                                            <span v-if="data.me">
+
                                                             <button class="w-48 h-10 float-left" v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
                                                             <button class="w-48 h-10 float-left" v-on:click="mutate();follow(number)" v-else>Follow </button>
+                                                            </span>
                                                         </template>
                                                     </ApolloMutation>
                                                 </span>
@@ -116,7 +122,7 @@
                             <div class="text-center text-gray-600 font-hairline"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
                             <div v-if="data">
                                 <div v-show="arrange(data.user.posts)"> 
-                                    <ul v-for="(post,index) in data.user.posts" :key="post" >
+                                    <ul v-for="(post,index) in data.user.posts" :key="index" >
                                         <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
                                             <div class="mention">
                                                 <img id="profile-img" :src="getImage(data)">
@@ -130,40 +136,43 @@
                                                 <ApolloMutation 
                                                     :mutation="require('../graphql/mutations/addLike.graphql')"
                                                     :variables="{post_id: post.id}"
-                                                    @done="onDone">
+                                                    >
                                                         <template v-slot="{mutate}">
-                                                            <span v-if="isAuth()">
-                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
-                                                                
-                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
+                                                            <span v-if="data.me">
 
-                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+                                                                <span v-if="isAuth() ">
+                                                                <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
+                                                                    
+                                                                    <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
 
-                                                                <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                    <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
 
-                                                                
-                                                                
-                                                            </div >
-                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
-                                                                
-                                                                
-                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
+                                                                    <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
 
-                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
+                                                                    
+                                                                    
+                                                                </div >
+                                                                <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
+                                                                    
+                                                                    
+                                                                    <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
 
-                                                                <div class="p-2 font-light likecounter">{{array[index].like}}</div>
-                                                                
-                                                                
-                                                            </div>
-                                                            </span>
-                                                            <span v-else>
-                                                                <!-- <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div> -->
-                                                                <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" >
+                                                                    <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
 
-                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer"  v-on:click="banner=true; feature='like a post'"></div>
-
-                                                                <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                    <div class="p-2 font-light likecounter">{{array[index].like}}</div>
+                                                                    
+                                                                    
                                                                 </div>
+                                                                </span>
+                                                                <span v-else>
+                                                                    <!-- <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div> -->
+                                                                    <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" >
+
+                                                                    <div class="heartl p-2 mt-2 mr-1 cursor-pointer"  v-on:click="banner=true; feature='like a post'"></div>
+
+                                                                    <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                    </div>
+                                                                </span>
                                                             </span>
                                                         </template>
                                                     </ApolloMutation>
