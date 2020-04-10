@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 import Vuelidate from "vuelidate";
 import { createProvider } from './vue-apollo'
 import {store} from './store/store'
+import { ValidationProvider, extend } from 'vee-validate';
 
 import frontPage from './components/frontPage';
 import register from './components/register';
@@ -16,9 +17,73 @@ import profile from './components/profile'
 
 import '@/assets/css/tailwind.css'
 
+import { required, email } from 'vee-validate/dist/rules';
 
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
+
+extend('required', {
+  ...required,
+  message: 'This field is required'
+});
+
+extend('secret', {
+  validate: value => value === 'example',
+  message: 'This is not the magic word'
+});
+
+extend('email', {
+  ...email,
+  message: 'This field expects a proper email address'
+});
+
+extend('password', {
+  params: ['target'],
+  validate(value, { target }) {
+    return value === target;
+  },
+  message: 'Passwords does not match'
+});
+
+// extend('username', {
+//   validate(value, data) {
+//     return data.includes(value)
+//   },
+//   params: ['data']
+//   // message: 'Your username needs to have at least 4 characters'
+// });
+
+extend('minCh', value => {
+  if (value.length >= 8 ){
+    return true
+  }
+  return 'Your password needs to have at least 8 characters'
+})
+
+extend('upperCase', value => {
+  if (value.match(/[A-Z]/g) !== null) {
+    return true
+  }
+  return 'Your password needs to have at least one upper case letter'
+});
+
+extend('lowerCase', value => {
+  if (value.match(/[a-z]/g) !== null) {
+    return true
+  }
+  return 'Your password needs to have at least one lower case letter'
+});
+
+extend('number', value => {
+  if (value.match(/[0-9]/g) !== null) {
+    return true
+  }
+  return 'Your password needs to have at least one numeral'
+});
+
+
+// Register it globally
+Vue.component('ValidationProvider', ValidationProvider);
 
 Vue.config.productionTip = false
 

@@ -21,11 +21,28 @@
                 <template v-slot="{mutate, error}">
                     <div v-if="!off">
                         <form v-on:submit.prevent="mutate(); off=true" class="containers">
-                            <input class="input" type="text" placeholder="Name" required  name="name" v-model="name">
-                            <input class="input" type="text" placeholder="Username" required  name="username" v-model="username">
-                            <input class="input" type="email" placeholder="Email ID" required  name="email" v-model="email">
-                            <input class="input" type="password" placeholder="Password" required name="password" v-model="password">
-                            <input class="input" type="password" placeholder="Confirm Password" required name="repassword" v-model="repassword">
+                            <ValidationProvider rules="required" v-slot="{errors}" class="grid-flow-col" >
+                                <input class="input" type="text" placeholder="Name"  name="name" v-model="name">
+                                <div>{{errors[0]}}</div>
+                            </ValidationProvider>
+                            <ValidationProvider rules="required" v-slot="{errors}">
+                                <input class="input" type="text" placeholder="Username"   name="username" v-model="username">
+                                <div>{{errors[0]}}</div>
+                            </ValidationProvider>
+                            <ValidationProvider rules="email|required" v-slot="{errors}">
+                                <input class="input" type="email" placeholder="Email ID"  name="email" v-model="email">
+                                <div>{{errors[0]}}</div>
+                            </ValidationProvider>
+                            <!-- <ValidationObserver class="flex-col"> -->
+                                <ValidationProvider  rules="minCh|upperCase|lowerCase|number|password:@confirm|required" v-slot="{errors}">
+                                    <input class="input" type="password" placeholder="Password" name="password" v-model="password">
+                                    <div>{{errors[0]}}</div>
+                                </ValidationProvider>
+                                <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
+                                    <input class="input" type="password" placeholder="Confirm Password" name="repassword" v-model="repassword">
+                                    <div>{{errors[0]}}</div>
+                                </ValidationProvider>
+                            <!-- </ValidationObserver> -->
                             <button id="submit" >REGISTER</button>
                         </form>
                     </div>
@@ -212,6 +229,13 @@ nav a{
     background-position: center;
     filter: grayscale(100%)
 
+}
+form div{
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    color: rgba(245, 119, 97, 0.815);
+    margin-bottom: 0.4rem;
 }
 
 </style>
