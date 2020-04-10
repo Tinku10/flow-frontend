@@ -22,13 +22,18 @@
                         <div v-if="errors">There was an error</div>
                     </form>
                 </div>
-                <div v-else>
-                    <p>Logging you in..</p>
+                <div v-else class="flex">
+                    <!-- <div class="h-20 w-20 flex">
+                    <img src="../../public/quote-gray.svg" alt="" class="load h-16 w-16">
+
+                    </div> -->
+                    <p>{{message}}</p>
                 </div>
             </template>
         </ApolloMutation>
         <!-- <p>token: {{api_token}}</p> -->
        
+        <p v-if="unauth" class="align-middle mb-4 error">Either the email or the password is incorrect</p>
         <div class="message" v-if="!off">
             <h4 id="bottom">Not registered yet?</h4>
             <h4 id="bottom"><router-link to="/register" style="text-decoration: none; color: rgb(113, 212, 212)">Sign up</router-link></h4>
@@ -47,7 +52,9 @@ export default {
         return{
             email: "",
             password: "", 
-            off: false
+            off: false,
+            unauth: false,
+            message: 'Authenticating..'
             // api_token: ""
         }
     },
@@ -55,10 +62,15 @@ export default {
         onDone(val){
             // this.api_token = val.data.login;
             // alert(val.data.login);
+                
+                    // this.unauth = false;
             this.$store.state.token = val.data.login;
             onLogin(this.$apollo.provider.defaultClient, this.$store.state.token);
             this.$router.push({path: '/home'});
-        }
+    
+                
+            }
+        
     },
     
 }
@@ -100,7 +112,7 @@ export default {
 
 }
 p{
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-family: "Source Sans Pro", sans-serif;
     color: rgb(173, 170, 170);
     font-weight: lighter;
@@ -113,7 +125,7 @@ input{
     padding: 1.2rem;
     border: 1px solid rgb(184, 182, 182);
     border-radius: 0.2rem;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
     border: none;
     outline: none;
@@ -208,6 +220,17 @@ nav a{
     background-position: center;
     filter: grayscale(100%)
 
+}
+.error{
+    font-size: 1rem;
+    color: rgba(245, 119, 97, 0.815);
+}
+.load{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    filter: opacity(60%);
 }
 </style>
 

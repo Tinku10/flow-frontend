@@ -79,11 +79,11 @@
                                                     >
                                                         <template v-slot="{mutate}">
                                                             <!-- truke -->
-                                                            <span v-if="data.me">
+                                                            <!-- <span v-if="data.me"> -->
 
                                                             <button class="w-48 h-10 float-left" v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
                                                             <button class="w-48 h-10 float-left" v-on:click="mutate();follow(number)" v-else>Follow </button>
-                                                            </span>
+                                                            <!-- </span> -->
                                                         </template>
                                                     </ApolloMutation>
                                                 </span>
@@ -138,7 +138,7 @@
                                                     :variables="{post_id: post.id}"
                                                     >
                                                         <template v-slot="{mutate}">
-                                                            <span v-if="data.me">
+                                                            <!-- <span v-if="data.me"> -->
 
                                                                 <span v-if="isAuth() ">
                                                                 <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
@@ -173,7 +173,7 @@
                                                                     <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
                                                                     </div>
                                                                 </span>
-                                                            </span>
+                                                            <!-- </span> -->
                                                         </template>
                                                     </ApolloMutation>
                                                 </template>

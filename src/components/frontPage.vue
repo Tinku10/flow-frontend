@@ -167,7 +167,7 @@ export default {
 .central{
     /* background: url('../../public/gareth-david-m0chaAschUw-unsplash.jpg'); */
     /* background-size: 70%; */
-    /* background-image: url('../../public/gareth-david-m0chaAschUw-unsplash.jpg'); */
+    /* background-image: url('../../public/mathew-schwartz-3SWQCLmxH1U-unsplash.jpg'); */
     background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
@@ -180,11 +180,23 @@ export default {
     left: 50%;
     top: 45%;
     transform: translate(-50%, -50%);
-    font-family: 'Hind', sans-serif;
+    /* font-family: 'Hind', sans-serif; */
+    font-family: 'Josefin Sans', sans-serif;
+    font-variation-settings: 'wght' 100, 'wdth' 85;
+	animation: breathe 4000ms infinite forwards;
     font-size: 6rem;
     /* z-index: 100; */
-    color: rgb(100, 100, 100);
+    color: rgba(43, 138, 202, 0.37);
 
+}
+@keyframes breathe {
+	60% {
+		font-variation-settings: 'wght' 700, 'wdth' 100;
+	}
+
+	100% {
+		font-variation-settings: 'wght' 100, 'wdth' 85;
+	}
 }
 /* .o, .l{
     color:rgb(66, 65, 65);
@@ -304,7 +316,15 @@ div.mention-link{
 }
 .background{
     /* background-image: url('../../public/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg'); */
-    background-size: cover;
+    background-image: url('../../public/mathew-schwartz-IDo8PVvKYsY-unsplash.jpg');
+    /* top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute; */
+    /* display: flex;
+    justify-content: center; */
+    text-align: center;
+    background-size: 80%;
     background-repeat: no-repeat;
     background-origin: center;
     background-blend-mode: overlay;
