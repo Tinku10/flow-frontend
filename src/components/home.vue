@@ -1,6 +1,6 @@
 <template>
   <div >
-    <nav-bar></nav-bar>
+    <nav-bar class=""></nav-bar>
 
     <!-- <div class="dashboard">PROFILE</div> -->
     <ApolloQuery 
@@ -132,9 +132,9 @@
 
             </div>
             <!-- <p v-else-if="error">Error..</p> -->
-            <div v-if="isLoading" class="main-page flex flex-col md:justify-center md:flex-row">
-                <div class="md:w-1/4 w-screen md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2"></div>
-                <div class="h-screen w-screen md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2" ></div>
+            <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
+                <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-64 "></div>
+                <div class="h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2 w-64 " ></div>
             </div>
         </template>
     </ApolloQuery>

@@ -3,11 +3,14 @@
         <nav class="h-30 w-full p-2 navbar-color mb-6 md:mb-0 " >
         <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-3 lg:p-4  lg:mr-4 lg:ml-4 mr-2 md:mr-4 md:ml-4"></span></router-link>
         <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
-        <input type="search" name="" class="h-8 w-56 lg:ml-6 lg:mr-4 p-3 outline-none border-none md:w-64 rounded-sm" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+        <!-- <span class="flex items-center"> -->
+            <!-- <img class="lens md:ml-1" src="../../public/search.svg" alt=""> -->
+            <input type="search" name="" class="h-8 w-56 lg:ml-6 lg:mr-4 p-3 outline-none border-none md:w-64 rounded-sm" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+        <!-- </span> -->
         <span class="float-right">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
-                    <div  v-if="!isLoading" class=" md:mr-4 float-right p-1 border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
+                    <div  v-if="!isLoading" class=" md:mr-4  p-1 border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
                         <img class="rounded-sm h-6 w-6" :src="getImage(data.me.username)">
                     </div>
                     <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
@@ -19,29 +22,36 @@
             <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none border-none" v-on:click="logout">Log out</button>
         </span> -->
     </nav>
-    <div v-show="menuPressed" class="h-24 w-32 md:mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
-        <div  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle cursor-pointer" v-on:click="logout">Log out</div>
-        <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
-        </router-link>
-    </div>
-    <div class="mention-link w-screen md:w-64 md:h-56 absolute border-gray-200 md:shadow-md p-2 lg:ml-24 md:mt-1 top-5  h-64 rounded-sm transition-shadow md:ml-16 "  v-show="searchbox" >
-        <ApolloQuery 
-        :query="require('../graphql/queries/users.graphql') "
-        >
-            <template  v-slot="{result: {data}}">
-                <span v-if="data">
-                    <ul v-for="user in filteredUsers(data.users)"  v-bind:key="user.id"  >
-                        <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 md:w-56 border-gray-100 md:ml-1 md:mr-1 w-screen overflow-x-hidden" style="text-decoration: none">
-                            <img id="profile-img" :src="getProfiles(user.username)">
-                            <p class="items-center">{{user.name}}</p>
-                        </router-link>
-                    </ul>
-                </span>
-            <!-- <p v-else>Loading..</p> -->
-            </template>
-        </ApolloQuery>
+    <transition name="fade">
+        <div v-show="menuPressed" class="h-24 w-32 md:mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
+            <div  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle cursor-pointer" v-on:click="logout">Log out</div>
+            <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
+            </router-link>
+        </div>
+    </transition>
+    <transition name="slide-fade">
+        <div class="mention-link w-screen md:w-64 md:h-56 absolute border-gray-200 md:shadow-md p-2 lg:ml-24 md:mt-1 top-5  h-64 rounded-sm transition-shadow md:ml-16 "  v-show="searchbox" >
+            <ApolloQuery 
+            :query="require('../graphql/queries/users.graphql') "
+            >
+                <template  v-slot="{result: {data}}">
+                    <span v-if="data">
+                        <ul >
+                            <li v-for="user in filteredUsers(data.users)"  v-bind:key="user.id"  >
+                                <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 md:w-56 border-gray-100 md:ml-1 md:mr-1 w-screen overflow-x-hidden" style="text-decoration: none">
+                                    <img id="profile-img" :src="getProfiles(user.username)">
+                                    <p class="items-center">{{user.name}}</p>
+                                </router-link>
+                            </li>
+                        </ul>
+                    </span>
+                <!-- <p v-else>Loading..</p> -->
+                </template>
+            </ApolloQuery>
+        
+        </div>
+    </transition>
     
-    </div>
     </div>
 </template>
 
@@ -195,5 +205,30 @@ div.mention-link{
     background-repeat: no-repeat;
     border-radius: 0.2rem;
     margin-right: 1rem;
+}
+.slide-fade-enter-active {
+  transition: all .5s ease;
+}
+.slide-fade-leave-active {
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(-50px);
+  opacity: 0;
+}
+.lens{
+    height: 1rem;
+    width: 1rem;
+    /* margin-left: 32vw; */
+    margin-left:1rem;
+    z-index: 10;
+    position: absolute;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

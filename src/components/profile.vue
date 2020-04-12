@@ -159,16 +159,16 @@
 
                 </div>
                 <!-- <p v-else-if="error">Error..</p> -->
-                <div v-if="isLoading" class="main-page flex flex-col md:justify-center md:flex-row">
-                <div class="md:w-1/4 w-screen md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2"></div>
-                <div class="h-screen w-screen md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2" ></div>
+                <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
+                <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-64 "></div>
+                <div class="h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2 w-64 " ></div>
             </div>
             </template>
         </ApolloQuery>
 
     </div>
     <transition name="fade">
-        <div v-show="auth==false&& banner ==true" class="auth p-2 w-1/3 flex-col shadow-xl rounded">
+        <div v-show="auth==false&& banner ==true" class="auth p-2 w-screen md:w-1/3 flex-col shadow-xl rounded">
             <p class="p-4 ml-2 mr-2 text-center">You need to be logged in to {{feature}}.</p>
             <div class="flex justify-center mt-4 mb-4">
                 <button class="mr-4 ml-4 h-8 w-20"><router-link to="/login"  class="mr-2 ml-2">Login</router-link></button>

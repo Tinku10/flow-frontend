@@ -1,9 +1,9 @@
 <template>
     <div class="background overflow-hidden">
 
-    <div class="hello relative overflow-hidden">
+    <div class="hello relative overflow-hidden ">
         <div class="overlay"></div>
-        <nav class="navbar flex " >
+        <nav class="navbar flex flex-row items-center mt-4 z-50" >
             <div class="flex items-center fixed">
                 <img class="lens md:ml-1" src="../../public/search.svg" alt="">
                 <input type="text" name="" class="ml-10 w-40 lg:p-3 outline-none border-none lg:resultbox  rounded-sm font-thin md:ml-16" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
@@ -20,6 +20,7 @@
             </div>
 
         </nav>
+        <transition name="slide-fade">
         <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 absolute z-10 "  v-show="searchbox" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
@@ -38,6 +39,7 @@
             </ApolloQuery>
 
         </div>
+        </transition>
         <div class="relative h-screen w-screen">
             <!-- <div id="title"> -->
                 <!-- <div id=image class="z-0 h-100 w-100  bg-no-repeat bg-contain" ></div> -->
@@ -383,5 +385,16 @@ div.mention-link{
         margin-right: 2vh;
     }
         
+}
+.slide-fade-enter-active {
+  transition: all .5s ease;
+}
+.slide-fade-leave-active {
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(-50px);
+  opacity: 0;
 }
 </style>
