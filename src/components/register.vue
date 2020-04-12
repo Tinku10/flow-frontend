@@ -5,7 +5,7 @@
             <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
         </router-link>
     </nav>
-    <div id="first">
+    <div id="first flex items-center">
         <h1 class="main " v-if="!off">Sign Up</h1>
 
             <ApolloMutation 
@@ -22,28 +22,28 @@
                     <div v-if="!off">
                         <form v-on:submit.prevent="mutate(); off=true" class="containers">
                             <ValidationProvider rules="required" v-slot="{errors}" class="grid-flow-col" >
-                                <input class="input" type="text" placeholder="Name"  name="name" v-model="name">
+                                <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Name"  name="name" v-model="name">
                                 <div>{{errors[0]}}</div>
                             </ValidationProvider>
                             <ValidationProvider rules="required" v-slot="{errors}">
-                                <input class="input" type="text" placeholder="Username"   name="username" v-model="username">
+                                <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Username"   name="username" v-model="username">
                                 <div>{{errors[0]}}</div>
                             </ValidationProvider>
                             <ValidationProvider rules="email|required" v-slot="{errors}">
-                                <input class="input" type="email" placeholder="Email ID"  name="email" v-model="email">
+                                <input class="input w-64 h-1 md:max-w-lg" type="email" placeholder="Email ID"  name="email" v-model="email">
                                 <div>{{errors[0]}}</div>
                             </ValidationProvider>
                             <!-- <ValidationObserver class="flex-col"> -->
                                 <ValidationProvider  rules="minCh|upperCase|lowerCase|number|password:@confirm|required" v-slot="{errors}">
-                                    <input class="input" type="password" placeholder="Password" name="password" v-model="password">
+                                    <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Password" name="password" v-model="password">
                                     <div>{{errors[0]}}</div>
                                 </ValidationProvider>
                                 <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
-                                    <input class="input" type="password" placeholder="Confirm Password" name="repassword" v-model="repassword">
+                                    <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Confirm Password" name="repassword" v-model="repassword">
                                     <div>{{errors[0]}}</div>
                                 </ValidationProvider>
                             <!-- </ValidationObserver> -->
-                            <button id="submit" >REGISTER</button>
+                            <button id="submit" class="w-24 h-10" >REGISTER</button>
                         </form>
                     </div>
                     <div v-else>
@@ -54,7 +54,7 @@
 
             </ApolloMutation>
             <!-- <input id="submit" type="submit" value="REGISTER"> -->
-        <div class="message" v-if="!off">
+        <div class="message flex flex-wrap" v-if="!off">
             <h4 id="bottom">Already have an account?</h4>
             <h4 id="bottom"><router-link to="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</router-link></h4>
         </div>
@@ -105,9 +105,9 @@ export default {
 }
 
 #first{
-    top: 50%;
+    /* top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     position: fixed;
 }
 .containers{
@@ -121,7 +121,7 @@ export default {
 
 }
 p{
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-family: "Source Sans Pro", sans-serif;
     color: rgb(173, 170, 170);
     font-weight: lighter;
@@ -129,12 +129,12 @@ p{
     text-align: center;
 }
 input{
-    width: 30rem;
-    height: 1rem;
+    /* width: 30rem;
+    height: 1rem; */
     padding: 1.2rem;
     border: 1px solid rgb(184, 182, 182);
     border-radius: 0.2rem;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
     border: none;
     outline: none;
@@ -142,8 +142,8 @@ input{
 }
 
 textarea{
-    width: 50vw;
-    height: 4vw;
+    /* width: 50vw;
+    height: 4vw; */
     border: 1px solid rgb(184, 182, 182);
     font: "Source Sans Pro", sans-serif;
     padding: 1.5vw;
@@ -159,8 +159,8 @@ textarea{
 }
 #submit{
     margin-top: 3rem;
-    width: 10rem;
-    height: 3rem;;
+    /* width: 10rem;
+    height: 3rem;; */
     font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
@@ -174,8 +174,8 @@ textarea{
 }
 #submit:hover{
     margin-top: 3rem;
-    width: 10rem;
-    height: 3rem;;
+    /* width: 10rem;
+    height: 3rem;; */
     font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
@@ -230,13 +230,45 @@ nav a{
     filter: grayscale(100%)
 
 }
-form div{
-    font-family: 'Source Code Pro', sans-serif;
-    font-size: 0.8rem;
-    text-align: center;
+.error{
+    font-size: 1rem;
     color: rgba(245, 119, 97, 0.815);
-    margin-bottom: 0.4rem;
 }
+.load{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    filter: opacity(60%);
+}
+@media (min-width: 768px){
+    input{
+        width: 30rem;
+        height: 1rem;
+        padding: 1.2rem;
+        border: 1px solid rgb(184, 182, 182);
+        border-radius: 0.2rem;
+        margin-bottom: 10px;
+        /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
+        border: none;
+        outline: none;
 
+    }
+    #submit{
+        margin-top: 3rem;
+        width: 10rem;
+        height: 3rem;;
+        font-size: 0.8rem;
+        font-family: 'Josefin Sans', sans-serif;
+        cursor: pointer;
+        outline: none;
+        color: rgb(243, 244, 245);
+        margin-bottom: 4vw;
+        border-radius: 0.2rem;
+        background-color: rgb(141, 223, 228);
+        border: none;
+
+}
+}
 </style>
 

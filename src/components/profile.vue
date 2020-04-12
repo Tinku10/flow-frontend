@@ -1,62 +1,31 @@
 <template>
-  <div>
-    <nav class="h-30 w-full p-3 navbar-color" >
-        <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-4 mr-4 ml-4"></span></router-link>
-        <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
-        <!-- <input type="search" name="" class="h-8 w-64 ml-6 mr-4 p-3 outline-none border-none " placeholder="Search" @click="searchbox = !searchbox" v-model="search"> -->
-        <span class="float-right" v-if="isAuth()">
-            <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
-                <template v-slot="{result: {data}, isLoading} ">
-                    <div  v-if="!isLoading && data" class="  mr-4 ml-1 float-right  border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
-                        <span v-if="data.me">
-                        <img class="rounded-sm h-6 w-6" :src="getMyImage(data.me.username)">
-
-                        </span>
-                    </div>
-                    <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 ml-1 float-right  cursor-pointer" v-else></div>
-                </template>
-
-            </ApolloQuery>
-        </span>
-        <!-- <span>
-            <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none border-none" v-on:click="logout">Log out</button>
-        </span> -->
-    </nav>
-    <div v-show="menuPressed" class="h-12 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
-        <div  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle cursor-pointer" v-on:click="logout">Log out</div>
-        <!-- <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
-        </router-link> -->
-    </div>
-    <!-- <div v-show="menuPressed" class="h-12 w-32 mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
-        <button  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" v-on:click="logout">Log out</button>
-        
-    </div> -->
-    <br>
     <div >
+        <nav-bar></nav-bar>
+        <div>
         <ApolloQuery 
             :query="require('../graphql/queries/user.graphql')"
             :variables="{id: $route.params.id}"
             >
             <template  v-slot="{result: {loading, error, data}, isLoading}">
-                <div class ="main-page flex-row justify-center" v-if="data">
-                    <div class="w-1/4 ml-6 mr-6 mt-6">
-                        <div class="p-2" v-if="data.user">
-                            <div  class=" h-60 w-60 mb-4">
-                                <img id="rounded" :src="getImage(data)">
+                <div class ="md:p-2 md:flex md:justify-evenly lg:justify-center" v-if="data">
+                    <div class="mt-1  justify-between md:w-1/4 md:ml-6 md:mr-6 md:mt-2">
+                        <div class="flex items-end justify-evenly ml-4 mr-4 md-4 md:flex-col md:p-2 md:ml-2 md:items-start" v-if="data.user">
+                            <div  class="ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48">
+                                <img id="h-32 w-32 md:h-40 md:w-40 md:mb-4 lg:rounded lg:h-48 lg:w-48" :src="getImage(data)">
 
                             </div>
-                            <div class="inf">
-                                <h3 class="name mt-2"><b>{{data.user.name}}</b></h3>
-                                <h5 class="username mt-2 font-bold"><b>@</b> {{data.user.username}}</h5>
-                                <div class="extras mt-4 w-48" v-if="data.user.profile" >
-                                    <div class="mt-2" v-if="data.user.profile.description != null">
+                            <div class="flex-col items-start ml-4 md:items-start">
+                                <h3 class="name md:mt-2"><b>{{data.user.name}}</b></h3>
+                                <h5 class="username  md:mt-2 font-bold"><b>@</b> {{data.user.username}}</h5>
+                                <div class="extras md:mt-4 w-48" v-if="data.user.profile" >
+                                    <div class="md:mt-2" v-if="data.user.profile.description != null">
                                         <p  >{{data.user.profile.description}}</p>
                                     </div>
-                                    <div class="mt-2 text-blue-300" v-if="data.user.profile.website != null">
+                                    <div class=" md:mt-2 text-blue-300" v-if="data.user.profile.website != null">
                                         <a :href="data.user.profile.website" target="_blank">{{data.user.profile.website}}</a>
                                     </div>
                                 </div>
-                                <div v-if="data.user" class=" extras flex-row justify-evenly mt-4 mb-2">
+                                <div v-if="data.user" class="  extras  justify-evenly md:mt-4 md:mb-4">
                                     <span v-if="followers == null">
                                         <span v-if="data.user.followers" class=" mr-2"><b>{{getf(data.user.followers)}}</b> Follower</span>
                                         <span v-else class=" mr-2"><b>0</b> Follower</span>
@@ -68,7 +37,7 @@
                                     <span v-if="data.user.followings" class=" ml-2"><b>{{get(data.user.followings)}}</b> Following</span>
                                     <span v-else class=" ml-2"><b>0</b> Following</span>
                                 </div>
-                                <div class="ch-profile">
+                                <div class="ch-profile flex sm:mt-2 md:flex-col">
                                     <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                         <template v-slot="{result: {data}}">
                                             <span v-if="isAuth() && data">
@@ -81,8 +50,8 @@
                                                             <!-- truke -->
                                                             <!-- <span v-if="data.me"> -->
 
-                                                            <button class="w-48 h-10 float-left" v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
-                                                            <button class="w-48 h-10 float-left" v-on:click="mutate();follow(number)" v-else>Follow </button>
+                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2  rounded-sm " v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
+                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2  rounded-sm " v-on:click="mutate();follow(number)" v-else>Follow </button>
                                                             <!-- </span> -->
                                                         </template>
                                                     </ApolloMutation>
@@ -93,8 +62,8 @@
                                                     :variables="{id: $route.params.id}"
                                                     >
                                                         <template v-slot="{mutate}">
-                                                            <button class="w-48 h-10 float-left" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
-                                                            <button class="w-48 h-10 float-left" v-on:click="mutate(); follow(number)" v-else>Follow </button>
+                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
+                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="mutate(); follow(number)" v-else>Follow </button>
                                                         
                                                         </template>
                                                     </ApolloMutation>
@@ -102,7 +71,7 @@
 
                                             </span>
                                             <span v-else>
-                                                <button class="w-48 h-10 float-left" v-on:click="banner=true;feature='follow a person'">Follow </button>
+                                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="banner=true;feature='follow a person'">Follow </button>
                                             </span>
                                         </template>
                                         
@@ -117,19 +86,19 @@
 
                     </div>
 
-                    <div class="ml-6 mr-6 w-2/4">
+                    <div class="ml-2 mr-2 md:ml-6 md:mr-6 md:ml-6 md:w-2/3 lg:w-2/4 lg:ml-8 lg:mr-8">
                         <div>
-                            <div class="text-center text-gray-600 font-hairline"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
+                            <div class="text-center text-gray-600 font-hairline mt-4 lg:mt-2"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
                             <div v-if="data">
                                 <div v-show="arrange(data.user.posts)"> 
                                     <ul v-for="(post,index) in data.user.posts" :key="index" >
-                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4">
-                                            <div class="mention">
+                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4 ml-2 mr-2">
+                                            <div class="mention items-center lg:p-2">
                                                 <img id="profile-img" :src="getImage(data)">
                                                 <p>{{data.user.name}}</p>
                                             </div>
                                             <p class="post-heading">{{post.title}}</p>
-                                            <p class="post-content">{{post.post}}</p>
+                                            <p class="post-content ml-2 mr-2">{{post.post}}</p>
                                             <div>
                                                 <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                                 <template v-slot="{result: {data}}">
@@ -190,9 +159,9 @@
 
                 </div>
                 <!-- <p v-else-if="error">Error..</p> -->
-                <div v-if="isLoading" class="main-page flex-row justify-center">
-                <div class="w-1/4 h-screen bg-gray-100 mr-10 ml-4 box-content mt-2"></div>
-                <div class="h-screen w-3/5 bg-gray-100 ml-10 mr-4 box-content mt-2" ></div>
+                <div v-if="isLoading" class="main-page flex flex-col md:justify-center md:flex-row">
+                <div class="md:w-1/4 w-screen md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2"></div>
+                <div class="h-screen w-screen md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2" ></div>
             </div>
             </template>
         </ApolloQuery>
@@ -221,11 +190,14 @@
 // import gql from 'graphql-tag';
 import {onLogout} from '../vue-apollo';
 import footer from '../components/footer';
+import navbar from '../components/navbar'
+
 
 
 export default {
     components: {
-        'footer-ele': footer
+        'footer-ele': footer,
+        'nav-bar': navbar
     },
     data(){
         return{
@@ -377,20 +349,20 @@ export default {
     border: none;
 }
 .name{
-    font-size: 2vw;
+    font-size: 1.4rem;
     color:rgb(119, 116, 116);
     font-family: "Source Code Pro", sans-serif;
     font-weight: lighter;
 }
 .username{
-    font-size: 1.5vw;
+    font-size: 1rem;
     color:rgb(116, 118, 119);
     font-family: "Source Code Pro", sans-serif;
     font-weight: lighter;
     font-style: italic;
 }
 .extras{
-    font-size: 1vw;
+    font-size: 0.6rem;
     color:rgb(119, 116, 116);
     font-family: "Source Code Pro", sans-serif;
     /* font-weight: lighter; */
@@ -402,22 +374,22 @@ export default {
     color:rgb(119, 116, 116);
 }
 .user{
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content:flex-start;
-    padding: 20px;
-    width: 20vw;
-    margin-left: 1vw;
-    height: 100vh;
+    justify-content:flex-start; */
+    /* padding: 20px; */
+    /* width: 20vw; */
+    /* margin-left: 1vw; */
+    /* height: 100vh; */
     background-color: rgb(255, 255, 255);
 }
 .ch-profile{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* text-align: center; */
     font-family: 'Source Code Pro', sans-serif;
     font-size: 20px;
-    margin-top: 6vh;
+    /* margin-top: 6vh; */
     
 }
 .ch-profile button{
@@ -427,6 +399,7 @@ export default {
     border: none;
     outline: none;
     background-color:rgb(141, 223, 228);
+    font-size:0.7rem;
 }
 .ch-profile button:hover {
     color: rgb(141, 223, 228);
@@ -435,22 +408,66 @@ export default {
 }
 .sidebar{
     background-color: rgb(255, 255, 255);
-    margin-left: -10px;
-    width: 25vw;
-    margin-right: 1vw;
+    /* margin-left: -10px; */
+    /* width: 25vw; */
+    /* margin-right: 1vw; */
     z-index: 1;
 
 }
+@media  (min-width: 768px){
+    
+    .name{
+        font-size: 2vw;
+        color:rgb(119, 116, 116);
+        font-family: "Source Code Pro", sans-serif;
+        font-weight: lighter;
+    }
+    .username{
+        font-size: 1.5vw;
+        color:rgb(116, 118, 119);
+        font-family: "Source Code Pro", sans-serif;
+        font-weight: lighter;
+        font-style: italic;
+    }
+    .extras{
+        font-size: 1vw;
+        color:rgb(119, 116, 116);
+        font-family: "Source Code Pro", sans-serif;
+        /* font-weight: lighter;
+        font-style: italic; */
+        column-width: 40%;
+    }
+    .post-content{
+        font-size: 2rem;
+        font-family: "Source Code Pro", sans-serif;
+        color:rgb(128, 126, 126);
+        padding: 2vw;
+        /* width: 40vw;
+        margin-left: 5.5vw;
+        margin-right: 8vw; */
+    /* text-align: center; */
+    }
+    .ch-profile button{
+        font-family: 'Source Code Pro', sans-serif;
+        font-size: 0.8rem;
+        color: #ffffff;
+        border: none;
+        outline: none;
+        background-color:rgb(141, 223, 228);
+    }
+    
+    
+}
 .right-bar{
-    padding: 10px;
-    width: 70vw;
-    border-top-left-radius: 0.2rem;
-    border-left: 1px solid rgb(238, 236, 236);
+    /* padding: 10px; */
+    /* width: 70vw; */
+    /* border-top-left-radius: 0.2rem; */
+    /* border-left: 1px solid rgb(238, 236, 236); */
     z-index: 1;
 }
 .main-page{
-    display: flex;
-    flex-direction: row;
+    /* display: flex;
+    flex-direction: row; */
     z-index: 1;
     
 }
@@ -472,16 +489,17 @@ export default {
 }
 
 .post-content{
-    font-size: 2.5vh;
+    font-size: 0.8rem;
     font-family: "Source Code Pro", sans-serif;
     color:rgb(128, 126, 126);
     padding: 2vw;
-    width: 40vw;
-    margin-left: 5.5vw;
-    margin-right: 8vw;
+    /* width: 40vw; */
+    text-align: left;
+    /* margin-left: 5.5vw;
+    margin-right: 8vw; */
 }
 .post-heading{
-    font-size: 3vh;
+    font-size: 1rem;
     font-family: "Source Code Pro", sans-serif;
     color:rgb(173, 170, 170);
     padding: 1vw;
@@ -499,20 +517,21 @@ export default {
     font-family: "Source Code Pro", sans-serif;
     color: gray;
     display: flex;
-    flex-direction: row;
-    padding: 2vh;
+    /* flex-direction: row; */
+    /* padding: 2vh; */
     padding-bottom: 0;
 }
 .mention p{
-    margin-top: 1.5vh;
+    /* margin-top: 1.5vh; */
+    
 }
 #profile-img{
-    height: 6vh;
-    width: 6vh;
+    height: 2.4rem;
+    width: 2.4rem;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 0.2rem;
-    margin-right: 2vh;
+    margin-right: 1rem;
 }
 .search{
     height: 5vh;
@@ -564,7 +583,8 @@ div.mention-link{
 
 }
 .mention-link p{
-    margin-top: 1.5vh;
+    align-items: center;
+    /* margin-top: 1.5vh; */
 }
 .navbar-color{
     background-color: rgb(49, 49, 49);

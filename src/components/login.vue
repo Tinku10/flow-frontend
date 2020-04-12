@@ -5,7 +5,7 @@
             <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
         </router-link>
     </nav>
-    <div id="first">
+    <div id="first flex items-center">
         <h1 class="main " v-if="!off">Log In</h1>
         <ApolloMutation 
         :mutation="require('../graphql/mutations/login.graphql')" 
@@ -15,10 +15,10 @@
             <template v-slot="{mutate, errors}">
                 <div  v-if="!off">
                     <form  class="containers" v-on:submit.prevent="mutate(); off=true">
-                        <input class="input" type="text" placeholder="Email ID" required  name="email" v-model="email">
-                        <input class="input" type="password" placeholder="Password" required name="password" v-model="password">
+                        <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Email ID" required  name="email" v-model="email">
+                        <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Password" required name="password" v-model="password">
 
-                        <button id="submit">LOG IN</button>
+                        <button id="submit" class=" w-24 h-10">LOG IN</button>
                         <div v-if="errors">There was an error</div>
                     </form>
                 </div>
@@ -96,9 +96,9 @@ export default {
 }
 
 #first{
-    top: 50%;
+    /* top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     position: fixed;
 }
 .containers{
@@ -120,8 +120,8 @@ p{
     text-align: center;
 }
 input{
-    width: 30rem;
-    height: 1rem;
+    /* width: 30rem;
+    height: 1rem; */
     padding: 1.2rem;
     border: 1px solid rgb(184, 182, 182);
     border-radius: 0.2rem;
@@ -133,8 +133,8 @@ input{
 }
 
 textarea{
-    width: 50vw;
-    height: 4vw;
+    /* width: 50vw;
+    height: 4vw; */
     border: 1px solid rgb(184, 182, 182);
     font: "Source Sans Pro", sans-serif;
     padding: 1.5vw;
@@ -150,8 +150,8 @@ textarea{
 }
 #submit{
     margin-top: 3rem;
-    width: 10rem;
-    height: 3rem;;
+    /* width: 10rem;
+    height: 3rem;; */
     font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
@@ -165,8 +165,8 @@ textarea{
 }
 #submit:hover{
     margin-top: 3rem;
-    width: 10rem;
-    height: 3rem;;
+    /* width: 10rem;
+    height: 3rem;; */
     font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
@@ -231,6 +231,35 @@ nav a{
     transform: translate(-50%, -50%);
     position: absolute;
     filter: opacity(60%);
+}
+@media (min-width: 768px){
+    input{
+        width: 30rem;
+        height: 1rem;
+        padding: 1.2rem;
+        border: 1px solid rgb(184, 182, 182);
+        border-radius: 0.2rem;
+        margin-bottom: 10px;
+        /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
+        border: none;
+        outline: none;
+
+    }
+      #submit{
+        margin-top: 3rem;
+        width: 10rem;
+        height: 3rem;;
+        font-size: 0.8rem;
+        font-family: 'Josefin Sans', sans-serif;
+        cursor: pointer;
+        outline: none;
+        color: rgb(243, 244, 245);
+        margin-bottom: 4vw;
+        border-radius: 0.2rem;
+        background-color: rgb(141, 223, 228);
+        border: none;
+
+}
 }
 </style>
 

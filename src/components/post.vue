@@ -5,7 +5,7 @@
             <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
         </router-link>
     </nav>
-    <div id="first">
+    <div id="first flex items-center">
         <h1 class="main " v-if="!off">Add a new Post</h1>
         <ApolloMutation 
         :mutation="require('../graphql/mutations/createPost.graphql')" 
@@ -18,7 +18,7 @@
                         <input class="input" type="text" placeholder="Title" required  name="title" v-model="title">
                         <textarea class="input"  placeholder="Post" required name="post" v-model="post"></textarea>
 
-                        <button id="submit">POST</button>
+                        <button id="submit" class="w-24 h-10">POST</button>
                         <div v-if="errors">There was an error</div>
                         <!-- <div v-else-if="loading">Loading..</div> -->
                     </form>
@@ -85,9 +85,9 @@ export default {
 }
 
 #first{
-    top: 50%;
+    /* top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     position: fixed;
 }
 .containers{
@@ -109,7 +109,7 @@ p{
     text-align: center;
 }
 input{
-    width: 30rem;
+    width: 20rem;
     height: 1rem;
     padding: 1.2rem;
     border: 1px solid rgb(184, 182, 182);
@@ -123,7 +123,7 @@ input{
 
 
 textarea{
-    width: 30rem;
+    width: 20rem;
     height: 15rem;
     border: 1px solid rgb(184, 182, 182);
     font: "Source Sans Pro", sans-serif;
@@ -140,8 +140,8 @@ textarea{
 }
 #submit{
     margin-top: 3rem;
-    width: 10rem;
-    height: 3rem;;
+    /* width: 10rem;
+    height: 3rem;; */
     font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
@@ -155,8 +155,8 @@ textarea{
 }
 #submit:hover{
     margin-top: 3rem;
-    width: 10rem;
-    height: 3rem;;
+    /* width: 10rem;
+    height: 3rem;; */
     font-size: 0.8rem;
     font-family: 'Josefin Sans', sans-serif;
     cursor: pointer;
@@ -210,6 +210,53 @@ nav a{
     background-position: center;
     filter: grayscale(100%)
 
+}
+@media (min-width: 768px){
+    input{
+    width: 30rem;
+    height: 1rem;
+    padding: 1.2rem;
+    border: 1px solid rgb(184, 182, 182);
+    border-radius: 0.2rem;
+    margin-bottom: 5px;
+    /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
+    border: none;
+    outline: none;
+
+}
+
+
+textarea{
+    width: 30rem;
+    height: 15rem;
+    border: 1px solid rgb(184, 182, 182);
+    font: "Source Sans Pro", sans-serif;
+    padding: 1.5vw;
+    font-size: 1vw;
+    font-weight: lighter;
+    color:rgb(164, 165, 165);
+    border-radius: 0.2rem;
+    margin-bottom: 5px;
+    box-shadow: 0 20px 30px -16px rgba(9,9,16,.2);
+    border: none;
+    outline: none;
+
+}
+  #submit{
+        margin-top: 3rem;
+        width: 10rem;
+        height: 3rem;;
+        font-size: 0.8rem;
+        font-family: 'Josefin Sans', sans-serif;
+        cursor: pointer;
+        outline: none;
+        color: rgb(243, 244, 245);
+        margin-bottom: 4vw;
+        border-radius: 0.2rem;
+        background-color: rgb(141, 223, 228);
+        border: none;
+
+}
 }
 </style>
 

@@ -4,9 +4,9 @@
     <div class="hello relative overflow-hidden">
         <div class="overlay"></div>
         <nav class="navbar flex " >
-            <div class="flex-row ">
-                <img class="lens" src="../../public/search.svg" alt="">
-                <input type="text" name="" class=" p-3 outline-none border-none resultbox  rounded-sm" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+            <div class="flex items-center fixed">
+                <img class="lens md:ml-1" src="../../public/search.svg" alt="">
+                <input type="text" name="" class="ml-10 w-40 lg:p-3 outline-none border-none lg:resultbox  rounded-sm font-thin md:ml-16" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
             </div>
 
             <div v-if="token" class="justify-end fixed right-0">
@@ -20,7 +20,7 @@
             </div>
 
         </nav>
-        <div class="mention-link  float-left border-gray-200 shadow-md p-2  mt-1 result"  v-show="searchbox" >
+        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 absolute z-10 "  v-show="searchbox" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
             >
@@ -29,7 +29,7 @@
                     <ul v-for="user in filteredUsers(data.users)"  :key="user.id"  >
                         <router-link :to="{path: '/profiles/'+String(user.id)}" class="mention-link ind mt-2 mb-2 w-56 border-gray-100 ml-2 mr-2" style="text-decoration: none">
                             <img id="profile-img" :src="getProfiles(user.username)">
-                            <p>{{user.name}}</p>
+                            <p class="items-center">{{user.name}}</p>
                         </router-link>
                     </ul>
                 </span>
@@ -230,7 +230,7 @@ export default {
     padding-bottom: 0;
     /* border: 1px solid rgb(230, 228, 228); */
     border-radius: 0.25rem;
-    width: 32.5vw;
+    /* width: 32.5vw; */
     
 
 }
@@ -249,11 +249,11 @@ div.mention-link{
 
 }
 .mention-link p{
-    margin-top: 1.5vh;
+    /* margin-top: 1.5vh; */
 }
 #profile-img{
-    height: 6vh;
-    width: 6vh;
+    height: 2rem;
+    width: 2rem;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 0.2rem;
@@ -285,19 +285,19 @@ div.mention-link{
     
 } */
 .result{
-    top: 25%;
+    /* top: 25%;
     left: 50.2%;
     transform: translate(-50%, -50%);
-    position: absolute;
-    width: 35vw;
-    height: 14rem;
+    position: absolute; */
+    /* width: 35vw;
+    height: 14rem; */
     overflow: hidden;
 }
 .resultbox{
     /* top: 5%; */
     /* left: 50%; */
     /* transform: translate(-50%, -50%); */
-    margin-left: 31vw;
+    margin-left: 15rem;
     justify-content: center;
     /* position: fixed; */
     border: 1px solid rgb(190, 190, 190);
@@ -307,35 +307,81 @@ div.mention-link{
     padding-left: 3vw;
 }
 .lens{
-    height: 1vw;
-    width: 1vw;
-    margin-left: 32vw;
+    height: 1rem;
+    width: 1rem;
+    /* margin-left: 32vw; */
+    margin-left:1rem;
     z-index: 10;
     position: absolute;
-    margin-top: 0.7vw;
 }
-.background{
-    /* background-image: url('../../public/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg'); */
-    background-image: url('../../public/mathew-schwartz-IDo8PVvKYsY-unsplash.jpg');
-    /* top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    position: absolute; */
-    /* display: flex;
-    justify-content: center; */
-    text-align: center;
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-origin: center;
-    background-blend-mode: overlay;
-    /* filter: opacity(40%); */
-    /* position: relative; */
-}
+
 .overlay{
     background: black;
     /* position: absolute; */
     height: 100%;
     width: 100%;
     /* filter: opacity(60%); */
+}
+@media (min-width: 768px){
+    .lens{
+        height: 2vw;
+        width: 2vw;
+        /* margin-left: 32vw; */
+        z-index: 10;
+        position: absolute;
+    }
+    .background{
+        /* background-image: url('../../public/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg'); */
+        background-image: url('../../public/mathew-schwartz-IDo8PVvKYsY-unsplash.jpg');
+        /* top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute; */
+        /* display: flex;
+        justify-content: center; */
+        text-align: center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-origin:border-box;
+        background-blend-mode: overlay;
+        /* filter: opacity(40%); */
+        /* position: relative; */
+    }
+    .mention-link{
+        font-family: "Source Code Pro", sans-serif;
+        color: gray;
+        display: flex;
+        flex-direction: row;
+        padding-bottom: 0;
+        /* border: 1px solid rgb(230, 228, 228); */
+        border-radius: 0.25rem;
+        width: 50vw;
+        
+
+    }
+    .mention-link.ind:hover{
+        background-color:rgb(247, 242, 242);
+    
+
+    }
+    div.mention-link{
+        border: none;
+        background-color:rgb(255, 255, 255);
+        border-radius: 0.2rem;
+        z-index: 10;
+        /* overflow-y:scroll; */
+    
+
+    }
+   
+    #profile-img{
+        height: 2rem;
+        width: 2rem;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0.2rem;
+        margin-right: 2vh;
+    }
+        
 }
 </style>
