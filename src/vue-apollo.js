@@ -9,7 +9,7 @@ Vue.use(VueApollo)
 const AUTH_TOKEN = 'apollo-token'
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://fathomless-mesa-81724.herokuapp.com//graphql'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://fathomless-mesa-81724.herokuapp.com/graphql'
 
 // Config
 const defaultOptions = {
