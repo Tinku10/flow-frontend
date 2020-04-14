@@ -105,11 +105,8 @@ const routes = [
               path: '/home'
             });
           }
-          else {
-            next({
-              path: '/login'
-            })
-            
+          else{
+            next();
           }
     }
   },
