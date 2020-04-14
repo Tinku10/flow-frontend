@@ -46,7 +46,7 @@
                             <button id="submit" class="w-24 h-10" >REGISTER</button>
                         </form>
                     </div>
-                    <div v-else>
+                    <div v-else class="flex flex-row justify-center">
                         <p v-if="error">{{error}}</p>
                         <p v-else>Creating your account..</p>
                     </div>

@@ -14,6 +14,7 @@ import updateProfile from './components/updateProfile'
 // import profiles from './components/profiles'
 import post from './components/post'
 import profile from './components/profile'
+import pagenotfound from './components/pagenotfound'
 
 import '@/assets/css/tailwind.css'
 
@@ -42,7 +43,7 @@ extend('password', {
   validate(value, { target }) {
     return value === target;
   },
-  message: 'Passwords does not match'
+  message: 'Passwords do not match'
 });
 
 // extend('username', {
@@ -97,7 +98,21 @@ Vue.config.productionTip = false
 const routes = [
   { path: '/register', component: register },
   { path: '/', component: frontPage },
-  { path: '/login', component: login },
+  { path: '/login', component: login,
+    beforeEnter(to, from, next){
+          if (localStorage.getItem("apollo-token")) {
+            next({
+              path: '/home'
+            });
+          }
+          else {
+            next({
+              path: '/login'
+            })
+            
+          }
+    }
+  },
   {
     path: '/home', component: home,
     beforeEnter(to, from, next){
@@ -144,7 +159,8 @@ const routes = [
       }
     }
   },
-  {path: '/profiles/:id', component: profile}
+  { path: '/profiles/:id', component: profile },
+  {path: '/*', component: pagenotfound}
 ];
 
 const router = new VueRouter({

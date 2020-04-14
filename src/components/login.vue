@@ -22,7 +22,7 @@
                         <div v-if="errors">There was an error</div>
                     </form>
                 </div>
-                <div v-else class="flex">
+                <div v-else class="flex flex-row justify-center">
                     <!-- <div class="h-20 w-20 flex">
                     <img src="../../public/quote-gray.svg" alt="" class="load h-16 w-16">
 

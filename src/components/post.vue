@@ -24,7 +24,7 @@
                     </form>
 
                 </div>
-                <div v-else>
+                <div v-else class="flex flex-row justify-center">
                     <p>Posting..</p>
                 </div>
             </template>
