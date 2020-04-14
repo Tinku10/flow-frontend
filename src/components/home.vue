@@ -3,6 +3,7 @@
     <nav-bar class=""></nav-bar>
 
     <!-- <div class="dashboard">PROFILE</div> -->
+    <div class="body">
     <ApolloQuery 
         :query="require('../graphql/queries/me2.graphql')"
         >
@@ -22,8 +23,8 @@
                                     <p v-else >{{data.me.profile.description}}</p>
                                 </div>
                                 <div class="md:mt-2 text-blue-300" v-if="data.me.profile.website != null">
-                                    <a :href="$store.getters.getWebsite" target="_blank" v-if="$store.getters.getWebsite">{{$store.getters.getWebsite}}</a>
-                                    <a :href="data.me.profile.website" target="_blank" v-else>{{data.me.profile.website}}</a>
+                                    <a :href="getWeb($store.getters.getWebsite)" target="_blank" v-if="$store.getters.getWebsite">{{$store.getters.getWebsite}}</a>
+                                    <a :href="getWeb(data.me.profile.website)" target="_blank" v-else>{{data.me.profile.website}}</a>
                                 </div>
                             </div>
                             <!-- <ApolloQuery :query="require('../graphql/queries/count.graphql')">
@@ -138,6 +139,7 @@
             </div>
         </template>
     </ApolloQuery>
+    </div>
     <br><br>
     <footer>
       <footer-ele></footer-ele>
@@ -296,6 +298,9 @@ export default {
         turnOn(index, color){
             this.color = color;
             this.pressed = index;
+        },
+        getWeb(data){
+            return 'https://' + data;
         }
         // make(post){
         //     // this.likeArr = followings;
@@ -649,5 +654,11 @@ div.mention-link{
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 </style>

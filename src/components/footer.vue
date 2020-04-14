@@ -1,12 +1,14 @@
 <template>
   <div id="foot" class="p-5 mt-2 h-32  w-screen bottom-auto">
     <p class="icons">
-      <a href="https://github.com/Tinku10" target=_blank style="text-decoration: none; color: inherit;"><div id="logo"></div></a>
+      <a href="https://flowwith.netlify.com" target=_blank style="text-decoration: none; color: inherit;"><div id="logo"></div></a>
       <span class=" ml-2  flow mr-2 mb-2">flow</span>
       <!-- <a href="https://www.linkedin.com/in/tinkumonikalita/" target=_blank style="text-decoration: none; color: inherit;"><div id="linkedin"></div></a>
       <a href="https://medium.com/@tinku.kvs" target=_blank style="text-decoration: none; color: inherit;"><div id="medium"></div></a> -->
       
     <div id="copyright" class="mt-2  align-center">Copyright © 2020 Flow</div>
+    <!-- <a href="https://github.com/Tinku10/flow-frontend" target=_blank style="text-decoration: none; color: inherit;"><div id="github"></div></a> 
+    <p>Contribute on GitHub</p> -->
   </div>
 </template>
 
@@ -41,9 +43,9 @@ div {
 
 }
 
-#medium{
+#github{
   padding: 1px;
-  background: url('../../public/medium.svg');
+  background: url('../../public/github.svg');
   height: 20px;
   width: 20px;
   background-repeat: no-repeat;

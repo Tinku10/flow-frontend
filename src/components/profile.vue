@@ -1,7 +1,7 @@
 <template>
     <div >
         <nav-bar></nav-bar>
-        <div>
+        <div class="body">
         <ApolloQuery 
             :query="require('../graphql/queries/user.graphql')"
             :variables="{id: $route.params.id}"
@@ -15,14 +15,14 @@
 
                             </div>
                             <div class="flex-col items-start ml-4 md:items-start">
-                                <h3 class="name md:mt-2"><b>{{data.user.name}}</b></h3>
-                                <h5 class="username  md:mt-2 font-bold"><b>@</b> {{data.user.username}}</h5>
+                                <h3  v-if="data.user.name" class="name md:mt-2"><b>{{data.user.name}}</b></h3>
+                                <h5 v-if="data.user.username" class="username  md:mt-2 font-bold"><b>@</b> {{data.user.username}}</h5>
                                 <div class="extras md:mt-4 w-48" v-if="data.user.profile" >
                                     <div class="md:mt-2" v-if="data.user.profile.description != null">
                                         <p  >{{data.user.profile.description}}</p>
                                     </div>
                                     <div class=" md:mt-2 text-blue-300" v-if="data.user.profile.website != null">
-                                        <a :href="data.user.profile.website" target="_blank">{{data.user.profile.website}}</a>
+                                        <a :href="getWeb(data.user.profile.website)" target="_blank">{{data.user.profile.website}}</a>
                                     </div>
                                 </div>
                                 <div v-if="data.user" class="  extras  justify-evenly md:mt-4 md:mb-4">
@@ -40,8 +40,8 @@
                                 <div class="ch-profile flex sm:mt-2 md:flex-col">
                                     <ApolloQuery :query="require('../graphql/queries/me.graphql')">
                                         <template v-slot="{result: {data}}">
-                                            <span v-if="isAuth() && data">
-                                                <span v-if="followers == null ">
+                                            <span v-if="isAuth() && data !=null">
+                                                <span v-if="followers == null && data !=null ">
                                                     <ApolloMutation
                                                     :mutation="require('../graphql/mutations/follow.graphql')"
                                                     :variables="{id: $route.params.id}"
@@ -301,6 +301,9 @@ export default {
                 return true;
             }
             return false;
+        },
+        getWeb(data){
+            return 'https://' + data;
         }
         
     }
@@ -646,5 +649,11 @@ div.mention-link{
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 </style>
