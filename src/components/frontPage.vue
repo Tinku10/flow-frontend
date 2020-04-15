@@ -4,16 +4,16 @@
     <div class="hello relative overflow-hidden ">
         <div class="overlay"></div>
         <nav class="navbar flex flex-row items-center mt-4 z-50" >
-            <div class="flex items-center fixed">
+            <div class="flex items-center fixed z-50">
                 <img class="lens md:ml-1" src="../../public/search.svg" alt="">
-                <input type="text" name="" class="ml-10 w-40 lg:p-3 outline-none border-none lg:resultbox  rounded-sm font-thin md:ml-16" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+                <input type="text" name="" class="ml-10 w-40 lg:p-3 outline-none border-none lg:resultbox  rounded-sm font-thin md:ml-16" placeholder="Search" @blur="searchbox=false" @focus="searchbox = true"   v-model="search">
             </div>
 
-            <div v-if="token" class="justify-end fixed right-0">
-                <span class="mr-4"><router-link to="/home" id="link" class="mr-2 ml-2" v-if="token">Home</router-link></span>
+            <div v-if="token" class="justify-end fixed right-0 z-50">
+                <span class="mr-4 "><router-link to="/home" id="link" class="mr-2 ml-2" v-if="token">Home</router-link></span>
 
             </div>
-            <div v-else class="justify-end fixed right-0">
+            <div v-else class="justify-end fixed right-0 z-50">
                 <span class="mr-4"><router-link to="/login" id="link" class="mr-2 ml-2">Login</router-link></span>
                 <span class="mr-4"><router-link to="/register" id="link" class="mr-2 ml-2">Register</router-link></span>
 
@@ -21,7 +21,7 @@
 
         </nav>
         <transition name="slide-fade">
-        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 absolute z-10 "  v-show="searchbox" >
+        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 fixed z-10 "  v-show="searchbox" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
             >
@@ -119,7 +119,7 @@ export default {
     margin-right: 1.5vw; */
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1rem;
-    z-index: 10;
+    /* z-index: 10; */
 
 }
 .heading{

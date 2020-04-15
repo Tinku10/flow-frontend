@@ -4,7 +4,7 @@ import VueRouter from "vue-router";
 import Vuelidate from "vuelidate";
 import { createProvider } from './vue-apollo'
 import {store} from './store/store'
-import { ValidationProvider, extend } from 'vee-validate';
+import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
 
 import frontPage from './components/frontPage';
 import register from './components/register';
@@ -85,6 +85,8 @@ extend('number', value => {
 
 // Register it globally
 Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+
 
 Vue.config.productionTip = false
 

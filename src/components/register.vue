@@ -20,31 +20,33 @@
                 @done="onDone">
                 <template v-slot="{mutate, error}">
                     <div v-if="!off">
+                        <ValidationObserver v-slot="{invalid}">
                         <form v-on:submit.prevent="mutate(); off=true" class="containers">
                             <ValidationProvider rules="required" v-slot="{errors}" class="grid-flow-col" >
                                 <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Name"  name="name" v-model="name">
-                                <div>{{errors[0]}}</div>
+                                <div class="error">{{errors[0]}}</div>
                             </ValidationProvider>
                             <ValidationProvider rules="required" v-slot="{errors}">
                                 <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Username"   name="username" v-model="username">
-                                <div>{{errors[0]}}</div>
+                                <div class="error">{{errors[0]}}</div>
                             </ValidationProvider>
                             <ValidationProvider rules="email|required" v-slot="{errors}">
                                 <input class="input w-64 h-1 md:max-w-lg" type="email" placeholder="Email ID"  name="email" v-model="email">
-                                <div>{{errors[0]}}</div>
+                                <div class="error">{{errors[0]}}</div>
                             </ValidationProvider>
                             <!-- <ValidationObserver class="flex-col"> -->
                                 <ValidationProvider  rules="minCh|upperCase|lowerCase|number|password:@confirm|required" v-slot="{errors}">
                                     <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Password" name="password" v-model="password">
-                                    <div>{{errors[0]}}</div>
+                                    <div class="error">{{errors[0]}}</div>
                                 </ValidationProvider>
                                 <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
                                     <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Confirm Password" name="repassword" v-model="repassword">
-                                    <div>{{errors[0]}}</div>
+                                    <div class="error">{{errors[0]}}</div>
                                 </ValidationProvider>
                             <!-- </ValidationObserver> -->
-                            <button id="submit" class="w-24 h-10" >REGISTER</button>
+                            <button id="submit" class="w-24 h-10" :disabled="invalid">REGISTER</button>
                         </form>
+                        </ValidationObserver>
                     </div>
                     <div v-else class="flex flex-row justify-center">
                         <p v-if="error">{{error}}</p>
@@ -134,7 +136,7 @@ input{
     padding: 1.2rem;
     border: 1px solid rgb(184, 182, 182);
     border-radius: 0.2rem;
-    margin-bottom: 10px;
+    margin-top: 10px;
     /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
     border: none;
     outline: none;
@@ -151,7 +153,7 @@ textarea{
     font-weight: lighter;
     color:rgb(164, 165, 165);
     border-radius: 0.2rem;
-    margin-bottom: 5px;
+    margin-top: 5px;
     box-shadow: 0 20px 30px -16px rgba(9,9,16,.2);
     border: none;
     outline: none;
@@ -231,7 +233,7 @@ nav a{
 
 }
 .error{
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: rgba(245, 119, 97, 0.815);
 }
 .load{
@@ -248,7 +250,7 @@ nav a{
         padding: 1.2rem;
         border: 1px solid rgb(184, 182, 182);
         border-radius: 0.2rem;
-        margin-bottom: 10px;
+        margin-top: 10px;
         /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
         border: none;
         outline: none;

@@ -5,12 +5,12 @@
         <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
         <!-- <span class="flex items-center"> -->
             <!-- <img class="lens md:ml-1" src="../../public/search.svg" alt=""> -->
-            <input type="search" name="" class="h-8 w-56 lg:ml-6 lg:mr-4 p-3 outline-none border-none md:w-64 rounded-sm" placeholder="Search" @click="searchbox = !searchbox" v-model="search">
+            <input type="search" name="" class="h-8 w-56 lg:ml-6 lg:mr-4 p-3 outline-none border-none md:w-64 rounded-sm" placeholder="Search" @blur="searchbox=false" @focus="searchbox = true" v-model="search">
         <!-- </span> -->
         <span class="float-right">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
-                    <div  v-if="!isLoading" class=" md:mr-4  p-1 border-none outline-none cursor-pointer" v-on:click="menuPressed = !menuPressed">
+                    <div  v-if="!isLoading" class=" md:mr-4  p-1 border-none outline-none cursor-pointer" @focus="menuPressed=true" @blur="menuPressed=false" tabindex="0">
                         <img class="rounded-sm h-6 w-6" :src="getImage(data.me.username)">
                     </div>
                     <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
