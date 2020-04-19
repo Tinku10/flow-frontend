@@ -1,188 +1,248 @@
 <template>
     <div >
-        <nav-bar></nav-bar>
-        <div class="body">
-        <ApolloQuery 
-            :query="require('../graphql/queries/user.graphql')"
-            :variables="{id: $route.params.id}"
-            >
-            <template  v-slot="{result: {loading, error, data}, isLoading}">
-                <div class ="md:p-2 md:flex md:justify-evenly lg:justify-center" v-if="data">
-                    <div class="mt-1  justify-between md:w-1/4 md:ml-6 md:mr-6 md:mt-2">
-                        <div class="flex items-end justify-evenly ml-4 mr-4 md-4 md:flex-col md:p-2 md:ml-2 md:items-start" v-if="data.user">
-                            <div  class="ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48">
-                                <img id="h-32 w-32 md:h-40 md:w-40 md:mb-4 lg:rounded lg:h-48 lg:w-48" :src="getImage(data)">
+        <div class="relative">
+             <div class="overlay absolute" v-if="showfollower == true || showfollowing ==true || banner == true "
+             @click="showfollower=false; showfollowing=false">
+            </div>
+            <nav-bar></nav-bar>
+            <div class="body">
+            <ApolloQuery 
+                :query="require('../graphql/queries/user.graphql')"
+                :variables="{id: $route.params.id}"
+                >
+                <template  v-slot="{result: {loading, error, data}, isLoading}">
+                    <div class ="md:p-2 md:flex md:justify-evenly lg:justify-center" v-if="data">
+                        <div class="mt-1  justify-between md:w-1/4 md:ml-6 md:mr-6 md:mt-2">
+                            <div class="flex items-start justify-evenly ml-4 mr-4 md-4 md:flex-col md:p-2 md:ml-2 md:items-start" v-if="data.user">
+                                <div  class="ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48">
+                                    <img id="h-32 w-32 md:h-40 md:w-40 md:mb-4 lg:rounded lg:h-48 lg:w-48" :src="getImage(data)">
 
-                            </div>
-                            <div class="flex-col items-start ml-4 md:items-start">
-                                <h3  v-if="data.user.name" class="name md:mt-2"><b>{{data.user.name}}</b></h3>
-                                <h5 v-if="data.user.username" class="username  md:mt-2 font-bold"><b>@</b> {{data.user.username}}</h5>
-                                <div class="extras md:mt-4 w-48" v-if="data.user.profile" >
-                                    <div class="md:mt-2" v-if="data.user.profile.description != null">
-                                        <p  >{{data.user.profile.description}}</p>
-                                    </div>
-                                    <div class=" md:mt-2 text-blue-300" v-if="data.user.profile.website != null">
-                                        <a :href="getWeb(data.user.profile.website)" target="_blank">{{data.user.profile.website}}</a>
-                                    </div>
                                 </div>
-                                <div v-if="data.user" class="  extras  justify-evenly md:mt-4 md:mb-4">
-                                    <span v-if="followers == null">
-                                        <span v-if="data.user.followers" class=" mr-2"><b>{{getf(data.user.followers)}}</b> Follower</span>
-                                        <span v-else class=" mr-2"><b>0</b> Follower</span>
-                                    </span>
-                                    <span v-else>
-                                        <span v-if="followers.follower" class=" mr-2"><b>{{followers.follower}}</b> Follower</span>
-                                        <span v-else class=" mr-2"><b>0</b> Follower</span>
-                                    </span>
-                                    <span v-if="data.user.followings" class=" ml-2"><b>{{get(data.user.followings)}}</b> Following</span>
-                                    <span v-else class=" ml-2"><b>0</b> Following</span>
-                                </div>
-                                <div class="ch-profile flex sm:mt-2 md:flex-col">
-                                    <ApolloQuery :query="require('../graphql/queries/me.graphql')">
-                                        <template v-slot="{result: {data}}">
-                                            <span v-if="isAuth() && data !=null">
-                                                <span v-if="followers == null && data !=null ">
-                                                    <ApolloMutation
-                                                    :mutation="require('../graphql/mutations/follow.graphql')"
-                                                    :variables="{id: $route.params.id}"
-                                                    >
-                                                        <template v-slot="{mutate}">
-                                                            <!-- truke -->
-                                                            <!-- <span v-if="data.me"> -->
+                                <div class="flex-col items-start mr-2 ml-4 md:items-start">
+                                    <h3  v-if="data.user.name" class="name md:mt-2"><b>{{data.user.name}}</b></h3>
+                                    <h5 v-if="data.user.username" class="username  md:mt-2 font-bold"><b>@</b> {{data.user.username}}</h5>
+                                    <div class="extras mt-2 md:mt-4 w-48" v-if="data.user.profile" >
+                                        <div class="md:mt-2" v-if="data.user.profile.description != null">
+                                            <p  >{{data.user.profile.description}}</p>
+                                        </div>
+                                        <div class=" md:mt-2 text-blue-300" v-if="data.user.profile.website != null">
+                                            <a :href="getWeb(data.user.profile.website)" target="_blank">{{data.user.profile.website}}</a>
+                                        </div>
+                                    </div>
+                                    <div v-if="data.user" class="  extras mt-2 mb-2 justify-evenly md:mt-4 md:mb-4">
+                                        <span v-if="followers == null">
+                                            <span v-if="data.user.followers" class=" mr-2 cursor-pointer outline-none" tabindex="0" @click="showfollower=true"  ><b>{{getf(data.user.followers)}}</b> Follower</span>
+                                            <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                        </span>
+                                        <span v-else>
+                                            <span v-if="followers.follower" class=" mr-2 cursor-pointer outline-none" tabindex="0" @click="showfollower=true"  ><b>{{followers.follower}}</b> Follower</span>
+                                            <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                        </span>
+                                        <span v-if="data.user.followings"  class="ml-2 cursor-pointer outline-none" tabindex="0" @focus="showfollowing=true" ><b>{{get(data.user.followings)}}</b> Following</span>
+                                        <span v-else class=" ml-2"><b>0</b> Following</span>
+                                    </div>
+                                    <div class="ch-profile flex sm:mt-2 md:flex-col">
+                                        <ApolloQuery :query="require('../graphql/queries/me.graphql')">
+                                            <template v-slot="{result: {data}}">
+                                                <span v-if="isAuth() && data !=null">
+                                                    <span v-if="followers == null && data !=null ">
+                                                        <ApolloMutation
+                                                        :mutation="require('../graphql/mutations/follow.graphql')"
+                                                        :variables="{id: $route.params.id}"
+                                                        >
+                                                            <template v-slot="{mutate}">
+                                                                <!-- truke -->
+                                                                <!-- <span v-if="data.me"> -->
 
-                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2  rounded-sm " v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
-                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2  rounded-sm " v-on:click="mutate();follow(number)" v-else>Follow </button>
-                                                            <!-- </span> -->
-                                                        </template>
-                                                    </ApolloMutation>
+                                                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2  rounded-sm " v-on:click="mutate();unfollow(number)" v-if="checkFollow(data.me.followings, $route.params.id)">Unfollow</button>
+                                                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2  rounded-sm " v-on:click="mutate();follow(number)" v-else>Follow </button>
+                                                                <!-- </span> -->
+                                                            </template>
+                                                        </ApolloMutation>
+                                                    </span>
+                                                    <span v-else>
+                                                        <ApolloMutation
+                                                        :mutation="require('../graphql/mutations/follow.graphql')"
+                                                        :variables="{id: $route.params.id}"
+                                                        >
+                                                            <template v-slot="{mutate}">
+                                                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
+                                                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="mutate(); follow(number)" v-else>Follow </button>
+                                                            
+                                                            </template>
+                                                        </ApolloMutation>
+                                                    </span>
+
                                                 </span>
                                                 <span v-else>
-                                                    <ApolloMutation
-                                                    :mutation="require('../graphql/mutations/follow.graphql')"
-                                                    :variables="{id: $route.params.id}"
-                                                    >
-                                                        <template v-slot="{mutate}">
-                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="mutate(); unfollow(number)"  v-if="followers.button == 'uf'">Unfollow</button>
-                                                            <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="mutate(); follow(number)" v-else>Follow </button>
-                                                        
-                                                        </template>
-                                                    </ApolloMutation>
+                                                    <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="banner=true;feature='follow a person'">Follow </button>
                                                 </span>
+                                            </template>
+                                            
+                                        </ApolloQuery>
+                                        <br>
+                                        <!-- <button>
+                                            <router-link to="/post" style="text-decoration: none; color: white">Add a Post</router-link>
+                                        </button> -->
+                                    </div>
+                                </div>
+                            </div>
 
-                                            </span>
-                                            <span v-else>
-                                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 rounded-sm" v-on:click="banner=true;feature='follow a person'">Follow </button>
-                                            </span>
-                                        </template>
-                                        
-                                    </ApolloQuery>
-                                    <br>
-                                    <!-- <button>
-                                        <router-link to="/post" style="text-decoration: none; color: white">Add a Post</router-link>
-                                    </button> -->
+                        </div>
+
+                        <div class="ml-2 mr-2 md:ml-6 md:mr-6 md:ml-6 md:w-2/3 lg:w-2/4 lg:ml-8 lg:mr-8">
+                            <div>
+                                <div class="text-center text-gray-600 font-hairline mt-6 lg:mt-2"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
+                                <div v-if="data">
+                                    <div v-show="arrange(data.user.posts)"> 
+                                        <ul v-for="(post,index) in data.user.posts" :key="index" >
+                                            <div class="bg-gray-100 p-2 rounded mb-4 mt-4 ml-2 mr-2">
+                                                <div class="mention items-center lg:p-2">
+                                                    <img id="profile-img" :src="getImage(data)">
+                                                    <p>{{data.user.name}}</p>
+                                                </div>
+                                                <p class="post-heading">{{post.title}}</p>
+                                                <p class="post-content ml-2 mr-2">{{post.post}}</p>
+                                                <div>
+                                                    <ApolloQuery :query="require('../graphql/queries/me.graphql')">
+                                                    <template v-slot="{result: {data}}">
+                                                    <ApolloMutation 
+                                                        :mutation="require('../graphql/mutations/addLike.graphql')"
+                                                        :variables="{post_id: post.id}"
+                                                        >
+                                                            <template v-slot="{mutate}">
+                                                                <!-- <span v-if="data.me"> -->
+
+                                                                    <span v-if="isAuth() ">
+                                                                    <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
+                                                                        
+                                                                        <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
+
+                                                                        <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+
+                                                                        <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+
+                                                                        
+                                                                        
+                                                                    </div >
+                                                                    <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
+                                                                        
+                                                                        
+                                                                        <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
+
+                                                                        <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
+
+                                                                        <div class="p-2 font-light likecounter">{{array[index].like}}</div>
+                                                                        
+                                                                        
+                                                                    </div>
+                                                                    </span>
+                                                                    <span v-else>
+                                                                        <!-- <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div> -->
+                                                                        <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" >
+
+                                                                        <div class="heartl p-2 mt-2 mr-1 cursor-pointer"  v-on:click="banner=true; feature='like a post'"></div>
+
+                                                                        <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                        </div>
+                                                                    </span>
+                                                                <!-- </span> -->
+                                                            </template>
+                                                        </ApolloMutation>
+                                                    </template>
+                                                    </ApolloQuery>
+                                                </div>
+                                                <br> <br>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    <!-- <p v-else-if="error">Error..</p> -->
+                    <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
+                    <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-medium "></div>
+                    <div class="h-medium mt-6 md:h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content md:mt-2 rounded-sm  ml-2 mr-2 w-medium " ></div>
+                </div>
+                </template>
+            </ApolloQuery>
 
-                    <div class="ml-2 mr-2 md:ml-6 md:mr-6 md:ml-6 md:w-2/3 lg:w-2/4 lg:ml-8 lg:mr-8">
-                        <div>
-                            <div class="text-center text-gray-600 font-hairline mt-4 lg:mt-2"><b>{{data.user.name.split(' ')[0]}}'s Nest</b></div>
-                            <div v-if="data">
-                                <div v-show="arrange(data.user.posts)"> 
-                                    <ul v-for="(post,index) in data.user.posts" :key="index" >
-                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4 ml-2 mr-2">
-                                            <div class="mention items-center lg:p-2">
-                                                <img id="profile-img" :src="getImage(data)">
-                                                <p>{{data.user.name}}</p>
-                                            </div>
-                                            <p class="post-heading">{{post.title}}</p>
-                                            <p class="post-content ml-2 mr-2">{{post.post}}</p>
-                                            <div>
-                                                <ApolloQuery :query="require('../graphql/queries/me.graphql')">
-                                                <template v-slot="{result: {data}}">
-                                                <ApolloMutation 
-                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
-                                                    :variables="{post_id: post.id}"
-                                                    >
-                                                        <template v-slot="{mutate}">
-                                                            <!-- <span v-if="data.me"> -->
+        </div>
+        <transition name="fade">
+            <div v-show="auth==false&& banner ==true" class="auth p-2 w-screen md:w-1/3 flex-col shadow-xl rounded z-20">
+                <p class="p-4 ml-2 mr-2 text-center">You need to be logged in to {{feature}}.</p>
+                <div class="flex justify-center mt-4 mb-4">
+                    <button class="mr-4 ml-4 h-8 w-20"><router-link to="/login"  class="mr-2 ml-2">Login</router-link></button>
+                    <button class="mr-4 ml-4 h-8 w-20" @click="banner=false">Explore</button>
 
-                                                                <span v-if="isAuth() ">
-                                                                <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
-                                                                    
-                                                                    <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
+                </div>
+            </div>
 
-                                                                    <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+        </transition>
+        <!-- <div class="dashboard">PROFILE</div> -->
+        <br><br>
+        <footer>
+        <footer-ele></footer-ele>
+        </footer>
 
-                                                                    <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
-
-                                                                    
-                                                                    
-                                                                </div >
-                                                                <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
-                                                                    
-                                                                    
-                                                                    <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
-
-                                                                    <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
-
-                                                                    <div class="p-2 font-light likecounter">{{array[index].like}}</div>
-                                                                    
-                                                                    
-                                                                </div>
-                                                                </span>
-                                                                <span v-else>
-                                                                    <!-- <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div> -->
-                                                                    <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" >
-
-                                                                    <div class="heartl p-2 mt-2 mr-1 cursor-pointer"  v-on:click="banner=true; feature='like a post'"></div>
-
-                                                                    <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
-                                                                    </div>
-                                                                </span>
-                                                            <!-- </span> -->
-                                                        </template>
-                                                    </ApolloMutation>
-                                                </template>
-                                                </ApolloQuery>
-                                            </div>
-                                            <br> <br>
-                                        </div>
-                                    </ul>
+        </div>
+        <div v-show="showfollower" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t  md:h-screen transition md:w-1/3 md:rounded-none outline-none z-20"  >
+        <ApolloQuery :query="require('../graphql/queries/showffuser.graphql')" :variables="{id: $route.params.id}">
+            <template v-slot="{result: {data}}">
+                <!-- <p v-if="isLoading">Loading..</p> -->
+                <p class="text-center mb-4 mt-4">Followers</p>
+                <div v-if="data">
+                    <div v-if="data.user.followers">
+                        <div  v-for="follower in data.user.followers" :key="follower.id">
+                            <!-- <p>{{follower.name}}</p>
+                            <p>{{follower.username}}</p> -->
+                            <router-link :to="{path: '/profiles/' + String(follower.id)}" class="mention items-center lg:p-2">
+                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2">
+                                    <img id="profile-img" :src="getMyImage(follower.username)">
+                                    <div class="flex flex-col items-start">
+                                        <p class="foln font-semibold">{{follower.name}}</p>
+                                        <p class="folu">@ {{follower.username}}</p>
+                                    </div>
                                 </div>
-                                
-                            </div>
+                            </router-link>
                         </div>
+
                     </div>
 
                 </div>
-                <!-- <p v-else-if="error">Error..</p> -->
-                <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
-                <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-64 "></div>
-                <div class="h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2 w-64 " ></div>
-            </div>
             </template>
         </ApolloQuery>
-
     </div>
-    <transition name="fade">
-        <div v-show="auth==false&& banner ==true" class="auth p-2 w-screen md:w-1/3 flex-col shadow-xl rounded">
-            <p class="p-4 ml-2 mr-2 text-center">You need to be logged in to {{feature}}.</p>
-            <div class="flex justify-center mt-4 mb-4">
-                <button class="mr-4 ml-4 h-8 w-20"><router-link to="/login"  class="mr-2 ml-2">Login</router-link></button>
-                <button class="mr-4 ml-4 h-8 w-20" @click="banner=false">Explore</button>
+    <div v-show="showfollowing" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-20" >
+        <ApolloQuery :query="require('../graphql/queries/showffuser.graphql')" :variables="{id: $route.params.id}">
+            <template v-slot="{result: {data}}">
+                <!-- <p v-if="isLoading">Loading..</p> -->
+                <p class="text-center mb-4 mt-4">Followings</p>
+                <div v-if="data">
+                    <div v-if="data.user.followings !=null">
+                        <div v-for="following in data.user.followings" :key="following.id">
+                            <!-- <p>{{follower.name}}</p>
+                            <p>{{follower.username}}</p> -->
+                            <router-link :to="{path: '/profiles/' + String(following.id)}" class="mention items-center lg:p-2">
+                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2">
+                                    <img id="profile-img" :src="getMyImage(following.username)">
+                                    <div class="flex flex-col items-start">
+                                        <p class="foln font-semibold">{{following.name}}</p>
+                                        <p class="folu">@ {{following.username}}</p>
+                                    </div>
+                                </div>
+                            </router-link>
+                        </div>
 
-            </div>
-        </div>
+                    </div>
 
-    </transition>
-    <!-- <div class="dashboard">PROFILE</div> -->
-    <br><br>
-    <footer>
-      <footer-ele></footer-ele>
-    </footer>
+                </div>
+            </template>
+        </ApolloQuery>
+    </div>
   </div>
 </template>
 
@@ -210,7 +270,9 @@ export default {
             array: null,
             auth: false,
             banner: false,
-            feature: ''
+            feature: '',
+            showfollower: false,
+            showfollowing: false
         }
     },
     computed: {
@@ -420,20 +482,20 @@ export default {
 @media  (min-width: 768px){
     
     .name{
-        font-size: 2vw;
+        font-size: 1.4rem;
         color:rgb(119, 116, 116);
         font-family: "Source Code Pro", sans-serif;
         font-weight: lighter;
     }
     .username{
-        font-size: 1.5vw;
+        font-size: 1rem;
         color:rgb(116, 118, 119);
         font-family: "Source Code Pro", sans-serif;
         font-weight: lighter;
         font-style: italic;
     }
     .extras{
-        font-size: 1vw;
+        font-size: 0.8rem;
         color:rgb(119, 116, 116);
         font-family: "Source Code Pro", sans-serif;
         /* font-weight: lighter;
@@ -457,6 +519,22 @@ export default {
         border: none;
         outline: none;
         background-color:rgb(141, 223, 228);
+    }
+    .foll{
+        /* height: 5rem;
+        width: 10rem; */
+        right: 0%;
+        top: 0%;
+        /* left: 50%; */
+        /* transform: translate(-50%); */
+        position: fixed;
+        font-family: 'Quicksand', sans-serif;
+        color: rgb(100, 100, 100);
+        /* font-size: 1.2rem; */
+        font-weight: lighter;
+        /* border: 1px solid  rgb(161, 163, 163); */
+        /* border-radius: 0.2rem; */
+        overflow:auto;
     }
     
     
@@ -655,5 +733,35 @@ div.mention-link{
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+.foln, .folu{
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.9rem;
+}
+.folu{
+    font-size: 0.8rem;
+}
+.foll{
+    /* height: 5rem;
+    width: 10rem; */
+    bottom: 0%;
+    /* left: 50%; */
+    /* transform: translate(-50%); */
+    position: fixed;
+    font-family: 'Quicksand', sans-serif;
+    color: rgb(100, 100, 100);
+    /* font-size: 1.2rem; */
+    font-weight: lighter;
+    /* border: 1px solid  rgb(161, 163, 163); */
+    /* border-radius: 0.2rem; */
+    overflow:auto;
+}
+.overlay{
+    background: rgb(53, 53, 53);
+    /* position: absolute; */
+    height: 100%;
+    width: 100%;
+    filter: opacity(50%);
+    z-index: 5;
 }
 </style>

@@ -1,17 +1,17 @@
 <template>
     <div>
         <nav class="h-30 w-full p-2 navbar-color mb-6 md:mb-0 " >
-        <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-3 lg:p-4  lg:mr-4 lg:ml-4 mr-2 md:mr-4 md:ml-4"></span></router-link>
+        <router-link  to="/" style="text-decoration: none"><span  id="image" class="bg-no-repeat p-3 lg:p-4  lg:mr-4 lg:ml-4 mr-4 md:mr-4 md:ml-4"></span></router-link>
         <!-- <span class="search-img ml-8 p-3 z-10 absolute mt-1"></span> -->
         <!-- <span class="flex items-center"> -->
             <!-- <img class="lens md:ml-1" src="../../public/search.svg" alt=""> -->
             <input type="search" name="" class="h-8 w-56 lg:ml-6 lg:mr-4 p-3 outline-none border-none md:w-64 rounded-sm" placeholder="Search" @blur="searchbox=false" @focus="searchbox = true" v-model="search">
         <!-- </span> -->
-        <span class="float-right">
+        <span class="float-right" v-if="isAuth">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
-                    <div  v-if="!isLoading" class=" md:mr-4  p-1 border-none outline-none cursor-pointer" @focus="menuPressed=true" @blur="menuPressed=false" tabindex="0">
-                        <img class="rounded-sm h-6 w-6" :src="getImage(data.me.username)">
+                    <div  v-if="!isLoading " class=" md:mr-4  p-1 border-none outline-none cursor-pointer" @focus="menuPressed=true" @blur="menuPressed=false" tabindex="0">
+                        <img class="rounded-sm h-6 w-6" :src="getImage(data)">
                     </div>
                     <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
                 </template>
@@ -70,8 +70,9 @@ export default {
     },
     methods: {
         getImage(data){
+            this.id = data.me.id;
             // this.$store.state.photo = 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
-            return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
+            return 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
         },
         filteredUsers(users){
             if(this.search == ''){
@@ -96,17 +97,23 @@ export default {
         getProfiles(data){
              return 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
         },
+        isAuth(){
+            if(localStorage.getItem("apollo-token")){
+                return true;
+            }
+            return false;
+        },
     }
 }
 </script>
 
 <style scoped>
 #image{
-    background: url('../../public/quote.svg');
+    background: url('../../public/atom.svg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    filter: grayscale(100%)
+    /* filter: grayscale(100%) */
 
 }
 .mention-link{

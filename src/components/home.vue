@@ -1,149 +1,209 @@
 <template>
   <div >
-    <nav-bar class=""></nav-bar>
+    <div class="relative">
+        <div class="overlay absolute" v-if="showfollower == true || showfollowing ==true "  @click="showfollower=false; showfollowing=false">
 
-    <!-- <div class="dashboard">PROFILE</div> -->
-    <div class="body">
-    <ApolloQuery 
-        :query="require('../graphql/queries/me2.graphql')"
-        >
-        <template  v-slot="{result: {loading, error, data}, isLoading}">
-            <div class ="md:p-2 md:flex md:justify-evenly lg:justify-center">
-                <div class="mt-1  justify-between md:w-1/4 md:ml-6 md:mr-6 md:mt-2 md:items-start">
-                    <div class="flex items-end justify-evenly ml-4 mr-4 md-4 md:flex-col md:p-2 md:items-start" v-if="isData(data)">
-                        <div  class=" ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48 md:ml-2 ">
-                            <img class="h-32 w-32 md:h-40 md:w-40 md:mb-4 lg:rounded lg:h-48 lg:w-48" :src="getImage(data.me.username)">
-                        </div>
-                        <div class="flex-col items-start ml-2 md:items-start">
-                            <h3 class="name md:mt-2"><b>{{data.me.name}}</b></h3>
-                            <h5 class="username  md:mt-2 font-bold"><b>@</b> {{data.me.username}}</h5>
-                            <div class="extras md:mt-4 w-48" v-if="data.me.profile" >
-                                <div class="md:mt-2" v-if="data.me.profile.description != null">
-                                    <p v-if="$store.getters.getDescription">{{$store.getters.getDescription}}</p>
-                                    <p v-else >{{data.me.profile.description}}</p>
+        </div>
+        <nav-bar class=""></nav-bar>
+
+        <!-- <div class="dashboard">PROFILE</div> -->
+        <div class="body">
+        <ApolloQuery 
+            :query="require('../graphql/queries/me2.graphql')"
+            >
+            <template  v-slot="{result: {loading, error, data}, isLoading}">
+                <div class ="md:p-2 md:flex md:justify-evenly lg:justify-center">
+                    <div class="mt-1  justify-between md:w-1/4 md:ml-6 md:mr-6 md:mt-2 md:items-start">
+                        <div class="flex items-start justify-evenly ml-4 mr-4 md-4 md:flex-col md:p-2 md:items-start" v-if="isData(data)">
+                            <div  class=" ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48 md:ml-2 ">
+                                <img class="h-32 w-32 md:h-40 md:w-40 md:mb-4 lg:rounded lg:h-48 lg:w-48" :src="getImage(data.me.username)">
+                            </div>
+                            <div class="flex-col items-start ml-2 mr-2 md:items-start">
+                                <h3 class="name md:mt-2"><b>{{data.me.name}}</b></h3>
+                                <h5 class="username  md:mt-2 font-bold"><b>@</b> {{data.me.username}}</h5>
+                                <div class="extras mt-2 md:mt-4 w-48" v-if="data.me.profile" >
+                                    <div class="md:mt-2" v-if="data.me.profile.description != null">
+                                        <p v-if="$store.getters.getDescription">{{$store.getters.getDescription}}</p>
+                                        <p v-else >{{data.me.profile.description}}</p>
+                                    </div>
+                                    <div class="md:mt-2 text-blue-300" v-if="data.me.profile.website != null">
+                                        <a :href="getWeb($store.getters.getWebsite)" target="_blank" v-if="$store.getters.getWebsite">{{$store.getters.getWebsite}}</a>
+                                        <a :href="getWeb(data.me.profile.website)" target="_blank" v-else>{{data.me.profile.website}}</a>
+                                    </div>
                                 </div>
-                                <div class="md:mt-2 text-blue-300" v-if="data.me.profile.website != null">
-                                    <a :href="getWeb($store.getters.getWebsite)" target="_blank" v-if="$store.getters.getWebsite">{{$store.getters.getWebsite}}</a>
-                                    <a :href="getWeb(data.me.profile.website)" target="_blank" v-else>{{data.me.profile.website}}</a>
+                                <!-- <ApolloQuery :query="require('../graphql/queries/count.graphql')">
+                                    <template v-slot="{result: {data}}"> -->
+                                <div v-if="data.me" class="extras  justify-evenly mt-2 mb-2 md:mt-4 md:mb-4">
+                                    <span v-if="data.me.followers" class=" mr-2 cursor-pointer outline-none" tabindex="0" @click="showfollower=true"><b>{{get(data.me.followers)}}</b> Follower</span>
+                                    <span v-else class=" mr-2"><b>0</b> Follower</span>
+                                    <span v-if="data.me.followings" class=" ml-2 cursor-pointer outline-none" tabindex="0" @click="showfollowing=true" ><b>{{get(data.me.followings)}}</b> Following</span>
+                                    <span v-else class=" ml-2"><b>0</b> Following</span>
+                                </div>
+                                    <!-- </template>
+                                </ApolloQuery> -->
+                                <div class="ch-profile flex sm:mt-2 md:flex-col">
+                                    <button class="w-20 mt-1 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 md:mb-1 rounded-sm mr-1 md:mr-0">
+                                        <router-link to="/update" style="text-decoration: none" >Update Profile</router-link>
+                                    </button>
+                                    <button class="w-20 mt-1 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 md:mb-1 rounded-sm ml-1 md:ml-0">
+                                        <router-link to="/post" style="text-decoration: none">Add a Post</router-link>
+                                    </button>
                                 </div>
                             </div>
-                            <!-- <ApolloQuery :query="require('../graphql/queries/count.graphql')">
-                                <template v-slot="{result: {data}}"> -->
-                            <div v-if="data.me" class="extras  justify-evenly md:mt-4 md:mb-4">
-                                <span v-if="data.me.followers" class=" mr-2"><b>{{get(data.me.followers)}}</b> Follower</span>
-                                <span v-else class=" mr-2"><b>0</b> Follower</span>
-                                <span v-if="data.me.followings" class=" ml-2"><b>{{get(data.me.followings)}}</b> Following</span>
-                                <span v-else class=" ml-2"><b>0</b> Following</span>
-                            </div>
-                                <!-- </template>
-                            </ApolloQuery> -->
-                            <div class="ch-profile flex sm:mt-2 md:flex-col">
-                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 md:mb-2 rounded-sm ">
-                                    <router-link to="/update" style="text-decoration: none" >Update Profile</router-link>
-                                </button>
-                                <br>
-                                <button class="w-20 h-6 md:w-40 md:h-10 lg:w-48 lg:mt-2 md:mb-2 ml-1 flex-shrink md:ml-0  rounded-sm ">
-                                    <router-link to="/post" style="text-decoration: none">Add a Post</router-link>
-                                </button>
-                            </div>
                         </div>
+
                     </div>
 
-                </div>
+                    <div class="ml-2 mr-2 md:ml-6 md:mr-6 md:ml-6 md:w-2/3 lg:w-2/4 lg:ml-8 lg:mr-8">
+                        <div >
+                            <div class="text-center text-gray-600 font-hairline mt-6 lg:mt-2"><b>My Nest</b></div>
+                            <div v-if="data" >
+                                <div v-if="data.me.followings" >
+                                    <!-- <div v-show="data.me.followings.posts"> -->
+                                        <ul v-for="(post,index) in arrange(data.me.followings)" :key="post.id" >
+                                        <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
+                                            <div class="bg-gray-100 p-2 rounded mb-4 mt-4 ml-2 mr-2" >
+                                                <router-link :to="{path: '/profiles/' + String(post.user.id)}" class="mention items-center lg:p-2">
+                                                    <img id="profile-img" :src="getImage(post.user.username)">
+                                                    <p>{{post.user.name}}</p>
+                                                </router-link>
+                                                <p class="post-heading">{{post.title}}</p>
+                                                <p class="post-content ml-2 mr-2">{{post.post}}</p>
+                                                <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
+                                                    <template v-slot="{result: {data}}"> -->
+                                                <div>
+                                                    <!-- || isLiked(index, data.me.id)" -->
+                                                    <span  >
+                                                        <ApolloMutation 
+                                                        :mutation="require('../graphql/mutations/addLike.graphql')"
+                                                        :variables="{post_id: post.id}"
+                                                        @done="onDone">
+                                                            <template v-slot="{mutate}">
+                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
+                                                                
+                                                                
+                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
 
-                <div class="ml-2 mr-2 md:ml-6 md:mr-6 md:ml-6 md:w-2/3 lg:w-2/4 lg:ml-8 lg:mr-8">
-                    <div >
-                        <div class="text-center text-gray-600 font-hairline mt-4 lg:mt-2"><b>My Nest</b></div>
-                        <div v-if="data" >
-                            <div v-if="data.me.followings" >
-                                <!-- <div v-show="data.me.followings.posts"> -->
-                                    <ul v-for="(post,index) in arrange(data.me.followings)" :key="post.id" >
-                                      <!-- {{post}} {{data.me.id}} {{post.id}} {{post.likes}} -->
-                                        <div class="bg-gray-100 p-2 rounded mb-4 mt-4 ml-2 mr-2" >
-                                            <router-link :to="{path: '/profiles/' + String(post.user.id)}" class="mention items-center lg:p-2">
-                                                <img id="profile-img" :src="getImage(post.user.username)">
-                                                <p>{{post.user.name}}</p>
-                                            </router-link>
-                                            <p class="post-heading">{{post.title}}</p>
-                                            <p class="post-content ml-2 mr-2">{{post.post}}</p>
-                                            <!-- <ApolloQuery :query="require('../graphql/queries/checkMyLike.graphql')" >
-                                                <template v-slot="{result: {data}}"> -->
-                                            <div>
-                                                <!-- || isLiked(index, data.me.id)" -->
-                                                <span  >
-                                                    <ApolloMutation 
-                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
-                                                    :variables="{post_id: post.id}"
-                                                    @done="onDone">
-                                                        <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-if="array[index].like == null">
-                                                            
-                                                            
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="seeLike(post.likes, data.me.id)" v-on:click="mutate(); like(post.likes.length, index)"></div>
+                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
 
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-else v-on:click="mutate(); dislike(post.likes.length, index)"></div>
+                                                                <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
 
-                                                            <div class="p-2 font-light likecounter" >{{post.likes.length}}</div>
+                                                                
+                                                                
+                                                            </div >
+                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
+                                                                
+                                                                
+                                                                <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
 
-                                                            
-                                                            
-                                                          </div >
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex" v-else>
-                                                            
-                                                            
-                                                            <div class="heartl p-2 mt-2 mr-1 cursor-pointer" v-if="array[index].color=='gray'" v-on:click="mutate(); like(likes[index], index)"></div>
+                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
 
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-if=" array[index].color=='red'" v-on:click="mutate(); dislike(likes[index], index)"></div>
+                                                                <div class="p-2 font-light likecounter">{{array[index].like}}</div>
+                                                                
+                                                                
+                                                            </div>
+                                                            </template>
+                                                        </ApolloMutation>
+                                                    </span>
+                                                    <!-- <span v-else>
+                                                        <ApolloMutation 
+                                                        :mutation="require('../graphql/mutations/addLike.graphql')"
+                                                        :variables="{post_id: post.id}"
+                                                        @donr="onDone">
+                                                            <template v-slot="{mutate}">
+                                                            <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
+                                                                <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate();decreaseLike(index, data.me.id)"></div>
+                                                                <div class="p-2 font-light likecounter" v-if="$store.state.followings">{{$store.state.followings[index].likes.length}}</div>
+                                                                <div class=" p-2 font-light likecounter " v-else>{{post.likes.length}}</div>
+                                                            </div>
 
-                                                            <div class="p-2 font-light likecounter">{{array[index].like}}</div>
-                                                            
-                                                            
-                                                          </div>
-                                                        </template>
-                                                    </ApolloMutation>
-                                                </span>
-                                                <!-- <span v-else>
-                                                    <ApolloMutation 
-                                                    :mutation="require('../graphql/mutations/addLike.graphql')"
-                                                    :variables="{post_id: post.id}"
-                                                    @donr="onDone">
-                                                        <template v-slot="{mutate}">
-                                                          <div class=" mb-2 mt-2 float-right p-1 ml-4 flex">
-                                                            <div class="heart p-2 mt-2 mr-1 cursor-pointer" v-on:click="mutate();decreaseLike(index, data.me.id)"></div>
-                                                            <div class="p-2 font-light likecounter" v-if="$store.state.followings">{{$store.state.followings[index].likes.length}}</div>
-                                                            <div class=" p-2 font-light likecounter " v-else>{{post.likes.length}}</div>
-                                                          </div>
-
-                                                        </template>
-                                                    </ApolloMutation>
-                                                </span> -->
+                                                            </template>
+                                                        </ApolloMutation>
+                                                    </span> -->
+                                                </div>
+                                                <br> <br>
+                                                    <!-- </template>
+                                                </ApolloQuery> -->
                                             </div>
-                                            <br> <br>
-                                                <!-- </template>
-                                            </ApolloQuery> -->
-                                        </div>
-                                    </ul>
-                                <!-- </div> -->
+                                        </ul>
+                                    <!-- </div> -->
+                                </div>
                             </div>
+                            
                         </div>
-                        
                     </div>
+
+
                 </div>
-
-
-            </div>
-            <!-- <p v-else-if="error">Error..</p> -->
-            <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
-                <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-64 "></div>
-                <div class="h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content mt-2 rounded-sm  ml-2 mr-2 w-64 " ></div>
-            </div>
-        </template>
-    </ApolloQuery>
+                <!-- <p v-else-if="error">Error..</p> -->
+                <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
+                    <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-medium "></div>
+                    <div class="h-medium mt-6 md:h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content md:mt-2 rounded-sm  ml-2 mr-2 w-medium " ></div>
+                </div>
+                
+            </template>
+        </ApolloQuery>
+        </div>
+        <br><br>
+        <footer>
+        <footer-ele></footer-ele>
+        </footer>
+        
     </div>
-    <br><br>
-    <footer>
-      <footer-ele></footer-ele>
-    </footer>
+    <div v-show="showfollower" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-10" >
+        <ApolloQuery :query="require('../graphql/queries/showff.graphql')">
+            <template v-slot="{result: {data}}">
+                <!-- <p v-if="isLoading">Loading..</p> -->
+                <p class="text-center mb-4 mt-4">Followers</p>
+                <div v-if="data">
+                    <div v-if="data.me.followers">
+                        <div  v-for="follower in data.me.followers" :key="follower.id">
+                            <!-- <p>{{follower.name}}</p>
+                            <p>{{follower.username}}</p> -->
+                            <router-link :to="{path: '/profiles/' + String(follower.id)}" class="mention items-center lg:p-2">
+                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2">
+                                    <img id="profile-img" :src="getImage(follower.username)">
+                                    <div class="flex flex-col items-start">
+                                        <p class="foln font-semibold">{{follower.name}}</p>
+                                        <p class="folu">@ {{follower.username}}</p>
+                                    </div>
+                                </div>
+                            </router-link>
+                        </div>
+
+                    </div>
+
+                </div>
+            </template>
+        </ApolloQuery>
+    </div>
+    <div v-show="showfollowing" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-10" >
+        <ApolloQuery :query="require('../graphql/queries/showff.graphql')">
+            <template v-slot="{result: {data}}">
+                <!-- <p v-if="isLoading">Loading..</p> -->
+                <p class="text-center mb-4 mt-4">Followings</p>
+                <div v-if="data">
+                    <div v-if="data.me.followings !=null">
+                        <div v-for="following in data.me.followings" :key="following.id">
+                            <!-- <p>{{follower.name}}</p>
+                            <p>{{follower.username}}</p> -->
+                            <router-link :to="{path: '/profiles/' + String(following.id)}" class="mention items-center lg:p-2">
+                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2">
+                                    <img id="profile-img" :src="getImage(following.username)">
+                                    <div class="flex flex-col items-start">
+                                        <p class="foln font-semibold">{{following.name}}</p>
+                                        <p class="folu">@ {{following.username}}</p>
+                                    </div>
+                                </div>
+                            </router-link>
+                        </div>
+
+                    </div>
+
+                </div>
+            </template>
+        </ApolloQuery>
+    </div>
   </div>
 </template>
 
@@ -172,7 +232,9 @@ export default {
             pressed: null,
             color: null,
             array: null,
-            likes: null 
+            likes: null,
+            showfollower: false,
+            showfollowing: false 
         }
     },
     computed: {
@@ -425,20 +487,20 @@ export default {
 @media  (min-width: 768px){
     
     .name{
-        font-size: 2vw;
+        font-size: 1.4rem;
         color:rgb(119, 116, 116);
         font-family: "Source Code Pro", sans-serif;
         font-weight: lighter;
     }
     .username{
-        font-size: 1.5vw;
+        font-size: 1rem;
         color:rgb(116, 118, 119);
         font-family: "Source Code Pro", sans-serif;
         font-weight: lighter;
         font-style: italic;
     }
     .extras{
-        font-size: 1vw;
+        font-size: 0.8rem;
         color:rgb(119, 116, 116);
         font-family: "Source Code Pro", sans-serif;
         /* font-weight: lighter;
@@ -462,6 +524,22 @@ export default {
         border: none;
         outline: none;
         background-color:rgb(141, 223, 228);
+    }
+    .foll{
+        /* height: 5rem;
+        width: 10rem; */
+        right: 0%;
+        top: 0%;
+        /* left: 50%; */
+        /* transform: translate(-50%); */
+        position: fixed;
+        font-family: 'Quicksand', sans-serif;
+        color: rgb(100, 100, 100);
+        /* font-size: 1.2rem; */
+        font-weight: lighter;
+        /* border: 1px solid  rgb(161, 163, 163); */
+        /* border-radius: 0.2rem; */
+        overflow:auto;
     }
     
     
@@ -660,5 +738,35 @@ div.mention-link{
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+.foln, .folu{
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.9rem;
+}
+.folu{
+    font-size: 0.8rem;
+}
+.foll{
+    /* height: 5rem;
+    width: 10rem; */
+    bottom: 0%;
+    /* left: 50%; */
+    /* transform: translate(-50%); */
+    position: fixed;
+    font-family: 'Quicksand', sans-serif;
+    color: rgb(100, 100, 100);
+    /* font-size: 1.2rem; */
+    font-weight: lighter;
+    /* border: 1px solid  rgb(161, 163, 163); */
+    /* border-radius: 0.2rem; */
+    overflow:auto;
+}
+.overlay{
+    background: rgb(53, 53, 53);
+    /* position: absolute; */
+    height: 100%;
+    width: 100%;
+    filter: opacity(50%);
+    z-index: 5;
 }
 </style>

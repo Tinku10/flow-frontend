@@ -1,10 +1,11 @@
 <template>
-  <div >
-    <nav v-if="!off" class="h-30 w-full p-2 navbar-color">
+<div class="relative h-max">
+  <div class=" w-fixed middle bg-green-100 rounded p-4">
+    <!-- <nav v-if="!off" class="h-30 w-full p-2 navbar-color">
         <router-link  to="/" style="text-decoration: none" >
             <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
         </router-link>
-    </nav>
+    </nav> -->
     <div id="first flex items-center">
         <h1 class="main " v-if="!off">Add a new Post</h1>
         <ApolloMutation 
@@ -15,8 +16,8 @@
             <template v-slot="{mutate, errors}">
                 <div v-if="!off">
                     <form  class="containers" v-on:submit.prevent="mutate(); off=true">
-                        <input class="input" type="text" placeholder="Title" required  name="title" v-model="title">
-                        <textarea class="input"  placeholder="Post" required name="post" v-model="post"></textarea>
+                        <input class="input w-64 h-1 bg-white" type="text" placeholder="Title" required  name="title" v-model="title">
+                        <textarea class="input w-64  bg-white h-32"  placeholder="Write something.." required name="post" v-model="post"></textarea>
 
                         <button id="submit" class="w-24 h-10">POST</button>
                         <div v-if="errors">There was an error</div>
@@ -35,6 +36,7 @@
     </div>
 
   </div>
+</div>
 </template>
 
 <script>
@@ -73,7 +75,7 @@ export default {
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: lighter;
     margin: 0px;
-    padding: 2.5rem;
+    padding: 2rem;
     text-align: center;
     align-content: center;
     
@@ -101,7 +103,7 @@ export default {
 
 }
 p{
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-family: "Source Sans Pro", sans-serif;
     color: rgb(173, 170, 170);
     font-weight: lighter;
@@ -109,22 +111,21 @@ p{
     text-align: center;
 }
 input{
-    width: 20rem;
-    height: 1rem;
+    /* width: 30rem;
+    height: 1rem; */
     padding: 1.2rem;
-    border: 1px solid rgb(184, 182, 182);
+    /* border: 1px solid rgb(184, 182, 182); */
     border-radius: 0.2rem;
-    margin-bottom: 5px;
+    margin-top: 10px;
     /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
     border: none;
     outline: none;
 
 }
 
-
 textarea{
-    width: 20rem;
-    height: 15rem;
+    /* width: 50vw;
+    height: 4vw; */
     border: 1px solid rgb(184, 182, 182);
     font: "Source Sans Pro", sans-serif;
     padding: 1.5vw;
@@ -132,8 +133,8 @@ textarea{
     font-weight: lighter;
     color:rgb(164, 165, 165);
     border-radius: 0.2rem;
-    margin-bottom: 5px;
-    box-shadow: 0 20px 30px -16px rgba(9,9,16,.2);
+    margin-top: 5px;
+    /* box-shadow: 0 20px 30px -16px rgba(9,9,16,.2); */
     border: none;
     outline: none;
 
@@ -173,7 +174,7 @@ textarea{
     font-size: 0.8rem;
     /* font-weight: lighter; */
     color:rgb(164, 165, 165);
-    border: solid 1px rgb(221, 218, 218);
+    /* border: solid 1px rgb(221, 218, 218); */
     outline: none;
 
 }
@@ -182,8 +183,8 @@ input:hover{
     outline: none;
 }
 #bottom{
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 1rem;
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.8rem;
     text-align: center;
     text-decoration: none;
     margin-right: 6px;
@@ -211,52 +212,17 @@ nav a{
     filter: grayscale(100%)
 
 }
-@media (min-width: 768px){
-    input{
-    width: 30rem;
-    height: 1rem;
-    padding: 1.2rem;
-    border: 1px solid rgb(184, 182, 182);
-    border-radius: 0.2rem;
-    margin-bottom: 5px;
-    /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
-    border: none;
-    outline: none;
-
+.error{
+    font-size: 0.8rem;
+    color: rgba(245, 119, 97, 0.815);
+}
+.load{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    filter: opacity(60%);
 }
 
-
-textarea{
-    width: 30rem;
-    height: 15rem;
-    border: 1px solid rgb(184, 182, 182);
-    font: "Source Sans Pro", sans-serif;
-    padding: 1.5vw;
-    font-size: 1vw;
-    font-weight: lighter;
-    color:rgb(164, 165, 165);
-    border-radius: 0.2rem;
-    margin-bottom: 5px;
-    box-shadow: 0 20px 30px -16px rgba(9,9,16,.2);
-    border: none;
-    outline: none;
-
-}
-  #submit{
-        margin-top: 3rem;
-        width: 10rem;
-        height: 3rem;;
-        font-size: 0.8rem;
-        font-family: 'Josefin Sans', sans-serif;
-        cursor: pointer;
-        outline: none;
-        color: rgb(243, 244, 245);
-        margin-bottom: 4vw;
-        border-radius: 0.2rem;
-        background-color: rgb(141, 223, 228);
-        border: none;
-
-}
-}
 </style>
 

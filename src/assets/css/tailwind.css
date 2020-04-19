@@ -3,3 +3,26 @@
 @tailwind components;
 
 @tailwind utilities;
+
+.h-medium{
+    height: 50vh;
+}
+.w-medium{
+    width: 90vw;
+}
+.middle{
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+   
+}
+.h-max{
+    height: 100vh;
+}
+.w-fixed{
+    width: 20rem;
+}
+.gray{
+    filter: grayscale(100%)
+}

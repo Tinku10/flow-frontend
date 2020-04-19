@@ -1,68 +1,69 @@
 <template>
-  <div >
-    <nav v-if="!off" class="h-30 w-full p-2 navbar-color">
-        <router-link  to="/" style="text-decoration: none" >
-            <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
-        </router-link>
-    </nav>
-    <div id="first flex items-center">
-        <h1 class="main " v-if="!off">Sign Up</h1>
+    <div class="relative h-max">
+        <div class=" w-fixed middle bg-green-100 rounded p-4">
+            <!-- <nav v-if="!off" class="h-30 w-full p-2 navbar-color">
+                <router-link  to="/" style="text-decoration: none" >
+                    <span  id="image" class="bg-no-repeat p-4 mr-4 ml-2"></span>
+                </router-link>
+            </nav> -->
+            <div id="first flex items-center  mb-8">
+                    <h1 class="main " v-if="!off">Sign Up</h1>
+                    <ApolloMutation 
+                        :mutation="require('../graphql/mutations/createUser.graphql')" 
+                        :variables="{
+                            name: this.name,
+                            username: this.username,
+                            email: this.email,
+                            password: this.password,
+                            repassword: this.repassword
+                        }"
+                        @done="onDone">
+                        <template v-slot="{mutate, error}">
+                            <div v-if="!off">
+                                <ValidationObserver v-slot="{invalid}">
+                                <form v-on:submit.prevent="mutate(); off=true" class="containers">
+                                    <ValidationProvider rules="required" v-slot="{errors}" class="grid-flow-col" >
+                                        <input class="input w-64 h-1 bg-white " type="text" placeholder="Name"  name="name" v-model="name">
+                                        <div class="error">{{errors[0]}}</div>
+                                    </ValidationProvider>
+                                    <ValidationProvider rules="required" v-slot="{errors}">
+                                        <input class="input w-64 h-1 bg-white " type="text" placeholder="Username"   name="username" v-model="username">
+                                        <div class="error">{{errors[0]}}</div>
+                                    </ValidationProvider>
+                                    <ValidationProvider rules="email|required" v-slot="{errors}">
+                                        <input class="input w-64 h-1 bg-white " type="email" placeholder="Email ID"  name="email" v-model="email">
+                                        <div class="error">{{errors[0]}}</div>
+                                    </ValidationProvider>
+                                    <!-- <ValidationObserver class="flex-col"> -->
+                                        <ValidationProvider  rules="minCh|upperCase|lowerCase|number|password:@confirm|required" v-slot="{errors}">
+                                            <input class="input w-64 h-1 bg-white " type="password" placeholder="Password" name="password" v-model="password">
+                                            <div class="error">{{errors[0]}}</div>
+                                        </ValidationProvider>
+                                        <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
+                                            <input class="input w-64 h-1 bg-white " type="password" placeholder="Confirm Password" name="repassword" v-model="repassword">
+                                            <div class="error">{{errors[0]}}</div>
+                                        </ValidationProvider>
+                                    <!-- </ValidationObserver> -->
+                                    <button id="submit" class="w-24 h-10" :disabled="invalid">REGISTER</button>
+                                </form>
+                                </ValidationObserver>
+                            </div>
+                            <div v-else class="flex flex-row justify-center bg-white">
+                                <p v-if="error">{{error}}</p>
+                                <p v-else>Creating your account..</p>
+                            </div>
+                        </template>
 
-            <ApolloMutation 
-                :mutation="require('../graphql/mutations/createUser.graphql')" 
-                :variables="{
-                    name: this.name,
-                    username: this.username,
-                    email: this.email,
-                    password: this.password,
-                    repassword: this.repassword
-                }"
-                @done="onDone">
-                <template v-slot="{mutate, error}">
-                    <div v-if="!off">
-                        <ValidationObserver v-slot="{invalid}">
-                        <form v-on:submit.prevent="mutate(); off=true" class="containers">
-                            <ValidationProvider rules="required" v-slot="{errors}" class="grid-flow-col" >
-                                <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Name"  name="name" v-model="name">
-                                <div class="error">{{errors[0]}}</div>
-                            </ValidationProvider>
-                            <ValidationProvider rules="required" v-slot="{errors}">
-                                <input class="input w-64 h-1 md:max-w-lg" type="text" placeholder="Username"   name="username" v-model="username">
-                                <div class="error">{{errors[0]}}</div>
-                            </ValidationProvider>
-                            <ValidationProvider rules="email|required" v-slot="{errors}">
-                                <input class="input w-64 h-1 md:max-w-lg" type="email" placeholder="Email ID"  name="email" v-model="email">
-                                <div class="error">{{errors[0]}}</div>
-                            </ValidationProvider>
-                            <!-- <ValidationObserver class="flex-col"> -->
-                                <ValidationProvider  rules="minCh|upperCase|lowerCase|number|password:@confirm|required" v-slot="{errors}">
-                                    <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Password" name="password" v-model="password">
-                                    <div class="error">{{errors[0]}}</div>
-                                </ValidationProvider>
-                                <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
-                                    <input class="input w-64 h-1 md:max-w-lg" type="password" placeholder="Confirm Password" name="repassword" v-model="repassword">
-                                    <div class="error">{{errors[0]}}</div>
-                                </ValidationProvider>
-                            <!-- </ValidationObserver> -->
-                            <button id="submit" class="w-24 h-10" :disabled="invalid">REGISTER</button>
-                        </form>
-                        </ValidationObserver>
-                    </div>
-                    <div v-else class="flex flex-row justify-center">
-                        <p v-if="error">{{error}}</p>
-                        <p v-else>Creating your account..</p>
-                    </div>
-                </template>
+                    </ApolloMutation>
+                    <!-- <input id="submit" type="submit" value="REGISTER"> -->
+                <div class="message flex flex-wrap" v-if="!off">
+                    <h4 id="bottom">Already have an account?</h4>
+                    <h4 id="bottom"><router-link to="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</router-link></h4>
+                </div>
+            </div>
 
-            </ApolloMutation>
-            <!-- <input id="submit" type="submit" value="REGISTER"> -->
-        <div class="message flex flex-wrap" v-if="!off">
-            <h4 id="bottom">Already have an account?</h4>
-            <h4 id="bottom"><router-link to="/login" style="text-decoration: none; color: rgb(113, 212, 212)">Log In</router-link></h4>
         </div>
     </div>
-
-  </div>
 </template>
 
 <script>
@@ -95,7 +96,7 @@ export default {
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: lighter;
     margin: 0px;
-    padding: 2.5rem;
+    padding: 2rem;
     text-align: center;
     align-content: center;
     
@@ -134,7 +135,7 @@ input{
     /* width: 30rem;
     height: 1rem; */
     padding: 1.2rem;
-    border: 1px solid rgb(184, 182, 182);
+    /* border: 1px solid rgb(184, 182, 182); */
     border-radius: 0.2rem;
     margin-top: 10px;
     /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
@@ -194,7 +195,7 @@ textarea{
     font-size: 0.8rem;
     /* font-weight: lighter; */
     color:rgb(164, 165, 165);
-    border: solid 1px rgb(221, 218, 218);
+    /* border: solid 1px rgb(221, 218, 218); */
     outline: none;
 
 }
@@ -203,8 +204,8 @@ input:hover{
     outline: none;
 }
 #bottom{
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 1rem;
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 0.8rem;
     text-align: center;
     text-decoration: none;
     margin-right: 6px;
@@ -243,34 +244,5 @@ nav a{
     position: absolute;
     filter: opacity(60%);
 }
-@media (min-width: 768px){
-    input{
-        width: 30rem;
-        height: 1rem;
-        padding: 1.2rem;
-        border: 1px solid rgb(184, 182, 182);
-        border-radius: 0.2rem;
-        margin-top: 10px;
-        /* box-shadow: 0 20px 30px -16px rgba(66, 66, 66, 0.2); */
-        border: none;
-        outline: none;
 
-    }
-    #submit{
-        margin-top: 3rem;
-        width: 10rem;
-        height: 3rem;;
-        font-size: 0.8rem;
-        font-family: 'Josefin Sans', sans-serif;
-        cursor: pointer;
-        outline: none;
-        color: rgb(243, 244, 245);
-        margin-bottom: 4vw;
-        border-radius: 0.2rem;
-        background-color: rgb(141, 223, 228);
-        border: none;
-
-}
-}
 </style>
-

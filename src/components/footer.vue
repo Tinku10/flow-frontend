@@ -1,12 +1,13 @@
 <template>
-  <div id="foot" class="p-5 mt-2 h-32  w-screen bottom-auto">
-    <p class="icons">
-      <a href="https://flowwith.netlify.com" target=_blank style="text-decoration: none; color: inherit;"><div id="logo"></div></a>
-      <span class=" ml-2  flow mr-2 mb-2">flow</span>
+  <div id="foot" class="p-5 mt-2 h-32 ">
+    <p class="icons flex items-center justify-center mb-2">
+      <a href="https://flowwith.netlify.com" target=_blank style="text-decoration: none; color: inherit;"><div id="logo" class="flex-1 mr-2 ml-2"></div></a>
+      <span class=" ml-2  flow mr-2">flow</span>
       <!-- <a href="https://www.linkedin.com/in/tinkumonikalita/" target=_blank style="text-decoration: none; color: inherit;"><div id="linkedin"></div></a>
       <a href="https://medium.com/@tinku.kvs" target=_blank style="text-decoration: none; color: inherit;"><div id="medium"></div></a> -->
       
-    <div id="copyright" class="mt-2  align-center">Copyright © 2020 Flow</div>
+    <div id="copyright" class="mt-2  align-center">Copyright © 2020 <a href="https://github.com/Tinku10" style="text-decoration:none">Tinku Kalita</a></div>
+    <p id="bottom">An Open Source Project</p>
     <!-- <a href="https://github.com/Tinku10/flow-frontend" target=_blank style="text-decoration: none; color: inherit;"><div id="github"></div></a> 
     <p>Contribute on GitHub</p> -->
   </div>
@@ -33,13 +34,14 @@ div {
   background-color: rgb(49, 49, 49);
 }
 #logo{
-  padding: 1px;
-  background: url('../../public/quote.svg');
-  height: 2.5rem;
-  width: 2.5rem;
+  padding: 1rem;
+  background: url('../../public/atom.svg');
+  /* height: 2.5rem;
+  width: 2.5rem; */
   background-repeat: no-repeat;
-  margin-right: 10px;
-  margin-left: 10px;
+  /* margin-right: 10px;
+  margin-left: 10px; */
+  filter: grayscale(100%);
 
 }
 
@@ -93,6 +95,10 @@ div {
 }
 #copyright{
   font-size: 0.8rem;
+  font-family: 'Source Code Pro', sans-serif;
+}
+#bottom{
+  font-size: 0.6rem;
   font-family: 'Source Code Pro', sans-serif;
 }
 html, body{
