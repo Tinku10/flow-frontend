@@ -15,7 +15,7 @@
                 <div class ="md:p-2 md:flex md:justify-evenly lg:justify-center">
                     <div class="mt-1  justify-between md:w-1/4 md:ml-6 md:mr-6 md:mt-2 md:items-start">
                         <div class="flex items-start justify-evenly ml-4 mr-4 md-4 md:flex-col md:p-2 md:items-start" v-if="isData(data)">
-                            <div  class=" ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48 md:ml-2 ">
+                            <div  class=" ml-4 mr-4 h-32 w-32  flex-shrink-0 md:h-40 md:w-40 md:mb-4 lg:h-48 lg:w-48 ">
                                 <img class="h-32 w-32 md:h-40 md:w-40 md:mb-4 lg:rounded lg:h-48 lg:w-48" :src="getImage(data.me.username)">
                             </div>
                             <div class="flex-col items-start ml-2 mr-2 md:items-start">
