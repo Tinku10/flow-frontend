@@ -10,6 +10,9 @@
 .h-mediump{
     height: 65vh;
 }
+.h-front{
+    max-height: 50vh;
+}
 .h-initial{
     height: 25vh;
 }

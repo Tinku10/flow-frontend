@@ -13,7 +13,7 @@
                     <div  v-if="!isLoading " class=" md:mr-4  p-1 border-none outline-none cursor-pointer" @focus="menuPressed=true" @blur="menuPressed=false" tabindex="0">
                         <img class="rounded-sm h-6 w-6" :src="getImage(data)">
                     </div>
-                    <div class="h-6 w-6 rounded-sm bg-gray-100  lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
+                    <div class="h-6 w-6 rounded-sm bg-gray-100 md:mr-4 lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
                 </template>
 
             </ApolloQuery>
@@ -30,7 +30,7 @@
         </div>
     </transition>
     <transition name="slide-fade">
-        <div class="mention-link w-screen md:w-64 md:h-56 absolute border-gray-200 md:shadow-md p-2 lg:ml-24 md:mt-1 top-5  h-64 rounded-sm transition-shadow md:ml-16 "  v-show="searchbox" >
+        <div class="mention-link w-screen md:w-64  absolute border-gray-200 md:shadow-md p-2 lg:ml-24 md:mt-1 top-5  h-front rounded-sm transition-shadow md:ml-16 "  v-show="searchbox" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
             >

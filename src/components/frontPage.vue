@@ -21,7 +21,7 @@
 
         </nav>
         <transition name="slide-fade">
-        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 fixed z-10 "  v-show="searchbox" >
+        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 fixed z-10 h-front"  v-show="searchbox" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
             >
