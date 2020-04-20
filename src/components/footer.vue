@@ -36,8 +36,8 @@ div {
 #logo{
   padding: 1rem;
   background: url('../../public/atom.svg');
-  /* height: 2.5rem;
-  width: 2.5rem; */
+  height: 2rem;
+  width: 2rem;
   background-repeat: no-repeat;
   /* margin-right: 10px;
   margin-left: 10px; */

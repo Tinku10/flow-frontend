@@ -7,13 +7,13 @@
             <!-- <img class="lens md:ml-1" src="../../public/search.svg" alt=""> -->
             <input type="search" name="" class="h-8 w-56 lg:ml-6 lg:mr-4 p-3 outline-none border-none md:w-64 rounded-sm" placeholder="Search" @blur="searchbox=false" @focus="searchbox = true" v-model="search">
         <!-- </span> -->
-        <span class="float-right" v-if="isAuth">
+        <span class="float-right" v-if="isAuth()">
             <ApolloQuery :query="require('../graphql/queries/profilePhoto.graphql')"  >
                 <template v-slot="{result: {data}, isLoading} ">
                     <div  v-if="!isLoading " class=" md:mr-4  p-1 border-none outline-none cursor-pointer" @focus="menuPressed=true" @blur="menuPressed=false" tabindex="0">
                         <img class="rounded-sm h-6 w-6" :src="getImage(data)">
                     </div>
-                    <div class="h-6 w-6 rounded-sm bg-gray-100 mr-4 lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
+                    <div class="h-6 w-6 rounded-sm bg-gray-100  lg:ml-1 float-right p-2 mt-1 cursor-pointer" v-else></div>
                 </template>
 
             </ApolloQuery>
@@ -22,7 +22,7 @@
             <button  class="p-1 mr-4 ml-4 text-gray-100 float-right outline-none border-none" v-on:click="logout">Log out</button>
         </span> -->
     </nav>
-    <transition name="fade">
+    <transition name="fade" v-if="isAuth()">
         <div v-show="menuPressed" class="h-24 w-32 md:mt-1 rounded shadow-md absolute mr-4 z-50 bg-white right-0 outline-none border-none">
             <div  class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle cursor-pointer" v-on:click="logout">Log out</div>
             <router-link :to="{path: '/profiles/'+String(this.id)}" class="p-3 mr-4 ml-6 text-gray-100 outline-none border-none text-gray-700 align-middle" style="text-decoration: none">Profile
@@ -70,9 +70,12 @@ export default {
     },
     methods: {
         getImage(data){
-            this.id = data.me.id;
-            // this.$store.state.photo = 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
-            return 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
+            if(this.isAuth()){
+                this.id = data.me.id;
+                // this.$store.state.photo = 'https://api.adorable.io/avatars/184/' + data + '@adorable.io.png';
+                return 'https://api.adorable.io/avatars/184/' + data.me.username + '@adorable.io.png';
+
+            }
         },
         filteredUsers(users){
             if(this.search == ''){

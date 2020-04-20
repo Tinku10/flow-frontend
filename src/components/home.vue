@@ -1,7 +1,7 @@
 <template>
   <div >
     <div class="relative">
-        <div class="overlay absolute" v-if="showfollower == true || showfollowing ==true "  @click="showfollower=false; showfollowing=false">
+        <div class="overlay absolute" v-if="$store.getters.getshowfollower == true || $store.getters.getshowfollowing ==true || banner == true"  @click="$store.commit('setshowfollower',false); $store.commit('setshowfollowing',false)">
 
         </div>
         <nav-bar class=""></nav-bar>
@@ -34,9 +34,9 @@
                                 <!-- <ApolloQuery :query="require('../graphql/queries/count.graphql')">
                                     <template v-slot="{result: {data}}"> -->
                                 <div v-if="data.me" class="extras  justify-evenly mt-2 mb-2 md:mt-4 md:mb-4">
-                                    <span v-if="data.me.followers" class=" mr-2 cursor-pointer outline-none" tabindex="0" @click="showfollower=true"><b>{{get(data.me.followers)}}</b> Follower</span>
+                                    <span v-if="data.me.followers" class=" mr-2 cursor-pointer outline-none"  @click="$store.commit('setshowfollower',true)"><b>{{get(data.me.followers)}}</b> Follower</span>
                                     <span v-else class=" mr-2"><b>0</b> Follower</span>
-                                    <span v-if="data.me.followings" class=" ml-2 cursor-pointer outline-none" tabindex="0" @click="showfollowing=true" ><b>{{get(data.me.followings)}}</b> Following</span>
+                                    <span v-if="data.me.followings" class=" ml-2 cursor-pointer outline-none" @click="$store.commit('setshowfollowing',true)" ><b>{{get(data.me.followings)}}</b> Following</span>
                                     <span v-else class=" ml-2"><b>0</b> Following</span>
                                 </div>
                                     <!-- </template>
@@ -136,9 +136,9 @@
 
                 </div>
                 <!-- <p v-else-if="error">Error..</p> -->
-                <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-center md:flex-row">
-                    <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-10 md:ml-4 box-content mt-2 rounded-sm h-40 ml-2 mr-2 w-medium "></div>
-                    <div class="h-medium mt-6 md:h-screen  md:w-3/5 bg-gray-100 md:ml-10 md:mr-4 box-content md:mt-2 rounded-sm  ml-2 mr-2 w-medium " ></div>
+                <div v-if="isLoading" class="main-page items-center flex flex-col md:justify-evenly md:flex-row">
+                    <div class="md:w-1/4  md:h-screen bg-gray-100 md:mr-4 md:ml-4 box-content mt-2 rounded-sm h-initial  ml-2 mr-2 w-medium "></div>
+                    <div class="h-mediump mt-6 md:h-screen  md:w-3/5 bg-gray-100 md:ml-4 md:mr-4 box-content md:mt-2 rounded-sm  ml-2 mr-2 w-medium " ></div>
                 </div>
                 
             </template>
@@ -150,7 +150,7 @@
         </footer>
         
     </div>
-    <div v-show="showfollower" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-10" >
+    <div v-show="$store.getters.getshowfollower" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-10" >
         <ApolloQuery :query="require('../graphql/queries/showff.graphql')">
             <template v-slot="{result: {data}}">
                 <!-- <p v-if="isLoading">Loading..</p> -->
@@ -160,8 +160,8 @@
                         <div  v-for="follower in data.me.followers" :key="follower.id">
                             <!-- <p>{{follower.name}}</p>
                             <p>{{follower.username}}</p> -->
-                            <router-link :to="{path: '/profiles/' + String(follower.id)}" class="mention items-center lg:p-2">
-                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2">
+                            <router-link :to="{path: '/profiles/' + String(follower.id)}" class="mention items-center lg:p-2" >
+                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2" @click="$store.commit('setshowfollower',false)">
                                     <img id="profile-img" :src="getImage(follower.username)">
                                     <div class="flex flex-col items-start">
                                         <p class="foln font-semibold">{{follower.name}}</p>
@@ -177,7 +177,7 @@
             </template>
         </ApolloQuery>
     </div>
-    <div v-show="showfollowing" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-10" >
+    <div v-show="$store.getters.getshowfollowing" class="foll p-2 w-screen md:w-2/3 flex-col   bg-white border-gray-100 p-4 h-medium rounded-t md:h-screen md:w-1/3 md:rounded-none outline-none z-10" >
         <ApolloQuery :query="require('../graphql/queries/showff.graphql')">
             <template v-slot="{result: {data}}">
                 <!-- <p v-if="isLoading">Loading..</p> -->
@@ -187,8 +187,8 @@
                         <div v-for="following in data.me.followings" :key="following.id">
                             <!-- <p>{{follower.name}}</p>
                             <p>{{follower.username}}</p> -->
-                            <router-link :to="{path: '/profiles/' + String(following.id)}" class="mention items-center lg:p-2">
-                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2">
+                            <router-link :to="{path: '/profiles/' + String(following.id)}" class="mention items-center lg:p-2" >
+                                <div class="flex items-start mb-2 mt-2 ml-2 mr-2" @click="$store.commit('setshowfollowing',false)">
                                     <img id="profile-img" :src="getImage(following.username)">
                                     <div class="flex flex-col items-start">
                                         <p class="foln font-semibold">{{following.name}}</p>

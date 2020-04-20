@@ -7,6 +7,12 @@
 .h-medium{
     height: 50vh;
 }
+.h-mediump{
+    height: 65vh;
+}
+.h-initial{
+    height: 25vh;
+}
 .w-medium{
     width: 90vw;
 }

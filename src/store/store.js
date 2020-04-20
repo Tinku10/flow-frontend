@@ -13,7 +13,9 @@ export const store = new Vuex.Store({
         description: null,
         website: null,
         title: null,
-        followings: null
+        followings: null,
+        showfollowing: false,
+        showfollower: false
     },
     getters: {
         
@@ -28,6 +30,12 @@ export const store = new Vuex.Store({
         },
         getWebsite(state) {
             return state.website;
+        },
+        getshowfollowing(state){
+            return state.showfollowing;
+        },
+        getshowfollower(state) {
+            return state.showfollower;
         }
        
     },
@@ -57,14 +65,14 @@ export const store = new Vuex.Store({
         setFollowings(state, followings) {
             state.followings = followings;
         },
-        increaseLikes(state, data) {
-            state.followings[data.index].likes = state.followings[data.index].likes.concat({ liker_id: data.id, likes: state.followings[data.index].likes.length + 1 })
+        setshowfollowing(state, cond) {
+            state.showfollowing = cond;
         },
-        decreaseLikes(state, data) {
-            if (state.followings[data.index].likes.includes({ liker_id: data.id, likes: state.followings[data.index].likes.length })) {
-                state.followings[data.index].likes.delete(state.followings[data.index].likes.data.indexOf({ liker_id: data.id, likes: state.followings[data.index].likes.length }));
-            }
+        setshowfollower(state, cond) {
+            state.showfollower = cond;
+            
         }
+        
 
     }
 });

@@ -1,7 +1,8 @@
 <template>
   <div>
+      <!-- <p>{{$route.fullPath}}</p> -->
     <transition name="fade">
-      <router-view ></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </transition>
     <!-- <profiles></profiles> -->
     
