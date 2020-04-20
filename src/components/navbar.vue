@@ -29,8 +29,8 @@
             </router-link>
         </div>
     </transition>
-    <transition name="slide-fade">
-        <div class="mention-link w-screen md:w-64  absolute border-gray-200 md:shadow-md p-2 lg:ml-24 md:mt-1 top-5  h-front rounded-sm transition-shadow md:ml-16 "  v-show="searchbox" >
+    <transition name="fade">
+        <div class="mention-link w-screen md:w-64  absolute border-gray-200 md:shadow-md p-2 lg:ml-24 md:mt-1 top-5  h-front rounded-sm transition-shadow md:ml-16 "  v-show="searchbox==true && nomenu==false" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
             >
@@ -66,6 +66,7 @@ export default {
             users: [],
             menuPressed: false,
             id: null,
+            nomenu: true
         }
     },
     methods: {
@@ -78,10 +79,15 @@ export default {
             }
         },
         filteredUsers(users){
-            if(this.search == ''){
-                this.search = null;
-            }else if(this.search == null){
-                return users;
+            // if(this.search == ''){
+            //     this.search = null;
+            // }else if(this.search == null){
+            //     return users;
+            // }
+             if(this.search == '' || this.search == null){
+                this.nomenu = true;
+            }else{
+                this.nomenu = false;
             }
             this.users = users;
             let filtered = [];

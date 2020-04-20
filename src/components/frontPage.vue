@@ -20,8 +20,8 @@
             </div>
 
         </nav>
-        <transition name="slide-fade">
-        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 fixed z-10 h-front"  v-show="searchbox" >
+        <transition name="fade">
+        <div class="mention-link md:ml-2 md:float-left border-gray-200 shadow-md md:p-2  mt-10 result w-screen md:ml-1 md:mt-6 fixed z-10 h-front overflow-scroll"  v-show="searchbox==true && nomenu==false" >
             <ApolloQuery 
             :query="require('../graphql/queries/users.graphql') "
             >
@@ -74,7 +74,8 @@ export default {
         return{
             searchbox: false,
             search: null,
-            users: null
+            users: null,
+            nomenu: true
         }
     },
     computed: {
@@ -84,11 +85,17 @@ export default {
     },
     methods: {
         filteredUsers(users){
-            if(this.search == ''){
-                this.search = null;
-            }else if(this.search == null){
-                return users;
+            // if(this.search == ''){
+            //     this.search = null;
+            // }else if(this.search == null){
+            //     return users;
+            // }
+            if(this.search == '' || this.search == null){
+                this.nomenu = true;
+            }else{
+                this.nomenu = false;
             }
+            
             this.users = users;
             let filtered = [];
             for(let user of this.users){
@@ -293,7 +300,7 @@ div.mention-link{
     position: absolute; */
     /* width: 35vw;
     height: 14rem; */
-    overflow: hidden;
+    overflow-x: hidden;
 }
 .resultbox{
     /* top: 5%; */
@@ -395,6 +402,12 @@ div.mention-link{
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateY(-50px);
+  opacity: 0;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 </style>
